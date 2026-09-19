@@ -1,31 +1,34 @@
 {
-    "name": "MiniGames",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build",
-        "preview": "vite preview",
-        "lint": "eslint ."
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "devEngines": {
-        "packageManager": {
-            "name": "pnpm",
-            "version": "11.20.0",
-            "onFail": "download"
-        }
-    },
-    "type": "module",
-    "devDependencies": {
-        "@eslint/js": "^10.0.1",
-        "eslint": "^10.11.0",
-        "eslint-plugin-unicorn": "^75.0.0",
-        "typescript": "^6.0.3",
-        "typescript-eslint": "^8.70.0",
-        "vite": "^8.3.0"
+  "name": "MiniGames",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "11.20.0",
+      "onFail": "download"
     }
+  },
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "eslint-plugin-unicorn": "^75.0.0",
+    "prettier": "^3.9.8",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.70.0",
+    "vite": "^8.3.0"
+  }
 }

@@ -1,4 +1,4 @@
-const app = document.querySelector('#app');
+const app = document.querySelector('#app')
 if (app) {
-    app.textContent = 'Hello, Vite!';
+  app.textContent = 'Hello, Vite!'
 }

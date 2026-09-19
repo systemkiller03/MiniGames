@@ -12,8 +12,8 @@
 
 ## Dates
 
-* **Submission date:** YYYY-MM-DD
-* **Deadline:** YYYY-MM-DD
+- **Submission date:** YYYY-MM-DD
+- **Deadline:** YYYY-MM-DD
 
 ## Self-check
 
@@ -21,10 +21,10 @@
 
 ### Checklist
 
-* [ ] Requirement 1 — XX points
-* [ ] 
-* [ ] 
-* [ ] 
+- [ ] Requirement 1 — XX points
+- [ ]
+- [ ]
+- [ ]
 
 ### Notes
 
