@@ -1,6 +1,6 @@
 ## Task
 
-**Task:** [Task name](TASK_URL)
+**Task:** [MiniGames: story-1](https://github.com/rolling-scopes-school/qualifying-stage/blob/main/tasks/minigames/story-1.md)
 
 ## Screenshot
 
@@ -12,8 +12,8 @@
 
 ## Dates
 
-* **Submission date:** YYYY-MM-DD
-* **Deadline:** YYYY-MM-DD
+- **Submission date:** 2026-09-DD
+- **Deadline:** 2026-09-21
 
 ## Self-check
 
@@ -21,10 +21,10 @@
 
 ### Checklist
 
-* [ ] Requirement 1 — XX points
-* [ ] 
-* [ ] 
-* [ ] 
+- [x] Requirement 1 - XX points
+- [x]
+- [x]
+- [x]
 
 ### Notes
 

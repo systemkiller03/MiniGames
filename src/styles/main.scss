@@ -1,0 +1,9 @@
+@use 'tokens' as *;
+@use 'mixins' as *;
+
+body {
+  margin: 0;
+  color: $color-text;
+  background: $color-background;
+  font-family: $font-family-main;
+}

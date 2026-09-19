@@ -1,0 +1,5 @@
+@use 'tokens' as *;
+
+@function spacing($multiplier) {
+  @return $size-sm * $multiplier;
+}
