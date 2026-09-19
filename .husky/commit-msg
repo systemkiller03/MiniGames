@@ -1,0 +1,10 @@
+#!/bin/sh
+
+commit_message=$(head -n 1 "$1")
+
+if ! printf '%s\n' "$commit_message" | grep -Eq '^(feat|fix|refactor|docs|style|test|perf|build|ci|chore|revert)(\([a-zA-Z0-9._/-]+\))?!?: .+$'; then
+  echo "Invalid commit message."
+  echo "Expected: <type>[optional scope]: <description>"
+  echo "Example: feat: add game layout"
+  exit 1
+fi
