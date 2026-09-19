@@ -21,10 +21,10 @@
 
 ### Checklist
 
-- [ ] Requirement 1 — XX points
-- [ ]
-- [ ]
-- [ ]
+- [x] Requirement 1 - XX points
+- [x]
+- [x]
+- [x]
 
 ### Notes
 
