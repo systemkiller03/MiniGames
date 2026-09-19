@@ -269,6 +269,9 @@ importers:
       eslint-plugin-unicorn:
         specifier: ^75.0.0
         version: 75.0.0(eslint@10.11.0)
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
       prettier:
         specifier: ^3.9.8
         version: 3.9.8
@@ -1012,6 +1015,14 @@ packages:
       {
         integrity: sha512-p/LgFzRN5FeoD3DLS6bkUapeye6E4SI6yJs6KetENd18S+FBthqYq2amJUWpt5z0EQwwHemidjY5OqJGEKm5uA==,
       }
+
+  husky@9.1.7:
+    resolution:
+      {
+        integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==,
+      }
+    engines: { node: '>=18' }
+    hasBin: true
 
   identifier-regex@1.1.0:
     resolution:
@@ -1981,6 +1992,8 @@ snapshots:
   hookified@1.15.1: {}
 
   hookified@2.2.0: {}
+
+  husky@9.1.7: {}
 
   identifier-regex@1.1.0:
     dependencies:
