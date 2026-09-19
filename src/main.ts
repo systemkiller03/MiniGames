@@ -1,5 +1,5 @@
 import './styles/main.scss'
-const app = document.querySelector('#app')
-if (app) {
-  app.textContent = 'Hello, Vite!'
-}
+
+const app: HTMLDivElement = document.createElement('div')
+app.id = 'app'
+document.body.append(app)
