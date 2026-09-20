@@ -1,4 +1,5 @@
 import './carousel.scss'
+import { ArrowLeft, ArrowRight } from 'lucide'
 import camperVanCard from '../../assets/camper-van-make-it-home-card.jpg'
 import catMailCard from '../../assets/cat-mail-co-card.jpg'
 import cozySolitaireCard from '../../assets/cozy-solitaire-card.jpg'
@@ -68,8 +69,8 @@ export function createCarousel(): HTMLElement {
 
   const controls = document.createElement('div')
   controls.className = 'carousel__controls'
-  const previousButton = createIconButton('Previous games', '←', 'carousel__arrow')
-  const nextButton = createIconButton('Next games', '→', 'carousel__arrow carousel__arrow--next')
+  const previousButton = createIconButton('Previous games', ArrowLeft, 'carousel__arrow')
+  const nextButton = createIconButton('Next games', ArrowRight, 'carousel__arrow carousel__arrow--next')
   controls.append(previousButton, nextButton)
   heading.append(title, controls)
 

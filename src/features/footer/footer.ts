@@ -29,7 +29,7 @@ const SOCIAL_LINKS = [
 ]
 
 const SCHOOL_URL = 'https://rs.school/courses/short-track'
-const GITHUB_USER = 'mira'
+const GITHUB_USER = 'systemkiller03'
 
 function create<K extends keyof HTMLElementTagNameMap>(
   tag: K,

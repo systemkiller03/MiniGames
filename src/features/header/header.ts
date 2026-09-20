@@ -1,4 +1,5 @@
 import './header.scss'
+import { Menu, X, createElement } from 'lucide'
 import logoSource from '../../assets/Logo.svg'
 import { createButton } from '../../shared/components/button/button'
 
@@ -17,12 +18,24 @@ function createLink(label: string, href: string, className = ''): HTMLAnchorElem
   return link
 }
 
-function createIconButton(label: string, icon: string, className: string): HTMLButtonElement {
+type IconNode = Parameters<typeof createElement>[0]
+
+function createIconButton(label: string, icon: string | IconNode, className: string): HTMLButtonElement {
   const button = document.createElement('button')
   button.type = 'button'
   button.className = className
   button.setAttribute('aria-label', label)
-  button.textContent = icon
+
+  const glyph = document.createElement('span')
+  glyph.className = 'icon-button__glyph'
+
+  if (typeof icon === 'string') {
+    glyph.textContent = icon
+  } else {
+    glyph.append(createElement(icon))
+  }
+
+  button.append(glyph)
   return button
 }
 
@@ -31,7 +44,7 @@ function createAuthDialog(): HTMLDialogElement {
   dialog.className = 'auth-dialog'
   dialog.setAttribute('aria-labelledby', 'auth-dialog-title')
 
-  const close = createIconButton('Close dialog', '×', 'auth-dialog__close')
+  const close = createIconButton('Close dialog', X, 'auth-dialog__close')
   const title = document.createElement('h2')
   title.id = 'auth-dialog-title'
   title.textContent = 'Welcome to MiniGames'
@@ -61,7 +74,7 @@ export function createHeader(currentPath = '/'): HTMLElement {
   brandName.textContent = 'MiniGames'
   brand.append(logo, brandName)
 
-  const menuToggle = createIconButton('Open navigation menu', '☰', 'header__menu-toggle')
+  const menuToggle = createIconButton('Open navigation menu', Menu, 'header__menu-toggle')
 
   const nav = document.createElement('nav')
   nav.className = 'header__nav'
@@ -89,7 +102,7 @@ export function createHeader(currentPath = '/'): HTMLElement {
 
   const mobileMenuHeader = document.createElement('div')
   mobileMenuHeader.className = 'mobile-menu__header'
-  const mobileClose = createIconButton('Close navigation menu', '×', 'mobile-menu__close')
+  const mobileClose = createIconButton('Close navigation menu', X, 'mobile-menu__close')
   mobileMenuHeader.append(brand.cloneNode(true), mobileClose)
 
   const mobileNav = document.createElement('nav')
