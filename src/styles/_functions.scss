@@ -1,5 +1,6 @@
+@use 'sass:math';
 @use 'tokens' as *;
 
 @function spacing($multiplier) {
-  @return $size-sm * $multiplier;
+  @return $size-1 * $multiplier;
 }

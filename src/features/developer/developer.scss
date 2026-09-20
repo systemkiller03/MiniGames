@@ -1,0 +1,102 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+$developer-max-width: 1660px;
+
+.developer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $size-3;
+  width: 100%;
+  max-width: $developer-max-width;
+  margin-inline: auto;
+  padding: $size-5 $size-2;
+  color: $color-on-primary;
+
+  &__illustration {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-medium;
+  }
+
+  &__content {
+    width: 100%;
+    padding: $size-3;
+    border: 1px solid $color-on-primary;
+    border-radius: $corner-small;
+    background: $color-white;
+    box-shadow: $shadow-level-1;
+  }
+
+  &__title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 0 $size-2;
+    padding-left: $size-3;
+    font-size: $font-size-headline-medium;
+    line-height: 1.15;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      border: 2px solid $color-bg-footer;
+      border-radius: $corner-small;
+      background: $color-primary;
+    }
+  }
+
+  &__description {
+    max-width: 36em;
+    margin: 0 0 $size-3;
+    color: $color-on-bg;
+    font-size: $font-size-body-medium;
+    line-height: 1.4;
+  }
+
+  &__contact {
+    margin: $size-2 0 0;
+    font-size: $font-size-body-small;
+    color: $color-on-bg-low;
+
+    a {
+      color: inherit;
+    }
+  }
+
+  @include tablet {
+    flex-direction: row;
+    gap: $size-4;
+    padding: $size-6 $size-4;
+
+    &__illustration {
+      flex: 1 1 0;
+      width: auto;
+      min-width: 0;
+    }
+
+    &__content {
+      flex: 1.4 1 0;
+      min-width: 0;
+      padding: $size-4;
+    }
+  }
+
+  @include desktop {
+    gap: $size-5;
+
+    &__content {
+      padding: $size-5;
+    }
+
+    &__title {
+      font-size: $font-size-headline-large;
+    }
+  }
+}

@@ -11,3 +11,22 @@
     @content;
   }
 }
+
+@mixin interactive {
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@mixin container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin-inline: auto;
+  padding-inline: $size-2;
+
+  @include tablet {
+    padding-inline: $size-4;
+  }
+}

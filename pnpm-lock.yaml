@@ -259,6 +259,10 @@ settings:
 
 importers:
   .:
+    dependencies:
+      lucide:
+        specifier: ^1.47.0
+        version: 1.47.0
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
@@ -1373,6 +1377,12 @@ packages:
       }
     engines: { node: '>=10' }
 
+  lucide@1.47.0:
+    resolution:
+      {
+        integrity: sha512-gJoVJM5fvpBDGZTvhpJS9IEurz85HbD+wgOlCkXCIw35tHrqTxSdIYUN9sXvs7Aw3NCl67A+nlotNyoU4u7zOQ==,
+      }
+
   mdn-data@2.35.0:
     resolution:
       {
@@ -2307,6 +2317,8 @@ snapshots:
   locate-path@6.0.0:
     dependencies:
       p-locate: 5.0.0
+
+  lucide@1.47.0: {}
 
   mdn-data@2.35.0: {}
 

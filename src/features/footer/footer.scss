@@ -1,0 +1,330 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+$footer-wide: 1024px;
+$footer-max-width: 1920px;
+
+@mixin wide {
+  @media (min-width: $footer-wide) {
+    @content;
+  }
+}
+
+.footer {
+  background: $color-bg-footer;
+  color: $color-on-bg-footer;
+  font-family: $font-family-inter;
+  font-size: $font-size-body-small;
+
+  // Full-width background, content centered and capped at 1920 (only side space grows)
+  &__inner {
+    box-sizing: border-box;
+    max-width: $footer-max-width;
+    margin-inline: auto;
+    padding: $size-4 $size-2; // 32 / 16
+
+    @include tablet {
+      padding: $size-5; // 40
+    }
+
+    @include desktop {
+      padding-inline: $size-15; // 120
+    }
+  }
+
+  // ---------- top block ----------
+  &__top {
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+    margin-bottom: $size-3;
+
+    @include tablet {
+      margin-bottom: $size-5;
+    }
+
+    @include wide {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: $size-5;
+    }
+
+    @include desktop {
+      margin-bottom: $size-8;
+    }
+  }
+
+  &__about {
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+  }
+
+  &__brand {
+    @include interactive;
+
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: $size-1;
+    color: $color-white;
+    font-size: $font-size-headline-small; // 20
+    font-weight: $font-weight-bold;
+    line-height: normal;
+    text-decoration: none;
+
+    @include desktop {
+      font-size: $font-size-headline-medium; // 24
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: $size-05;
+    }
+  }
+
+  &__logo {
+    width: $size-4;
+    height: $size-4;
+  }
+
+  &__description {
+    margin: 0;
+    line-height: 1.5;
+
+    @include wide {
+      max-width: 392px;
+    }
+  }
+
+  // ---------- link columns ----------
+  // mobile: Explore | Company, Community below. tablet+: three columns in a row.
+  &__columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $size-3 $size-5;
+
+    @include tablet {
+      grid-template-columns: repeat(3, auto);
+      justify-content: start;
+    }
+
+    @include desktop {
+      column-gap: $size-10; // 80
+    }
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+
+    &--social {
+      grid-column: 1 / -1;
+
+      @include tablet {
+        grid-column: auto;
+      }
+    }
+  }
+
+  &__heading {
+    margin: 0;
+    color: $color-white;
+    font-size: $font-size-body-medium;
+    font-weight: $font-weight-bold;
+    line-height: normal;
+  }
+
+  &__list,
+  &__social {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__list {
+    flex-direction: column;
+    gap: $size-2;
+  }
+
+  // ---------- shared link states ----------
+  &__link,
+  &__chip {
+    @include interactive;
+
+    color: $color-on-bg-footer;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $color-primary;
+    }
+
+    &:active {
+      color: $color-primary-high;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: $size-05;
+      border-radius: $corner-extra-small;
+    }
+  }
+
+  &__link {
+    line-height: normal;
+
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: $size-05;
+    }
+  }
+
+  // ---------- social ----------
+  &__social {
+    gap: $size-2;
+  }
+
+  &__social-link {
+    @include interactive;
+
+    display: grid;
+    place-items: center;
+    width: $size-4; // 32
+    height: $size-4;
+    border-radius: $corner-full;
+    background: $color-bg-footer-low;
+    color: $color-white;
+    transition:
+      box-shadow 0.2s ease,
+      background-color 0.2s ease;
+
+    @include desktop {
+      width: $size-5; // 40
+      height: $size-5;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+
+      @include desktop {
+        width: $size-3; // 24
+        height: $size-3;
+      }
+    }
+
+    &:hover {
+      box-shadow: inset 0 0 0 2px $color-primary;
+    }
+
+    &:active {
+      background: $color-bg-footer-lowest;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: $size-05;
+    }
+  }
+
+  // ---------- bottom row ----------
+  &__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $size-2;
+    row-gap: $size-1;
+    padding-top: $size-1;
+    border-top: 1px solid $color-bg-footer-low;
+    font-size: $font-size-label-medium; // 12
+
+    @include tablet {
+      justify-content: space-between;
+      padding-top: $size-2;
+      font-size: $font-size-body-small; // 14
+    }
+
+    @include desktop {
+      padding-top: $size-3;
+    }
+  }
+
+  &__copyright,
+  &__tagline {
+    margin: 0;
+    line-height: normal;
+  }
+
+  // copyright gets its own line on mobile
+  &__copyright {
+    flex: 0 0 100%;
+
+    @include tablet {
+      flex: 0 0 auto;
+    }
+  }
+
+  // not in the 375 design
+  &__tagline {
+    display: none;
+
+    @include tablet {
+      display: block;
+    }
+  }
+
+  &__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: $size-1;
+    line-height: normal;
+
+    &:hover .footer__chip-label {
+      text-decoration: underline;
+      text-underline-offset: $size-05;
+    }
+  }
+
+  &__chip-icon {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: $corner-full;
+
+    @include desktop {
+      width: $size-3; // 24
+      height: $size-3;
+    }
+
+    &--rs {
+      background: $color-on-primary;
+      color: $color-primary;
+      font-size: 8px;
+      font-weight: $font-weight-bold;
+      line-height: 1;
+
+      @include desktop {
+        font-size: $font-size-label-small; // 10
+      }
+    }
+
+    &--code {
+      background: $color-white;
+      color: $color-on-primary;
+
+      svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        fill: currentColor;
+      }
+    }
+  }
+}
