@@ -1,0 +1,277 @@
+@use '/src/styles/tokens' as *;
+
+.auth-dialog {
+  box-sizing: border-box;
+  width: min(calc(100% - #{$size-4}), 420px);
+  max-height: calc(100vh - #{$size-4});
+  margin: auto;
+  padding: $size-4;
+  border: 3px solid $color-on-primary;
+  border-radius: $corner-extra-large;
+  box-shadow: 8px 8px 0 $color-black;
+  color: $color-on-primary;
+  background: $color-bg;
+  overflow-y: auto;
+
+  &::backdrop {
+    background: rgb(30 27 58 / 75%);
+  }
+
+  &__close {
+    float: right;
+    width: $size-4;
+    height: $size-4;
+    padding: 0;
+    background: transparent;
+    color: $color-on-primary;
+    font-size: $font-size-headline-medium;
+    line-height: 1;
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    margin-bottom: $size-3;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-medium;
+    overflow: hidden;
+    background: $color-white;
+  }
+
+  &__tab {
+    flex: 1;
+    min-height: 44px;
+    padding: $size-1 $size-2;
+    border-radius: $corner-small;
+    background: transparent;
+    color: $color-on-bg;
+    font-size: $font-size-label-extra-large;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &.is-active {
+      background: $color-bg-footer-low;
+      color: $color-white;
+    }
+
+    &:focus-visible,
+    &:hover {
+      outline: 2px solid $color-tertiary;
+      outline-offset: -2px;
+    }
+  }
+
+  h2 {
+    margin: 0 0 $size-1;
+    font-size: $font-size-display-small;
+  }
+
+  &__message {
+    margin: 0;
+    color: $color-on-bg;
+    font-size: $font-size-body-small;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+    margin-top: $size-3;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+  }
+
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    min-height: 48px;
+    padding: 0 $size-2;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-small;
+    background: $color-white;
+    color: $color-on-bg;
+
+    svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    &:focus-within {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+  }
+
+  input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: $color-on-primary;
+    font-size: $font-size-body-small;
+
+    &::placeholder {
+      color: $color-on-bg;
+      opacity: 1;
+    }
+  }
+
+  &__visibility {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background: transparent;
+    color: $color-on-bg;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__forgot {
+    align-self: flex-end;
+    margin-top: -$size-1;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $color-on-primary;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-tertiary;
+    }
+
+    &[hidden] {
+      display: none;
+    }
+  }
+
+  &__submit,
+  &__google {
+    min-height: 50px;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-medium;
+    font-size: $font-size-label-extra-large;
+    font-weight: $font-weight-bold;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid $color-tertiary;
+      outline-offset: 2px;
+    }
+  }
+
+  &__submit {
+    background: $color-primary;
+    box-shadow: 0 4px 0 $color-on-primary;
+    color: $color-on-primary;
+
+    &:hover {
+      background: $color-primary-high;
+    }
+
+    &:active {
+      box-shadow: 0 2px 0 $color-on-primary;
+      transform: translateY(2px);
+    }
+
+    &:disabled {
+      background: $color-outline;
+      box-shadow: none;
+      color: $color-on-bg-low;
+      cursor: not-allowed;
+    }
+  }
+
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    color: $color-on-bg;
+    font-size: $font-size-label-medium;
+    font-weight: $font-weight-bold;
+
+    span:first-child,
+    span:last-child {
+      flex: 1;
+      height: 1px;
+      background: $color-outline;
+    }
+  }
+
+  &__google {
+    background: $color-white;
+    color: $color-on-primary;
+
+    &:hover {
+      background: $color-surface;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    gap: $size-05;
+    margin: 0;
+    color: $color-on-bg;
+    font-size: $font-size-body-small;
+  }
+
+  &__footer-action {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $color-on-primary;
+    font-size: inherit;
+    font-weight: $font-weight-bold;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+      color: $color-tertiary;
+    }
+  }
+}
