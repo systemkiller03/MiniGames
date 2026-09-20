@@ -63,13 +63,19 @@ export function createAuthDialog(): {
   const close = createIconButton('Close dialog', X, 'auth-dialog__close')
   const tabs = document.createElement('div')
   tabs.className = 'auth-dialog__tabs'
+  tabs.setAttribute('role', 'tablist')
+  tabs.setAttribute('aria-label', 'Authentication mode')
   const loginTab = document.createElement('button')
   loginTab.type = 'button'
   loginTab.className = 'auth-dialog__tab'
+  loginTab.setAttribute('role', 'tab')
+  loginTab.setAttribute('aria-controls', 'auth-dialog-form')
   loginTab.textContent = 'Login'
   const registerTab = document.createElement('button')
   registerTab.type = 'button'
   registerTab.className = 'auth-dialog__tab'
+  registerTab.setAttribute('role', 'tab')
+  registerTab.setAttribute('aria-controls', 'auth-dialog-form')
   registerTab.textContent = 'Register'
   tabs.append(loginTab, registerTab)
 
@@ -80,6 +86,7 @@ export function createAuthDialog(): {
 
   const form = document.createElement('form')
   form.className = 'auth-dialog__form'
+  form.id = 'auth-dialog-form'
   form.addEventListener('submit', (event) => event.preventDefault())
 
   const fields = document.createElement('div')
@@ -115,6 +122,8 @@ export function createAuthDialog(): {
     registerTab.classList.toggle('is-active', !isLogin)
     loginTab.setAttribute('aria-selected', String(isLogin))
     registerTab.setAttribute('aria-selected', String(!isLogin))
+    loginTab.tabIndex = isLogin ? 0 : -1
+    registerTab.tabIndex = isLogin ? -1 : 0
     title.textContent = isLogin ? 'Welcome Back!' : 'Create Account'
     message.textContent = isLogin
       ? 'Sign in to resume your games and progress.'
