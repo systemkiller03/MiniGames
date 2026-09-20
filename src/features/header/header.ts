@@ -2,6 +2,7 @@ import './header.scss'
 import { Menu, X, createElement } from 'lucide'
 import logoSource from '../../assets/Logo.svg'
 import { createButton } from '../../shared/components/button/button'
+import { createAuthDialog, type AuthMode } from '../auth/auth'
 
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
@@ -41,23 +42,6 @@ function createIconButton(
 
   button.append(glyph)
   return button
-}
-
-function createAuthDialog(): HTMLDialogElement {
-  const dialog = document.createElement('dialog')
-  dialog.className = 'auth-dialog'
-  dialog.setAttribute('aria-labelledby', 'auth-dialog-title')
-
-  const close = createIconButton('Close dialog', X, 'auth-dialog__close')
-  const title = document.createElement('h2')
-  title.id = 'auth-dialog-title'
-  title.textContent = 'Welcome to MiniGames'
-  const message = document.createElement('p')
-  message.textContent = 'Log in or create an account to continue.'
-
-  close.addEventListener('click', () => dialog.close())
-  dialog.append(close, title, message)
-  return dialog
 }
 
 export function createHeader(currentPath = '/'): HTMLElement {
@@ -124,7 +108,7 @@ export function createHeader(currentPath = '/'): HTMLElement {
   const mobileSignUp = createButton('Sign Up', 'primary')
   mobileActions.append(mobileLogIn, mobileSignUp)
 
-  const authDialog = createAuthDialog()
+  const { dialog: authDialog, setMode: setAuthMode } = createAuthDialog()
   const openMenu = (): void => {
     mobileMenu.classList.add('is-open')
     mobileMenu.setAttribute('aria-hidden', 'false')
@@ -137,13 +121,20 @@ export function createHeader(currentPath = '/'): HTMLElement {
     menuToggle.setAttribute('aria-expanded', 'false')
     document.body.classList.remove('mobile-menu-open')
   }
-  const openAuthDialog = (): void => authDialog.showModal()
+  const openAuthDialog = (mode: AuthMode, event?: Event): void => {
+    event?.preventDefault()
+    closeMenu()
+    setAuthMode(mode)
+    authDialog.showModal()
+  }
 
   menuToggle.setAttribute('aria-expanded', 'false')
   menuToggle.addEventListener('click', openMenu)
   mobileClose.addEventListener('click', closeMenu)
-  mobileLogIn.addEventListener('click', openAuthDialog)
-  mobileSignUp.addEventListener('click', openAuthDialog)
+  mobileLogIn.addEventListener('click', (event) => openAuthDialog('login', event))
+  mobileSignUp.addEventListener('click', (event) => openAuthDialog('register', event))
+  logIn.addEventListener('click', (event) => openAuthDialog('login', event))
+  signUp.addEventListener('click', (event) => openAuthDialog('register', event))
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && mobileMenu.classList.contains('is-open') && !authDialog.open) {
       closeMenu()
