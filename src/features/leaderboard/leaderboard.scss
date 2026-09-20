@@ -3,13 +3,13 @@
 
 .leaderboard {
   width: 100%;
-  padding: 32px 16px 48px;
+  padding: $size-4 $size-2 $size-6;
   background: $color-bg;
 
   h2 {
     width: 100%;
     max-width: 1680px;
-    margin: 0 auto 16px;
+    margin: 0 auto $size-2;
     color: $color-on-primary;
     font-size: $font-size-headline-small;
     line-height: 1.2;
@@ -40,7 +40,7 @@
 
   th,
   td {
-    padding: 12px 16px;
+    padding: $size-1 $size-2;
     text-align: left;
   }
 
@@ -85,16 +85,16 @@
 
 @include tablet {
   .leaderboard {
-    padding-inline: 40px;
+    padding-inline: $size-5;
 
     h2 {
-      margin-bottom: 24px;
+      margin-bottom: $size-3;
       font-size: $font-size-headline-medium;
     }
 
     th,
     td {
-      padding: 16px 24px;
+      padding: $size-2 $size-3;
     }
 
     th:nth-child(1),
@@ -106,16 +106,16 @@
 
 @include desktop {
   .leaderboard {
-    padding: 40px max(120px, calc((100% - #{$breakpoint-desktop}) / 2 + 120px)) 96px;
+    padding: $size-5 $size-15 $size-12;
 
     h2 {
-      margin-bottom: 24px;
+      margin-bottom: $size-3;
       font-size: $font-size-headline-medium;
     }
 
     th,
     td {
-      padding: 18px 24px;
+      padding: $size-2 $size-3;
       font-size: $font-size-body-medium;
     }
   }
