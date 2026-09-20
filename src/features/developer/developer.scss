@@ -1,0 +1,97 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+.developer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $size-2;
+  width: min(100%, 960px);
+  margin: 0 auto;
+  min-height: 280px;
+  overflow: hidden;
+  padding: $size-5 $size-2;
+  color: $color-on-primary;
+  background: $color-bg;
+
+  &__illustration {
+    display: block;
+    width: 100%;
+    max-width: 343px;
+    height: auto;
+    margin-inline: auto;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-medium;
+    object-fit: cover;
+  }
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 560px);
+    margin: 0 auto;
+    padding: $size-3;
+    border: 1px solid $color-on-primary;
+    border-radius: $corner-small;
+    background: $color-white;
+    box-shadow: $shadow-level-1;
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: $font-size-headline-medium;
+    line-height: 1.15;
+  }
+
+  &__description {
+    max-width: 440px;
+    margin: 0 0 24px;
+    color: $color-on-bg;
+    font-size: $font-size-body-medium;
+    line-height: 1.4;
+  }
+
+  .btn {
+    min-height: $size-4;
+  }
+}
+
+@include tablet {
+  .developer {
+    flex-direction: row;
+    width: min(100%, 688px);
+    min-height: 300px;
+    padding: $size-6 $size-4;
+
+    &__illustration {
+      width: 42%;
+      max-width: 288px;
+    }
+
+    &__content {
+      width: min(100%, 376px);
+      padding: $size-4;
+    }
+  }
+}
+
+@include desktop {
+  .developer {
+    width: 980px;
+    min-height: 343px;
+    padding: $size-4 0;
+    gap: $size-3;
+
+    &__illustration {
+      width: 320px;
+      max-width: none;
+    }
+
+    &__content {
+      width: 636px;
+      padding: $size-3;
+    }
+  }
+}
