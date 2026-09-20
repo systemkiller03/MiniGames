@@ -3,7 +3,11 @@ import { createElement } from 'lucide'
 
 type IconNode = Parameters<typeof createElement>[0]
 
-export function createIconButton(label: string, icon: string | IconNode, className = ''): HTMLButtonElement {
+export function createIconButton(
+  label: string,
+  icon: string | IconNode,
+  className = '',
+): HTMLButtonElement {
   const button = document.createElement('button')
   button.type = 'button'
   button.className = `icon-button${className ? ` ${className}` : ''}`

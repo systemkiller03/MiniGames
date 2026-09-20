@@ -20,7 +20,11 @@ function createLink(label: string, href: string, className = ''): HTMLAnchorElem
 
 type IconNode = Parameters<typeof createElement>[0]
 
-function createIconButton(label: string, icon: string | IconNode, className: string): HTMLButtonElement {
+function createIconButton(
+  label: string,
+  icon: string | IconNode,
+  className: string,
+): HTMLButtonElement {
   const button = document.createElement('button')
   button.type = 'button'
   button.className = className

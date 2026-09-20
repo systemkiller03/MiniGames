@@ -70,7 +70,11 @@ export function createCarousel(): HTMLElement {
   const controls = document.createElement('div')
   controls.className = 'carousel__controls'
   const previousButton = createIconButton('Previous games', ArrowLeft, 'carousel__arrow')
-  const nextButton = createIconButton('Next games', ArrowRight, 'carousel__arrow carousel__arrow--next')
+  const nextButton = createIconButton(
+    'Next games',
+    ArrowRight,
+    'carousel__arrow carousel__arrow--next',
+  )
   controls.append(previousButton, nextButton)
   heading.append(title, controls)
 
