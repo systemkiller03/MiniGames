@@ -11,3 +11,11 @@
     @content;
   }
 }
+
+@mixin interactive {
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
