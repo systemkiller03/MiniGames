@@ -9,18 +9,19 @@ $header-full-nav-breakpoint: 1024px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: $size-7;
+  min-height: 64px;
   padding-inline: calc(var(--side) + max(0px, (100% - #{$breakpoint-desktop}) / 2));
   background-color: $color-bg;
   border-bottom: 1px solid $color-outline-variant;
 
   @include tablet {
-    --side: #{$size-4};
-    min-height: $size-8;
+    --side: #{$size-5};
+    min-height: 72px;
   }
 
   @include desktop {
-    min-height: $size-12;
+    --side: #{$size-10};
+    min-height: 85px;
   }
 
   &__logo {
