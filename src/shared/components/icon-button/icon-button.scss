@@ -1,0 +1,16 @@
+@use '/src/styles/mixins' as *;
+
+.icon-button {
+  @include interactive;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-align: center;
+
+  &__glyph {
+    display: block;
+    line-height: 1;
+  }
+}
