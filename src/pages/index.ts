@@ -1,1 +1,1 @@
-export const pages = 'INDEX'
+export { createHomePage } from './home'

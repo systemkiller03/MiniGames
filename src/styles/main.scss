@@ -5,12 +5,12 @@
 }
 
 html {
-  min-width: 375px;
+  min-width: 0;
 }
 
 body {
   margin: 0;
-  min-width: 375px;
+  min-width: 0;
   color: $color-on-bg;
   background: $color-bg;
   font-family: $font-family-inter;
