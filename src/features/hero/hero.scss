@@ -1,0 +1,91 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+.hero {
+  position: relative;
+  min-height: 331px;
+  overflow: hidden;
+  isolation: isolate;
+  background-image: linear-gradient(rgb(30 27 58 / 65%), rgb(30 27 58 / 65%)), var(--hero-image);
+  background-position: center;
+  background-size: cover;
+
+  &__content {
+    position: relative;
+    z-index: 1;
+    width: calc(100% - #{$size-4});
+    max-width: 640px;
+    margin: 64px $size-2 0;
+    min-height: 203px;
+    padding: $size-3;
+    border: 2px solid $color-on-primary;
+    border-radius: $corner-large;
+    background: $color-bg;
+    box-shadow: $shadow-level-2;
+  }
+
+  h1 {
+    max-width: 500px;
+    margin: 0 0 $size-1;
+    color: $color-on-primary;
+    font-size: $font-size-headline-medium;
+    line-height: 1.15;
+  }
+
+  p {
+    margin: 0 0 $size-1;
+    color: $color-on-bg;
+    font-size: $font-size-body-small;
+    line-height: 1.2;
+  }
+
+  .btn {
+    min-height: 29px;
+    padding: 4px 16px;
+  }
+}
+
+@include tablet {
+  .hero {
+    min-height: 383px;
+
+    &__content {
+      width: 480px;
+      margin: 72px $size-5 0;
+      min-height: 239px;
+      padding: $size-3;
+    }
+
+    h1 {
+      font-size: $font-size-display-medium;
+    }
+
+    p {
+      font-size: $font-size-body-medium;
+    }
+  }
+}
+
+@include desktop {
+  .hero {
+    min-height: 627px;
+
+    &__content {
+      width: 640px;
+      margin: 112px max(120px, calc((100% - #{$breakpoint-desktop}) / 2 + 120px)) 0;
+      min-height: 403px;
+      padding: $size-5;
+      border-width: 3px;
+      border-radius: $corner-large;
+      box-shadow: $shadow-level-3;
+    }
+
+    h1 {
+      font-size: $font-size-display-large;
+    }
+
+    p {
+      font-size: $font-size-body-large;
+    }
+  }
+}

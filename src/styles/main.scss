@@ -1,9 +1,36 @@
 @use 'tokens' as *;
-@use 'mixins' as *;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 375px;
+}
 
 body {
   margin: 0;
-  color: $color-text;
-  background: $color-background;
-  font-family: $font-family-main;
+  min-width: 375px;
+  color: $color-on-bg;
+  background: $color-bg;
+  font-family: $font-family-inter;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  border: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
 }
