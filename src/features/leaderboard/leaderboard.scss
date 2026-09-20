@@ -7,12 +7,27 @@
   background: $color-bg;
 
   h2 {
+    position: relative;
+    display: flex;
+    align-items: center;
     width: 100%;
     max-width: 1680px;
     margin: 0 auto $size-2;
+    padding-left: $size-3;
     color: $color-on-primary;
     font-size: $font-size-headline-small;
     line-height: 1.2;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      border: 2px solid $color-bg-footer;
+      border-radius: $corner-small;
+      background: $color-primary;
+    }
   }
 
   &__table {

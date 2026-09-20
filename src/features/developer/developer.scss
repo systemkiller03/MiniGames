@@ -32,9 +32,24 @@ $developer-max-width: 1660px;
   }
 
   &__title {
+    position: relative;
+    display: flex;
+    align-items: center;
     margin: 0 0 $size-2;
+    padding-left: $size-3;
     font-size: $font-size-headline-medium;
     line-height: 1.15;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      border: 2px solid $color-bg-footer;
+      border-radius: $corner-small;
+      background: $color-primary;
+    }
   }
 
   &__description {

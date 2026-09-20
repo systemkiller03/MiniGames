@@ -15,10 +15,23 @@
   }
 
   h2 {
+    position: relative;
     margin: 0;
+    padding-left: $size-3;
     color: $color-on-primary;
     font-size: $font-size-headline-small;
     line-height: 1.2;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      border: 2px solid $color-bg-footer;
+      border-radius: $corner-small;
+      background: $color-primary;
+    }
   }
 
   &__controls {
