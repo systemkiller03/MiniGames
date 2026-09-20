@@ -1,5 +1,5 @@
-@use '../../../styles/tokens' as *;
-@use '../../../styles/mixins' as *;
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
 
 @mixin btn-size($padding, $font-size, $radius) {
   padding: $padding;
@@ -16,26 +16,14 @@
   color: $color-on-primary;
   transition: background-color 0.15s ease;
 
-  @include btn-size(
-    $button-small-padding,
-    $font-size-label-medium,
-    $corner-extra-small
-  );
+  @include btn-size($button-small-padding, $font-size-label-medium, $corner-extra-small);
 
   @include tablet {
-    @include btn-size(
-      $button-medium-padding,
-      $font-size-label-large,
-      $corner-small
-    );
+    @include btn-size($button-medium-padding, $font-size-label-large, $corner-small);
   }
 
   @include desktop {
-    @include btn-size(
-      $button-large-padding,
-      $font-size-label-extra-large,
-      $corner-medium
-    );
+    @include btn-size($button-large-padding, $font-size-label-extra-large, $corner-medium);
   }
 
   &:focus-visible {
