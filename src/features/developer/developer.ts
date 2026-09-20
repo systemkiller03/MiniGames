@@ -14,18 +14,27 @@ export function createDeveloperSection(): HTMLElement {
 
   const content = document.createElement('div')
   content.className = 'developer__content'
+const title = document.createElement('h2')
+title.className = 'developer__title' // was styled with a bare h2 selector
+title.id = 'developer-title'
+title.textContent = 'Are You a Game Developer?'
 
-  const title = document.createElement('h2')
-  title.id = 'developer-title'
-  title.textContent = 'Are You a Game Developer?'
+const description = document.createElement('p')
+description.className = 'developer__description'
+description.textContent =
+  "Want to see your game on MiniGames? We're always looking for fun, engaging mini games to add to our platform. Submit your game and reach thousands of players!"
 
-  const description = document.createElement('p')
-  description.className = 'developer__description'
-  description.textContent =
-    'Share your game with a community of players who love discovering something new.'
+const button = createButton('Submit Form', 'primary')
 
-  const button = createButton('Submit Form', 'primary')
-  content.append(title, description, button)
+const contact = document.createElement('p')
+contact.className = 'developer__contact'
+contact.append('or contact us at ')
+const email = document.createElement('a')
+email.href = 'mailto:developers@minigames.com'
+email.textContent = 'developers@minigames.com'
+contact.append(email)
+
+content.append(title, description, button, contact)
 
   section.append(illustrationElement, content)
   return section

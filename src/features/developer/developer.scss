@@ -1,37 +1,29 @@
 @use '/src/styles/tokens' as *;
 @use '/src/styles/mixins' as *;
 
+$developer-max-width: 1660px;
+
 .developer {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: $size-2;
-  width: min(100%, 960px);
-  margin: 0 auto;
-  min-height: 280px;
-  overflow: hidden;
+  gap: $size-3;
+  width: 100%;
+  max-width: $developer-max-width;
+  margin-inline: auto;
   padding: $size-5 $size-2;
   color: $color-on-primary;
-  background: $color-bg;
 
   &__illustration {
     display: block;
     width: 100%;
-    max-width: 343px;
     height: auto;
-    margin-inline: auto;
     border: 2px solid $color-on-primary;
     border-radius: $corner-medium;
-    object-fit: cover;
   }
 
   &__content {
-    position: relative;
-    z-index: 1;
-    width: min(100%, 560px);
-    margin: 0 auto;
+    width: 100%;
     padding: $size-3;
     border: 1px solid $color-on-primary;
     border-radius: $corner-small;
@@ -39,59 +31,57 @@
     box-shadow: $shadow-level-1;
   }
 
-  h2 {
-    margin: 0 0 12px;
+  &__title {
+    margin: 0 0 $size-2;
     font-size: $font-size-headline-medium;
     line-height: 1.15;
   }
 
   &__description {
-    max-width: 440px;
-    margin: 0 0 24px;
+    max-width: 36em;
+    margin: 0 0 $size-3;
     color: $color-on-bg;
     font-size: $font-size-body-medium;
     line-height: 1.4;
   }
 
-  .btn {
-    min-height: $size-4;
-  }
-}
+  &__contact {
+    margin: $size-2 0 0;
+    font-size: $font-size-body-small;
+    color: $color-on-bg-low;
 
-@include tablet {
-  .developer {
+    a {
+      color: inherit;
+    }
+  }
+
+  @include tablet {
     flex-direction: row;
-    width: min(100%, 688px);
-    min-height: 300px;
+    gap: $size-4;
     padding: $size-6 $size-4;
 
     &__illustration {
-      width: 42%;
-      max-width: 288px;
+      flex: 1 1 0;
+      width: auto;
+      min-width: 0;
     }
 
     &__content {
-      width: min(100%, 376px);
+      flex: 1.4 1 0;
+      min-width: 0;
       padding: $size-4;
     }
   }
-}
 
-@include desktop {
-  .developer {
-    width: 980px;
-    min-height: 343px;
-    padding: $size-4 0;
-    gap: $size-3;
-
-    &__illustration {
-      width: 320px;
-      max-width: none;
-    }
+  @include desktop {
+    gap: $size-5;
 
     &__content {
-      width: 636px;
-      padding: $size-3;
+      padding: $size-5;
+    }
+
+    &__title {
+      font-size: $font-size-headline-large;
     }
   }
 }
