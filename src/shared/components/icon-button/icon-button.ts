@@ -1,5 +1,5 @@
-import './icon-button.scss';
-import { createElement } from 'lucide';
+import'./icon-button.scss';
+import{ createElement } from'lucide';
 
 type IconNode = Parameters<typeof createElement>[0];
 
@@ -7,7 +7,7 @@ export function createIconButton(
     label: string,
     icon: string | IconNode,
     className = '',
-): HTMLButtonElement {
+): HTMLButtonElement{
     const button = document.createElement('button');
     button.type = 'button';
     button.className = `icon-button${className ? ` ${className}` : ''}`;
@@ -16,9 +16,9 @@ export function createIconButton(
     const glyph = document.createElement('span');
     glyph.className = 'icon-button__glyph';
 
-    if (typeof icon === 'string') {
+    if(typeof icon === 'string'){
         glyph.textContent = icon;
-    } else {
+    } else{
         glyph.append(createElement(icon));
     }
 

@@ -1,7 +1,7 @@
-import './footer.scss';
-import logoSource from '../../assets/Logo.svg';
-import rssLogo from '../../assets/rss-logo.svg';
-import { Code2, MessageCircle, Share2, createElement } from 'lucide';
+import'./footer.scss';
+import logoSource from'../../assets/Logo.svg';
+import rssLogo from'../../assets/rss-logo.svg';
+import{ Code2, MessageCircle, Share2, createElement } from'lucide';
 
 type FooterLink = { label: string; href: string };
 
@@ -35,14 +35,14 @@ function create<K extends keyof HTMLElementTagNameMap>(
     tag: K,
     className?: string,
     text?: string,
-): HTMLElementTagNameMap[K] {
+): HTMLElementTagNameMap[K]{
     const element = document.createElement(tag);
-    if (className) element.className = className;
-    if (text) element.textContent = text;
+    if(className) element.className = className;
+    if(text) element.textContent = text;
     return element;
 }
 
-function createBrand(): HTMLAnchorElement {
+function createBrand(): HTMLAnchorElement{
     const brand = create('a', 'footer__brand');
     brand.href = '/';
     brand.setAttribute('aria-label', 'MiniGames home');
@@ -55,7 +55,7 @@ function createBrand(): HTMLAnchorElement {
     return brand;
 }
 
-function createLinkColumn(title: string, id: string, links: FooterLink[]): HTMLElement {
+function createLinkColumn(title: string, id: string, links: FooterLink[]): HTMLElement{
     const column = create('nav', 'footer__column');
     column.setAttribute('aria-labelledby', id);
 
@@ -63,7 +63,7 @@ function createLinkColumn(title: string, id: string, links: FooterLink[]): HTMLE
     heading.id = id;
 
     const list = create('ul', 'footer__list');
-    for (const { label, href } of links) {
+    for(const{ label, href } of links){
         const item = document.createElement('li');
         const link = create('a', 'footer__link', label);
         link.href = href;
@@ -75,25 +75,25 @@ function createLinkColumn(title: string, id: string, links: FooterLink[]): HTMLE
     return column;
 }
 
-function createSocialColumn(): HTMLElement {
+function createSocialColumn(): HTMLElement{
     const column = create('div', 'footer__column footer__column--social');
     const heading = create('h2', 'footer__heading', 'Community');
     const list = create('ul', 'footer__social');
 
-    for (const { label, href, icon, type } of SOCIAL_LINKS) {
+    for(const{ label, href, icon, type } of SOCIAL_LINKS){
         const item = document.createElement('li');
         const link = create('a', 'footer__social-link');
         link.href = href;
         link.setAttribute('aria-label', label);
         link.title = label;
 
-        if (type === 'rss') {
+        if(type === 'rss'){
             const rssIcon = document.createElement('img');
             rssIcon.src = rssLogo;
             rssIcon.alt = '';
             rssIcon.setAttribute('aria-hidden', 'true');
             link.append(rssIcon);
-        } else {
+        } else{
             link.append(createElement(icon));
         }
 
@@ -105,7 +105,7 @@ function createSocialColumn(): HTMLElement {
     return column;
 }
 
-function createChip(href: string, icon: HTMLElement, label: string): HTMLAnchorElement {
+function createChip(href: string, icon: HTMLElement, label: string): HTMLAnchorElement{
     const chip = create('a', 'footer__chip');
     chip.href = href;
     chip.target = '_blank';
@@ -114,7 +114,7 @@ function createChip(href: string, icon: HTMLElement, label: string): HTMLAnchorE
     return chip;
 }
 
-function createBottom(): HTMLElement {
+function createBottom(): HTMLElement{
     const bottom = create('div', 'footer__bottom');
 
     const copyright = create(
@@ -148,7 +148,7 @@ function createBottom(): HTMLElement {
     return bottom;
 }
 
-export function createFooter(): HTMLElement {
+export function createFooter(): HTMLElement{
     const footer = create('footer', 'footer');
     const inner = create('div', 'footer__inner');
     const top = create('div', 'footer__top');
