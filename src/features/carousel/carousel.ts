@@ -1,11 +1,11 @@
-import './carousel.scss';
-import { ArrowLeft, ArrowRight } from 'lucide';
-import camperVanCard from '../../assets/camper-van-make-it-home-card.jpg';
-import catMailCard from '../../assets/cat-mail-co-card.jpg';
-import cozySolitaireCard from '../../assets/cozy-solitaire-card.jpg';
-import littleCornersCard from '../../assets/little-corners-card.jpg';
-import organizedInsideCard from '../../assets/organized-inside-card.jpg';
-import { createIconButton } from '../../shared/components/icon-button/icon-button';
+import'./carousel.scss';
+import{ ArrowLeft, ArrowRight } from'lucide';
+import camperVanCard from'../../assets/camper-van-make-it-home-card.jpg';
+import catMailCard from'../../assets/cat-mail-co-card.jpg';
+import cozySolitaireCard from'../../assets/cozy-solitaire-card.jpg';
+import littleCornersCard from'../../assets/little-corners-card.jpg';
+import organizedInsideCard from'../../assets/organized-inside-card.jpg';
+import{ createIconButton } from'../../shared/components/icon-button/icon-button';
 
 const GAMES = [
     { title: 'Camper Van: Make It Home', image: camperVanCard, likes: '1.2k', rating: '4.8' },
@@ -17,7 +17,7 @@ const GAMES = [
 
 type CardSlot = 'peek' | 'side' | 'featured';
 
-function createCard(game: (typeof GAMES)[number], slot: CardSlot): HTMLElement {
+function createCard(game: (typeof GAMES)[number], slot: CardSlot): HTMLElement{
     const card = document.createElement('article');
     card.className = `carousel__card carousel__card--${slot}`;
 
@@ -38,25 +38,25 @@ function createCard(game: (typeof GAMES)[number], slot: CardSlot): HTMLElement {
     return card;
 }
 
-function updateCard(card: HTMLElement, game: (typeof GAMES)[number], slot: CardSlot): void {
+function updateCard(card: HTMLElement, game: (typeof GAMES)[number], slot: CardSlot): void{
     card.className = `carousel__card carousel__card--${slot}`;
     const image = card.querySelector('img');
     const title = card.querySelector('h3');
     const metadata = card.querySelector('.carousel__card-meta');
-    if (image instanceof HTMLImageElement) {
+    if(image instanceof HTMLImageElement){
         image.src = game.image;
         image.alt = game.title;
     }
-    if (title instanceof HTMLHeadingElement) {
+    if(title instanceof HTMLHeadingElement){
         title.textContent = game.title;
         title.title = game.title;
     }
-    if (metadata instanceof HTMLElement) {
+    if(metadata instanceof HTMLElement){
         metadata.innerHTML = `<span aria-label="${game.likes} likes">♥ ${game.likes}</span><span aria-label="${game.rating} out of 5 stars">★ ${game.rating}</span>`;
     }
 }
 
-export function createCarousel(): HTMLElement {
+export function createCarousel(): HTMLElement{
     const section = document.createElement('section');
     section.className = 'carousel';
     section.setAttribute('aria-labelledby', 'carousel-title');
@@ -90,7 +90,7 @@ export function createCarousel(): HTMLElement {
 
     const indicators = document.createElement('div');
     indicators.className = 'carousel__indicators';
-    for (let index = 0; index < GAMES.length; index += 1) {
+    for(let index = 0; index < GAMES.length; index += 1){
         const indicator = document.createElement('button');
         indicator.type = 'button';
         indicator.setAttribute('aria-label', `Show game ${index + 1}`);
@@ -100,14 +100,14 @@ export function createCarousel(): HTMLElement {
 
     let currentIndex = 0;
     const updateIndicators = (): void => {
-        for (const [index, indicator] of [...indicators.children].entries()) {
+        for(const[index, indicator] of[...indicators.children].entries()){
             indicator.classList.toggle('is-active', index === currentIndex);
         }
     };
 
     const renderCards = (): void => {
         orderedGames = [...GAMES.slice(currentIndex), ...GAMES.slice(0, currentIndex)];
-        for (const [index, card] of cards.entries()) {
+        for(const[index, card] of cards.entries()){
             updateCard(card, orderedGames[index], slots[index]);
         }
         updateIndicators();
@@ -120,7 +120,7 @@ export function createCarousel(): HTMLElement {
 
     previousButton.addEventListener('click', () => updateCarousel(-1));
     nextButton.addEventListener('click', () => updateCarousel(1));
-    for (const [index, indicator] of [...indicators.children].entries()) {
+    for(const[index, indicator] of[...indicators.children].entries()){
         indicator.addEventListener('click', () => {
             currentIndex = index;
             renderCards();

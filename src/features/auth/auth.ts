@@ -1,10 +1,10 @@
-import './auth.scss';
-import { Eye, LockKeyhole, Mail, UserRound, X, createElement } from 'lucide';
+import'./auth.scss';
+import{ Eye, LockKeyhole, Mail, UserRound, X, createElement } from'lucide';
 
 type IconNode = Parameters<typeof createElement>[0];
 export type AuthMode = 'login' | 'register';
 
-function createIconButton(label: string, icon: IconNode, className: string): HTMLButtonElement {
+function createIconButton(label: string, icon: IconNode, className: string): HTMLButtonElement{
     const button = document.createElement('button');
     button.type = 'button';
     button.className = className;
@@ -18,7 +18,7 @@ function createAuthField(
     inputType: string,
     placeholder: string,
     icon: IconNode,
-): HTMLLabelElement {
+): HTMLLabelElement{
     const field = document.createElement('label');
     field.className = 'auth-dialog__field';
 
@@ -36,7 +36,7 @@ function createAuthField(
     input.required = true;
     inputWrapper.append(input);
 
-    if (inputType === 'password') {
+    if(inputType === 'password'){
         const visibilityButton = createIconButton('Show password', Eye, 'auth-dialog__visibility');
         visibilityButton.addEventListener('click', () => {
             input.type = input.type === 'password' ? 'text' : 'password';
@@ -55,7 +55,7 @@ function createAuthField(
 export function createAuthDialog(): {
     dialog: HTMLDialogElement;
     setMode: (mode: AuthMode) => void;
-} {
+}{
     const dialog = document.createElement('dialog');
     dialog.className = 'auth-dialog';
     dialog.setAttribute('aria-labelledby', 'auth-dialog-title');
@@ -165,5 +165,5 @@ export function createAuthDialog(): {
     dialog.append(close, tabs, title, message, form);
     form.append(fields, forgotPassword, submit, divider, google, footer);
     setMode('login');
-    return { dialog, setMode };
+    return{ dialog, setMode };
 }
