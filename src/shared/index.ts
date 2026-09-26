@@ -1,1 +1,1 @@
-export const shared = 'INDEX'
+export const shared = 'INDEX';

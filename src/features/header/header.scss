@@ -2,63 +2,63 @@
 @use '/src/styles/mixins' as *;
 
 * {
-  margin: 0;
+    margin: 0;
 }
 header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $size-4;
-  padding: $size-3 $size-10;
-  background-color: $color-bg;
-  color: $color-on-primary;
-  font-family: $font-family-inter;
-  border: 1px $color-on-primary solid;
-  font-weight: $font-weight-bold;
-
-  div {
     display: flex;
     align-items: center;
-    gap: $size-1;
-    img {
-      width: $size-4;
-      height: $size-4;
-      object-fit: contain;
-    }
-    h1 {
-      font-size: $font-size-headline-medium;
-      margin: 0;
-    }
-  }
-  nav {
-    display: flex;
-    align-items: center;
+    justify-content: space-between;
     gap: $size-4;
+    padding: $size-3 $size-10;
+    background-color: $color-bg;
+    color: $color-on-primary;
+    font-family: $font-family-inter;
+    border: 1px $color-on-primary solid;
+    font-weight: $font-weight-bold;
 
-    ul {
-      display: flex;
-      align-items: center;
-      gap: $size-5;
-      list-style: none;
-      a {
-        color: $color-on-bg;
-        font-size: $font-size-body-medium;
-        font-weight: $font-weight-bold;
-        text-decoration: none;
-        transition: color 0.2s ease;
-
-        &:hover {
-          color: $color-primary;
+    div {
+        display: flex;
+        align-items: center;
+        gap: $size-1;
+        img {
+            width: $size-4;
+            height: $size-4;
+            object-fit: contain;
         }
-        &:active {
-          color: $color-on-primary;
+        h1 {
+            font-size: $font-size-headline-medium;
+            margin: 0;
         }
-      }
     }
-  }
-  div {
-    gap: $size-2;
-  }
+    nav {
+        display: flex;
+        align-items: center;
+        gap: $size-4;
+
+        ul {
+            display: flex;
+            align-items: center;
+            gap: $size-5;
+            list-style: none;
+            a {
+                color: $color-on-bg;
+                font-size: $font-size-body-medium;
+                font-weight: $font-weight-bold;
+                text-decoration: none;
+                transition: color 0.2s ease;
+
+                &:hover {
+                    color: $color-primary;
+                }
+                &:active {
+                    color: $color-on-primary;
+                }
+            }
+        }
+    }
+    div {
+        gap: $size-2;
+    }
 }
 
 // @include tablet {
