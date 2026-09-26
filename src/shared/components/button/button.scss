@@ -10,20 +10,20 @@
 .btn {
   @include interactive;
 
-  border: 2px solid $color-on-primary;
+  outline: 2px solid $color-on-primary;
   font-family: $font-family-inter;
   font-weight: $font-weight-bold;
   color: $color-on-primary;
   transition: background-color 0.15s ease;
 
-  @include btn-size($button-small-padding, $font-size-label-medium, $corner-extra-small);
+  @include btn-size($button-small-padding, $font-size-label-small, $corner-small);
 
   @include tablet {
-    @include btn-size($button-medium-padding, $font-size-label-large, $corner-small);
+    @include btn-size($button-medium-padding, $font-size-label-medium, $corner-medium);
   }
 
   @include desktop {
-    @include btn-size($button-large-padding, $font-size-label-extra-large, $corner-medium);
+    @include btn-size($button-medium-padding, $font-size-label-large, $corner-small);
   }
 
   &:focus-visible {
