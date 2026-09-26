@@ -1,6 +1,6 @@
-import js from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import unicorn from 'eslint-plugin-unicorn';
+import js from'@eslint/js';
+import tseslint from'typescript-eslint';
+import unicorn from'eslint-plugin-unicorn';
 
 export default tseslint.config(
     {

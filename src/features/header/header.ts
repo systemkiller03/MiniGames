@@ -1,6 +1,6 @@
-import logoIconSrc from '@/assets/Logo.svg';
-import { createButton } from '@/shared/components/button/button';
-import './header.scss';
+import logoIconSrc from'@/assets/Logo.svg';
+import{ createButton } from'@/shared/components/button/button';
+import'./header.scss';
 
 const NAV_ELEMS: { name: string; link: string }[] = [
     {
@@ -20,7 +20,7 @@ const NAV_ELEMS: { name: string; link: string }[] = [
         link: '/',
     },
 ];
-export function createHeader() {
+export function createHeader(){
     const header = document.createElement('header');
 
     const logo = document.createElement('div');
@@ -38,7 +38,7 @@ export function createHeader() {
 
     const nav = document.createElement('nav');
     const ul = document.createElement('ul');
-    for (const element of NAV_ELEMS) {
+    for(const element of NAV_ELEMS){
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.textContent = element.name;

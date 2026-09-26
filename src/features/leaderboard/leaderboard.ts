@@ -1,4 +1,4 @@
-import './leaderboard.scss';
+import'./leaderboard.scss';
 
 const PLAYERS = [
     { rank: '01', name: 'BubblyPea', score: '12,480', games: '87', streak: '8 days' },
@@ -8,7 +8,7 @@ const PLAYERS = [
     { rank: '05', name: 'MoonlitFox', score: '9,210', games: '58', streak: '3 days' },
 ];
 
-export function createLeaderboard(): HTMLElement {
+export function createLeaderboard(): HTMLElement{
     const section = document.createElement('section');
     section.className = 'leaderboard';
     section.setAttribute('aria-labelledby', 'leaderboard-title');
@@ -24,7 +24,7 @@ export function createLeaderboard(): HTMLElement {
     caption.textContent = 'Top players ranked by weekly score';
     const head = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    for (const label of ['Rank', 'Player', 'Score', 'Games', 'Streak']) {
+    for(const label of['Rank', 'Player', 'Score', 'Games', 'Streak']){
         const cell = document.createElement('th');
         cell.scope = 'col';
         cell.textContent = label;
@@ -33,13 +33,13 @@ export function createLeaderboard(): HTMLElement {
     head.append(headerRow);
 
     const body = document.createElement('tbody');
-    for (const player of PLAYERS) {
+    for(const player of PLAYERS){
         const row = document.createElement('tr');
         const values = [player.rank, player.name, player.score, player.games, player.streak];
-        for (const [index, value] of values.entries()) {
+        for(const[index, value] of values.entries()){
             const cell = document.createElement('td');
-            if (index === 0) cell.className = 'leaderboard__rank';
-            else if (index === 1) cell.className = 'leaderboard__player';
+            if(index === 0) cell.className = 'leaderboard__rank';
+            else if(index === 1) cell.className = 'leaderboard__player';
             cell.textContent = value;
             row.append(cell);
         }
