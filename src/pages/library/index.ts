@@ -1,4 +1,4 @@
 export function createLibraryPage() {
-  const main = document.createElement('main')
-  return main
+    const main = document.createElement('main');
+    return main;
 }
