@@ -2,25 +2,29 @@ import heart from'@/assets/heart.svg';
 import star from'@/assets/start.svg';
 import'./card.scss';
 import{ createButton } from'@/shared/components/button/button';
-export function createCard({
-    imgSrc,
-    name,
-    description,
-    category,
-    detailsLink,
-    cost,
-    stars,
-    likes,
-}: {
-    imgSrc: string;
-    name: string;
-    description: string;
-    category: string;
-    detailsLink: string;
-    cost: string;
-    stars: number;
-    likes: number;
-}){
+
+export function createCard(
+    {
+        imgSrc,
+        name,
+        description,
+        category,
+        detailsLink,
+        cost,
+        stars,
+        likes,
+    }: {
+        imgSrc: string;
+        name: string;
+        description: string;
+        category: string;
+        detailsLink: string;
+        cost: string;
+        stars: number;
+        likes: number;
+    },
+    onDetailsClick?: () => void,
+){
     const card = document.createElement('div');
     card.classList.add('card');
 
@@ -86,6 +90,10 @@ export function createCard({
 
     const detailsButton = createButton({ label: 'Details', variant: 'primary' });
     detailsButton.addEventListener('click', () => {
+        if (onDetailsClick) {
+            onDetailsClick();
+            return;
+        }
         console.log(detailsLink);
     });
     footer.append(detailsButton);

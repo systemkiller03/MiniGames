@@ -63,11 +63,11 @@
                 }
                 p.category {
                     color: $color-on-primary;
-                    font-size: $font-size-body-medium;
+                    font-size: $font-size-label-medium;
                     font-weight: $font-weight-bold;
                     border: 1px solid $color-on-primary;
                     border-radius: $corner-extra-large;
-                    padding: $size-1 $size-2;
+                    padding: $size-05 $size-1;
                     cursor: pointer;
                     @include tablet {
                         font-size: $font-size-body-small;
