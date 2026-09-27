@@ -15,8 +15,11 @@ header {
     font-family: $font-family-inter;
     border: 1px $color-on-primary solid;
     font-weight: $font-weight-bold;
+    @include tablet{
+        padding:$size-2 $size-5;
+    }
 
-    div {
+    >div {
         display: flex;
         align-items: center;
         gap: $size-1;
@@ -28,9 +31,12 @@ header {
         h1 {
             font-size: $font-size-headline-medium;
             margin: 0;
+            @include tablet {
+                font-size: $font-size-headline-small;
+            }
         }
     }
-    nav {
+    >nav {
         display: flex;
         align-items: center;
         gap: $size-4;
@@ -40,6 +46,9 @@ header {
             align-items: center;
             gap: $size-5;
             list-style: none;
+            @include tablet {
+                display: none;
+            }
             a {
                 color: $color-on-bg;
                 font-size: $font-size-body-medium;
@@ -55,59 +64,26 @@ header {
                 }
             }
         }
-    }
-    div {
-        gap: $size-2;
-    }
+    div { 
+        display: flex;
+        align-items: center;    
+        gap:$size-4;
+        .login{
+            @include tablet {
+                display: none;
+            }
+        
+        }
+        .signup{
+            @include mobile {
+                display: none;
+            }
+        }
+        .mobileBurgerButton{
+            display:none;
+            @include tablet {
+                display: block;
+            }     
+        }
+    }}
 }
-
-// @include tablet {
-//   header {
-//     padding-inline: $size-4;
-//   }
-// }
-
-// @media (max-width: $breakpoint-tablet) {
-//   header {
-//     flex-wrap: wrap;
-//     padding: $size-2 $size-3;
-//     gap: $size-2;
-
-//     nav {
-//       flex-wrap: wrap;
-//       width: 100%;
-
-//       ul {
-//         justify-content: space-between;
-//         width: 100%;
-//         gap: $size-2;
-//       }
-
-//       .login {
-//         margin-left: 0;
-//       }
-//     }
-//   }
-// }
-
-// @media (max-width: $breakpoint-mobile) {
-//   header {
-//     div {
-//       h1 {
-//         font-size: $font-size-headline-small;
-//       }
-//     }
-
-//     nav {
-//       gap: $size-1;
-
-//       ul {
-//         gap: $size-1;
-
-//         a {
-//           font-size: $font-size-label-large;
-//         }
-//       }
-//     }
-//   }
-// }

@@ -1,0 +1,100 @@
+@use '/src/styles/mixins' as *;
+@use '/src/styles/tokens' as *;
+
+aside {
+    display: none;
+    z-index: 100;
+    @include tablet {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: $color-bg-footer;
+        padding: $size-3;
+        gap:$size-4;
+    }
+    div {
+        display: flex;
+        justify-content: space-between;
+        div {
+            display: flex;
+            align-items: center;
+            gap: $size-1;
+            img {
+                width: $size-4;
+                height: $size-4;
+                object-fit: contain;
+            }
+            h1 {
+                font-size: $font-size-headline-medium;
+                color: white;
+                margin: 0;
+                @include tablet {
+                    font-size: $font-size-headline-small;
+                }
+            }
+        }
+        .closeButton{
+            background: $color-bg-footer-low;
+            padding: 0;
+            outline: none;
+            color: white;
+            font-size: $font-size-display-small;
+            cursor: pointer;
+        }
+    }
+    nav {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: $size-4;
+        ul {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: $size-3;
+            list-style: none;
+            padding:0;
+            a {
+                color: $color-on-bg-footer;
+                font-size: $font-size-body-large;
+                font-weight: $font-weight-bold;
+                text-decoration: none;
+                transition: color 0.2s ease;
+
+                &:hover {
+                    color: $color-primary;
+                }
+                &:active {
+                    color: $color-on-primary;
+                }
+            }
+        }
+        div{
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: $size-2;
+            button{
+                width: 100%;
+            }
+            .login{
+                outline-color:$color-bg;
+                color:$color-bg;
+                background-color:$color-bg-footer;
+            }
+        }
+    }
+    &.closed {
+        display: none;
+    }
+}
+footer {
+    display: none;
+}

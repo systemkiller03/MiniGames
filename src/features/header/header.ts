@@ -1,8 +1,11 @@
-import logoIconSrc from'@/assets/Logo.svg';
-import{ createButton } from'@/shared/components/button/button';
-import'./header.scss';
+import logoIconSrc from '@/assets/Logo.svg';
+import { createButton } from '@/shared/components/button/button';
+import './header.scss';
+import { createElement, Menu } from 'lucide';
+import { createMobileBurger } from './mobile-burger';
 
-const NAV_ELEMS: { name: string; link: string }[] = [
+export type NAV_ELEM = { name: string; link: string };
+const NAV_ELEMS: NAV_ELEM[] = [
     {
         name: 'Home',
         link: '/',
@@ -20,7 +23,7 @@ const NAV_ELEMS: { name: string; link: string }[] = [
         link: '/',
     },
 ];
-export function createHeader(){
+export function createHeader() {
     const header = document.createElement('header');
 
     const logo = document.createElement('div');
@@ -38,7 +41,7 @@ export function createHeader(){
 
     const nav = document.createElement('nav');
     const ul = document.createElement('ul');
-    for(const element of NAV_ELEMS){
+    for (const element of NAV_ELEMS) {
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.textContent = element.name;
@@ -49,16 +52,29 @@ export function createHeader(){
     nav.append(ul);
 
     const div = document.createElement('div');
-    const login = createButton('Log In', 'outline');
+    const login = createButton({ label: 'Log In', variant: 'outline' });
     login.classList.add('login');
     div.append(login);
 
-    const signup = createButton('Sign Up', 'primary');
+    const signup = createButton({ label: 'Sign Up', variant: 'primary' });
     signup.classList.add('signup');
     div.append(signup);
+
+    const mobileBurgerButton = createButton({ icon: createElement(Menu), variant: 'outline' });
+    mobileBurgerButton.classList.add('mobileBurgerButton');
+
+    mobileBurgerButton.addEventListener('click',()=>{
+        aside.classList.remove('closed')
+    })
+
+    div.append(mobileBurgerButton)
 
     nav.append(div);
 
     header.append(nav);
+
+    const aside = createMobileBurger()
+    header.append(aside);
+
     return header;
 }
