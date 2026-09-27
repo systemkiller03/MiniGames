@@ -15,7 +15,7 @@ header {
     font-family: $font-family-inter;
     border: 1px $color-on-primary solid;
     font-weight: $font-weight-bold;
-    @include tablet {
+    @include desktop {
         padding: $size-2 $size-5;
     }
 
