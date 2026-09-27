@@ -1,4 +1,4 @@
-import './button.scss';
+import'./button.scss';
 
 export type ButtonVariant = 'primary' | 'outline';
 
@@ -10,15 +10,15 @@ export function createButton({
     label?: string;
     icon?: Node;
     variant: ButtonVariant;
-}): HTMLButtonElement {
+}): HTMLButtonElement{
     const button = document.createElement('button');
     button.type = 'button';
     button.className = `btn btn--${variant}`;
-    if (label) {
+    if(label){
         button.textContent = label;
     }
-    if (icon) {
-        button.appendChild(icon);
+    if(icon){
+        button.append(icon);
     }
 
     return button;
