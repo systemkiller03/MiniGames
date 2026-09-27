@@ -1,7 +1,7 @@
 @use '/src/styles/tokens' as *;
 @use '/src/styles/mixins' as *;
 
-$developer-max-width: 1660px;
+$developer-max-width: 1680px;
 
 .developer {
     display: flex;
@@ -19,37 +19,24 @@ $developer-max-width: 1660px;
         width: 100%;
         height: auto;
         border: 2px solid $color-on-primary;
-        border-radius: $corner-medium;
+        border-radius: $corner-extra-large;
     }
 
     &__content {
         width: 100%;
         padding: $size-3;
-        border: 1px solid $color-on-primary;
-        border-radius: $corner-small;
+        border: 2px solid $color-on-primary;
+        border-radius: $corner-extra-large;
         background: $color-white;
-        box-shadow: $shadow-level-1;
+        box-shadow:
+            0 2px 4px rgb(0 0 0 / 4%),
+            0 14px 15px rgb(0 0 0 / 8%);
     }
 
     &__title {
-        position: relative;
-        display: flex;
-        align-items: center;
         margin: 0 0 $size-2;
-        padding-left: $size-3;
         font-size: $font-size-headline-medium;
         line-height: 1.15;
-
-        &::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            width: 6px;
-            height: 100%;
-            border: 2px solid $color-bg-footer;
-            border-radius: $corner-small;
-            background: $color-primary;
-        }
     }
 
     &__description {
@@ -57,7 +44,7 @@ $developer-max-width: 1660px;
         margin: 0 0 $size-3;
         color: $color-on-bg;
         font-size: $font-size-body-medium;
-        line-height: 1.4;
+        line-height: 1.5;
     }
 
     &__contact {
@@ -70,10 +57,25 @@ $developer-max-width: 1660px;
         }
     }
 
-    @include tablet {
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: $size-1;
+        padding: $button-large-padding;
+        border-radius: $corner-medium;
+        font-size: $font-size-body-large;
+        box-shadow: 0 10px 10px rgb(0 0 0 / 10%);
+
+        svg {
+            width: $size-3;
+            height: $size-3;
+        }
+    }
+
+    @media (min-width: 769px) {
         flex-direction: row;
         gap: $size-4;
-        padding: $size-6 $size-4;
+        padding: $size-6 $size-5;
 
         &__illustration {
             flex: 1 1 0;
@@ -88,8 +90,16 @@ $developer-max-width: 1660px;
         }
     }
 
-    @include desktop {
+    @media (min-width: 1200px) {
         gap: $size-5;
+        padding: $size-5 0;
+
+        &__illustration {
+            flex: 1 1 0;
+            min-width: 0;
+            border: 0;
+            border-radius: $corner-extra-large;
+        }
 
         &__content {
             padding: $size-5;
