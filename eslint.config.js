@@ -1,29 +1,32 @@
-import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import unicorn from 'eslint-plugin-unicorn'
+import js from'@eslint/js';
+import tseslint from'typescript-eslint';
+import unicorn from'eslint-plugin-unicorn';
 
 export default tseslint.config(
-  {
-    ignores: ['dist/**', 'node_modules/**'],
-  },
-
-  js.configs.recommended,
-
-  ...tseslint.configs.recommended,
-
-  {
-    plugins: {
-      unicorn,
+    {
+        ignores: ['dist/**', 'node_modules/**'],
     },
 
-    rules: {
-      ...unicorn.configs.recommended.rules,
+    js.configs.recommended,
 
-      '@typescript-eslint/no-explicit-any': 'error',
-    },
+    ...tseslint.configs.recommended,
 
-    linterOptions: {
-      noInlineConfig: true,
+    {
+        plugins: {
+            unicorn,
+        },
+
+        rules: {
+            ...unicorn.configs.recommended.rules,
+
+            '@typescript-eslint/no-explicit-any': 'error',
+            'space-before-blocks': ['error', 'never'],
+            'keyword-spacing': ['error', { after: false }],
+            'space-before-function-paren': ['error', 'never'],
+        },
+
+        linterOptions: {
+            noInlineConfig: true,
+        },
     },
-  },
-)
+);

@@ -2,221 +2,282 @@
 @use '/src/styles/mixins' as *;
 
 .carousel {
-  width: 100%;
-  padding: 16px 0 40px;
-  overflow: hidden;
-  background: $color-bg;
-
-  &__heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 16px 16px;
-  }
-
-  h2 {
-    position: relative;
-    margin: 0;
-    padding-left: $size-3;
-    color: $color-on-primary;
-    font-size: $font-size-headline-small;
-    line-height: 1.2;
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      width: 6px;
-      height: 100%;
-      border: 2px solid $color-bg-footer;
-      border-radius: $corner-small;
-      background: $color-primary;
-    }
-  }
-
-  &__controls {
-    display: flex;
-    gap: 8px;
-  }
-
-  &__arrow {
-    @include interactive;
-
-    width: 38px;
-    height: 38px;
-    padding: 0;
-    border: 2px solid $color-on-primary;
-    border-radius: $corner-full;
-    color: $color-on-primary;
-    background: $color-white;
-    font-size: 20px;
-
-    &--next {
-      color: $color-on-primary;
-      background: $color-primary;
-    }
-  }
-
-  &__viewport {
     width: 100%;
+    padding: 16px 0 40px;
     overflow: hidden;
-  }
-
-  &__track {
-    display: flex;
-    gap: 5.5px;
-    width: max-content;
-    padding-left: 20px;
-    transition: transform 0.25s ease;
-  }
-
-  &__card {
-    position: relative;
-    container-type: inline-size;
-    flex: 0 0 56px;
-    height: 200px;
-    overflow: hidden;
-    border: 2px solid $color-on-primary;
-    border-radius: $corner-large;
-    background: $color-white;
-    transition: flex-basis 0.25s ease;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  &__card--peek {
-    flex-basis: 56px;
-  }
-
-  &__card--side {
-    flex-basis: 56px;
-  }
-
-  &__card--featured {
-    flex-basis: 218px;
-  }
-
-  &__card-info {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: none;
-    padding: 12px 16px;
-    color: $color-white;
-    background: linear-gradient(transparent, rgb(30 27 58 / 92%));
-  }
-
-  &__card-info h3 {
-    overflow: hidden;
-    margin: 10px 0 6px;
-    font-size: $font-size-body-medium;
-    font-weight: $font-weight-bold;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &__card-meta {
-    display: flex;
-    gap: 16px;
-    font-size: $font-size-body-small;
-  }
-
-  &__indicators {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 16px;
-  }
-
-  &__indicator {
-    @include interactive;
-
-    width: 8px;
-    height: 8px;
-    padding: 0;
-    border: 0;
-    border-radius: $corner-full;
-    background: $color-outline-variant;
-
-    &.is-active {
-      width: 24px;
-      border-radius: $corner-small;
-      background: $color-primary;
-    }
-  }
-}
-
-@include tablet {
-  .carousel {
-    padding-top: 32px;
+    background: $color-bg;
 
     &__heading {
-      margin-inline: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 16px 16px;
     }
 
     h2 {
-      font-size: $font-size-headline-medium;
+        position: relative;
+        margin: 0;
+        padding-left: $size-3;
+        color: $color-on-primary;
+        font-size: $font-size-headline-small;
+        line-height: 1.2;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            border: 2px solid $color-bg-footer;
+            border-radius: $corner-small;
+            background: $color-primary;
+        }
+    }
+
+    &__controls {
+        display: flex;
+        gap: 8px;
+    }
+
+    &__arrow {
+        @include interactive;
+
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: 2px solid $color-on-primary;
+        border-radius: $corner-full;
+        color: $color-on-primary;
+        background: $color-white;
+        font-size: 20px;
+
+        &--next {
+            color: $color-on-primary;
+            background: $color-primary;
+        }
+    }
+
+    &__viewport {
+        width: 100%;
+        overflow: hidden;
+        cursor: grab;
+        touch-action: pan-y;
+        user-select: none;
+
+        &.is-pressed {
+            cursor: grabbing;
+        }
     }
 
     &__track {
-      gap: 8px;
-      padding-left: 48px;
+        position: relative;
+        left: 50%;
+        display: flex;
+        gap: 5.5px;
+        width: max-content;
+        padding: 0;
+        transform: translateX(-50%);
     }
 
     &__card {
-      height: 280px;
-    }
+        position: relative;
+        container-type: inline-size;
+        flex: 0 0 56px;
+        height: 200px;
+        overflow: hidden;
+        border: 2px solid $color-on-primary;
+        border-radius: $corner-large;
+        background: $color-white;
+        cursor: pointer;
+        transition:
+            flex-basis 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+            opacity 0.22s ease;
 
-    &__card--peek,
-    &__card--side {
-      flex-basis: 105px;
-    }
+        &[hidden] {
+            display: none;
+        }
 
-    &__card--featured {
-      flex-basis: 448px;
-    }
-  }
-}
+        &:focus-visible {
+            outline: 3px solid $color-tertiary;
+            outline-offset: 4px;
+        }
 
-@include desktop {
-  .carousel {
-    padding: 40px 0 20px;
-
-    &__heading {
-      margin-inline: max(120px, calc((100% - #{$breakpoint-desktop}) / 2 + 120px));
-      margin-bottom: 50px;
-    }
-
-    &__track {
-      padding-left: max(128px, calc((100% - #{$breakpoint-desktop}) / 2 + 128px));
-    }
-
-    &__card {
-      height: 384px;
-      border-radius: $corner-large;
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     }
 
     &__card--peek {
-      flex-basis: 120px;
+        flex-basis: 56px;
     }
 
     &__card--side {
-      flex-basis: 288px;
+        flex-basis: 56px;
     }
 
     &__card--featured {
-      flex-basis: 816px;
+        flex-basis: 218px;
     }
-  }
+
+    &__card-info {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: none;
+        padding: 12px 16px;
+        color: $color-white;
+        background: linear-gradient(transparent, rgb(30 27 58 / 92%));
+    }
+
+    &__card-info h3 {
+        overflow: hidden;
+        margin: 10px 0 6px;
+        font-size: $font-size-body-medium;
+        font-weight: $font-weight-bold;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &__card-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        font-size: $font-size-body-small;
+    }
+
+    &__rating {
+        color: $color-primary;
+    }
+
+    &__indicators {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    &__indicator {
+        @include interactive;
+
+        width: 8px;
+        height: 8px;
+        padding: 0;
+        border: 0;
+        border-radius: $corner-full;
+        background: $color-outline-variant;
+
+        &.is-active {
+            width: 24px;
+            border-radius: $corner-small;
+            background: $color-primary;
+        }
+    }
 }
 
-@container (min-width: 280px) {
-  .carousel__card-info {
-    display: block;
-  }
+@media (min-width: 481px) and (max-width: 1199px) {
+    .carousel {
+        padding-top: 32px;
+
+        &__heading {
+            margin-inline: 40px;
+        }
+
+        h2 {
+            font-size: $font-size-headline-medium;
+        }
+
+        &__track {
+            gap: 8px;
+        }
+
+        &__card {
+            height: 280px;
+        }
+
+        &__card--peek,
+        &__card--side {
+            flex-basis: 105px;
+        }
+
+        &__card--featured {
+            flex-basis: 448px;
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .carousel {
+        padding: $size-5 $size-15 $size-2;
+
+        &__heading {
+            margin: 0 0 $size-5;
+        }
+
+        h2 {
+            font-size: $font-size-headline-large;
+        }
+
+        &__arrow {
+            width: $size-6;
+            height: $size-6;
+        }
+
+        &__track {
+            position: static;
+            width: 100%;
+            max-width: 1680px;
+            justify-content: space-between;
+            gap: 0;
+            margin-inline: auto;
+            padding: 0 8px;
+            transform: none;
+        }
+
+        &__card {
+            height: 384px;
+            border-radius: $corner-extra-large;
+            box-shadow: 4px 4px 0 $color-on-primary;
+        }
+
+        &__card--peek {
+            flex-basis: 7.14%;
+        }
+
+        &__card--side {
+            flex-basis: 17.14%;
+        }
+
+        &__card--featured {
+            flex-basis: 48.57%;
+        }
+
+        &__indicators {
+            display: none;
+        }
+    }
+}
+
+@media (min-width: 1920px) {
+    .carousel {
+        &__card--peek {
+            flex-basis: 120px;
+        }
+
+        &__card--side {
+            flex-basis: 288px;
+        }
+
+        &__card--featured {
+            flex-basis: 816px;
+        }
+    }
+}
+
+@container (min-width: 284px) {
+    .carousel__card-info {
+        display: block;
+    }
 }

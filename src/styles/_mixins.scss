@@ -1,32 +1,42 @@
 @use 'tokens' as *;
 
-@mixin tablet {
-  @media (min-width: $breakpoint-tablet) {
-    @content;
-  }
-}
-
 @mixin desktop {
-  @media (min-width: $breakpoint-desktop) {
-    @content;
-  }
+    @media (max-width: $breakpoint-desktop) {
+        @content;
+    }
 }
 
-@mixin interactive {
-  cursor: pointer;
+@mixin tablet {
+    @media (max-width: $breakpoint-tablet) {
+        @content;
+    }
+}
 
-  &:disabled {
-    cursor: not-allowed;
-  }
+@mixin mobile {
+    @media (max-width: $breakpoint-mobile) {
+        @content;
+    }
 }
 
 @mixin container {
-  width: 100%;
-  max-width: $container-max-width;
-  margin-inline: auto;
-  padding-inline: $size-2;
+    width: 100%;
+    max-width: $container-max-width;
+    margin-inline: auto;
+    padding-inline: $size-10;
 
-  @include tablet {
-    padding-inline: $size-4;
-  }
+    @include desktop {
+        padding-inline: $size-4;
+    }
+
+    @include tablet {
+        padding-inline: $size-2;
+    }
+}
+
+@mixin interactive {
+    cursor: pointer;
+
+    &:disabled {
+        cursor: not-allowed;
+    }
 }

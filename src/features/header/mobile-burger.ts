@@ -1,9 +1,7 @@
 import logoIconSrc from'@/assets/Logo.svg';
 import{ createButton } from'@/shared/components/button/button';
-import'./header.scss';
-import{ createElement, Menu } from'lucide';
-import{ createMobileBurger } from'./mobile-burger';
-
+import{ createElement, X } from'lucide';
+import'./mobile-burger.scss';
 export type NAV_ELEM = { name: string; link: string };
 const NAV_ELEMS: NAV_ELEM[] = [
     {
@@ -12,7 +10,7 @@ const NAV_ELEMS: NAV_ELEM[] = [
     },
     {
         name: 'Library',
-        link: '/library',
+        link: '/',
     },
     {
         name: 'Tournaments',
@@ -23,9 +21,11 @@ const NAV_ELEMS: NAV_ELEM[] = [
         link: '/',
     },
 ];
-export function createHeader(){
-    const header = document.createElement('header');
+export function createMobileBurger(){
+    const aside = document.createElement('aside');
+    aside.classList.add('closed');
 
+    const firstLine = document.createElement('div');
     const logo = document.createElement('div');
 
     const icon: HTMLImageElement = document.createElement('img');
@@ -37,7 +37,16 @@ export function createHeader(){
 
     logo.append(icon);
     logo.append(h1);
-    header.append(logo);
+    firstLine.append(logo);
+    const closeButton = createButton({ icon: createElement(X), variant: 'outline' });
+    closeButton.classList.add('closeButton');
+
+    closeButton.addEventListener('click', () => {
+        aside.classList.add('closed');
+    });
+    firstLine.append(closeButton);
+
+    aside.append(firstLine);
 
     const nav = document.createElement('nav');
     const ul = document.createElement('ul');
@@ -60,21 +69,7 @@ export function createHeader(){
     signup.classList.add('signup');
     div.append(signup);
 
-    const mobileBurgerButton = createButton({ icon: createElement(Menu), variant: 'outline' });
-    mobileBurgerButton.classList.add('mobileBurgerButton');
-
-    mobileBurgerButton.addEventListener('click', () => {
-        aside.classList.remove('closed');
-    });
-
-    div.append(mobileBurgerButton);
-
     nav.append(div);
-
-    header.append(nav);
-
-    const aside = createMobileBurger();
-    header.append(aside);
-
-    return header;
+    aside.append(nav);
+    return aside;
 }

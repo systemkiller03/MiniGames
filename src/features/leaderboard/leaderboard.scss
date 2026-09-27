@@ -2,136 +2,159 @@
 @use '/src/styles/mixins' as *;
 
 .leaderboard {
-  width: 100%;
-  padding: $size-4 $size-2 $size-6;
-  background: $color-bg;
-
-  h2 {
-    position: relative;
-    display: flex;
-    align-items: center;
     width: 100%;
-    max-width: 1680px;
-    margin: 0 auto $size-2;
-    padding-left: $size-3;
-    color: $color-on-primary;
-    font-size: $font-size-headline-small;
-    line-height: 1.2;
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      width: 6px;
-      height: 100%;
-      border: 2px solid $color-bg-footer;
-      border-radius: $corner-small;
-      background: $color-primary;
-    }
-  }
-
-  &__table {
-    width: 100%;
-    max-width: 1680px;
-    margin: 0 auto;
-    border-collapse: separate;
-    border-spacing: 0;
-    overflow: hidden;
-    border: 2px solid $color-on-primary;
-    border-radius: $corner-medium;
-    color: $color-on-primary;
-    background: $color-white;
-    table-layout: fixed;
-  }
-
-  caption {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
-
-  th,
-  td {
-    padding: $size-1 $size-2;
-    text-align: left;
-  }
-
-  th {
-    color: $color-on-bg-footer;
-    background: $color-bg-footer;
-    font-size: $font-size-label-large;
-    font-weight: $font-weight-bold;
-  }
-
-  td {
-    border-top: 1px solid $color-outline-variant;
-    font-size: $font-size-body-small;
-    font-weight: $font-weight-medium;
-  }
-
-  th:nth-child(1),
-  td:nth-child(1) {
-    width: 18%;
-  }
-
-  th:nth-child(n + 3),
-  td:nth-child(n + 3) {
-    text-align: right;
-  }
-
-  &__rank {
-    color: $color-tertiary;
-    font-weight: $font-weight-bold;
-  }
-
-  &__player {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  tbody tr:first-child td:first-child {
-    color: $color-primary-high;
-  }
-}
-
-@include tablet {
-  .leaderboard {
-    padding-inline: $size-5;
+    padding: $size-5 $size-2;
+    background: $color-bg;
 
     h2 {
-      margin-bottom: $size-3;
-      font-size: $font-size-headline-medium;
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 1680px;
+        margin: 0 auto $size-5;
+        padding-left: $size-3;
+        color: $color-on-primary;
+        font-size: $font-size-headline-medium;
+        line-height: 1.2;
+
+        &::before {
+            position: absolute;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            border: 1.5px solid $color-on-primary;
+            border-radius: $corner-extra-small;
+            background: $color-primary;
+            content: '';
+        }
+    }
+
+    &__table-wrap {
+        width: 100%;
+        max-width: 1680px;
+        margin: 0 auto;
+        overflow-x: auto;
+        border: 2.5px solid $color-on-primary;
+        border-radius: $corner-large;
+        box-shadow: 6px 6px 0 $color-on-primary;
+        background: $color-white;
+    }
+
+    &__table {
+        width: 100%;
+        min-width: 940px;
+        border-collapse: collapse;
+        color: $color-on-primary;
+        table-layout: fixed;
+    }
+
+    caption {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
     }
 
     th,
     td {
-      padding: $size-2 $size-3;
+        text-align: center;
     }
 
-    th:nth-child(1),
-    td:nth-child(1) {
-      width: 12%;
+    th {
+        padding: $size-3;
+        border-bottom: 1.5px solid $color-on-primary;
+        color: $color-white;
+        background: $color-tertiary;
+        font-size: $font-size-body-medium;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
     }
-  }
+
+    td {
+        padding: $size-2 $size-3;
+        border-bottom: 1px solid $color-outline;
+        font-size: $font-size-body-medium;
+        font-weight: $font-weight-medium;
+    }
+
+    th:first-child,
+    td:first-child {
+        width: 80px;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 24%;
+    }
+
+    &__rank {
+        color: $color-on-primary;
+        font-weight: $font-weight-bold;
+    }
+
+    &__player {
+        text-align: left;
+    }
+
+    &__avatar {
+        display: inline-grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+        border: 1.5px solid $color-on-primary;
+        border-radius: 50%;
+        background: var(--avatar-color);
+        color: $color-on-primary;
+        font-size: $font-size-label-large;
+        font-weight: $font-weight-bold;
+        vertical-align: middle;
+    }
+
+    &__name {
+        font-weight: $font-weight-bold;
+        vertical-align: middle;
+    }
+
+    &__streak {
+        white-space: nowrap;
+    }
+
+    &__favorite {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 4px 12px;
+        border: 1.5px solid $color-on-primary;
+        border-radius: $corner-full;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    tbody tr:nth-child(odd) {
+        background: $color-bg;
+    }
+
+    tbody tr:first-child td:first-child {
+        color: $color-primary-high;
+    }
 }
 
-@include desktop {
-  .leaderboard {
-    padding: $size-5 $size-15 $size-12;
-
-    h2 {
-      margin-bottom: $size-3;
-      font-size: $font-size-headline-medium;
+@media (min-width: 481px) and (max-width: 1199px) {
+    .leaderboard {
+        padding-inline: $size-5;
     }
+}
 
-    th,
-    td {
-      padding: $size-2 $size-3;
-      font-size: $font-size-body-medium;
+@media (min-width: 1200px) {
+    .leaderboard {
+        padding: $size-5 $size-15;
+
+        h2 {
+            font-size: $font-size-headline-large;
+        }
     }
-  }
 }

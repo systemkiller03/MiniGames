@@ -1,1 +1,1 @@
-export const features = 'INDEX'
+export const features = 'INDEX';

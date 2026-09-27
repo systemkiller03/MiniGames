@@ -1,7 +1,6 @@
-import { createHomePage } from './pages'
-import './styles/main.scss'
+import{ createApp } from'./app';
+import{ createRouter } from'./app/router';
+import'./styles/main.scss';
 
-const app: HTMLDivElement = document.createElement('div')
-app.id = 'app'
-document.body.append(app)
-app.append(createHomePage())
+const main = createApp();
+createRouter(main);
