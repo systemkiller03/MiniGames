@@ -1,8 +1,9 @@
-import logoIconSrc from'@/assets/Logo.svg';
-import{ createButton } from'@/shared/components/button/button';
-import'./header.scss';
-import{ createElement, Menu } from'lucide';
-import{ createMobileBurger } from'./mobile-burger';
+import logoIconSrc from '@/assets/Logo.svg';
+import { createButton } from '@/shared/components/button/button';
+import { getNavigationUrl } from '@/shared/navigation';
+import './header.scss';
+import { createElement, Menu } from 'lucide';
+import { createMobileBurger } from './mobile-burger';
 
 export type NAV_ELEM = { name: string; link: string };
 const NAV_ELEMS: NAV_ELEM[] = [
@@ -23,7 +24,8 @@ const NAV_ELEMS: NAV_ELEM[] = [
         link: '/',
     },
 ];
-export function createHeader(){
+
+export function createHeader() {
     const header = document.createElement('header');
 
     const logo = document.createElement('div');
@@ -41,11 +43,11 @@ export function createHeader(){
 
     const nav = document.createElement('nav');
     const ul = document.createElement('ul');
-    for(const element of NAV_ELEMS){
+    for (const element of NAV_ELEMS) {
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.textContent = element.name;
-        a.href = element.link;
+        a.href = getNavigationUrl(element.link);
         li.append(a);
         ul.append(li);
     }
