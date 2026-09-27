@@ -1,8 +1,8 @@
-import logoIconSrc from '@/assets/Logo.svg';
-import { createButton } from '@/shared/components/button/button';
-import './header.scss';
-import { createElement, Menu } from 'lucide';
-import { createMobileBurger } from './mobile-burger';
+import logoIconSrc from'@/assets/Logo.svg';
+import{ createButton } from'@/shared/components/button/button';
+import'./header.scss';
+import{ createElement, Menu } from'lucide';
+import{ createMobileBurger } from'./mobile-burger';
 
 export type NAV_ELEM = { name: string; link: string };
 const NAV_ELEMS: NAV_ELEM[] = [
@@ -23,7 +23,7 @@ const NAV_ELEMS: NAV_ELEM[] = [
         link: '/',
     },
 ];
-export function createHeader() {
+export function createHeader(){
     const header = document.createElement('header');
 
     const logo = document.createElement('div');
@@ -41,7 +41,7 @@ export function createHeader() {
 
     const nav = document.createElement('nav');
     const ul = document.createElement('ul');
-    for (const element of NAV_ELEMS) {
+    for(const element of NAV_ELEMS){
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.textContent = element.name;
@@ -63,17 +63,17 @@ export function createHeader() {
     const mobileBurgerButton = createButton({ icon: createElement(Menu), variant: 'outline' });
     mobileBurgerButton.classList.add('mobileBurgerButton');
 
-    mobileBurgerButton.addEventListener('click',()=>{
-        aside.classList.remove('closed')
-    })
+    mobileBurgerButton.addEventListener('click', () => {
+        aside.classList.remove('closed');
+    });
 
-    div.append(mobileBurgerButton)
+    div.append(mobileBurgerButton);
 
     nav.append(div);
 
     header.append(nav);
 
-    const aside = createMobileBurger()
+    const aside = createMobileBurger();
     header.append(aside);
 
     return header;

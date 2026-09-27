@@ -1,7 +1,7 @@
-import logoIconSrc from '@/assets/Logo.svg';
-import { createButton } from '@/shared/components/button/button';
-import { createElement, X } from 'lucide';
-import './mobile-burger.scss';
+import logoIconSrc from'@/assets/Logo.svg';
+import{ createButton } from'@/shared/components/button/button';
+import{ createElement, X } from'lucide';
+import'./mobile-burger.scss';
 export type NAV_ELEM = { name: string; link: string };
 const NAV_ELEMS: NAV_ELEM[] = [
     {
@@ -21,7 +21,7 @@ const NAV_ELEMS: NAV_ELEM[] = [
         link: '/',
     },
 ];
-export function createMobileBurger() {
+export function createMobileBurger(){
     const aside = document.createElement('aside');
     aside.classList.add('closed');
 
@@ -36,8 +36,8 @@ export function createMobileBurger() {
     h1.textContent = 'MiniGames';
 
     logo.append(icon);
-logo.append(h1);
-    firstLine.appendChild(logo);
+    logo.append(h1);
+    firstLine.append(logo);
     const closeButton = createButton({ icon: createElement(X), variant: 'outline' });
     closeButton.classList.add('closeButton');
 
@@ -47,10 +47,10 @@ logo.append(h1);
     firstLine.append(closeButton);
 
     aside.append(firstLine);
-    
+
     const nav = document.createElement('nav');
     const ul = document.createElement('ul');
-    for (const element of NAV_ELEMS) {
+    for(const element of NAV_ELEMS){
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.textContent = element.name;
@@ -70,6 +70,6 @@ logo.append(h1);
     div.append(signup);
 
     nav.append(div);
-    aside.appendChild(nav);
+    aside.append(nav);
     return aside;
 }

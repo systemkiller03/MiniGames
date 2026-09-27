@@ -15,11 +15,11 @@ header {
     font-family: $font-family-inter;
     border: 1px $color-on-primary solid;
     font-weight: $font-weight-bold;
-    @include tablet{
-        padding:$size-2 $size-5;
+    @include tablet {
+        padding: $size-2 $size-5;
     }
 
-    >div {
+    > div {
         display: flex;
         align-items: center;
         gap: $size-1;
@@ -36,7 +36,7 @@ header {
             }
         }
     }
-    >nav {
+    > nav {
         display: flex;
         align-items: center;
         gap: $size-4;
@@ -64,26 +64,26 @@ header {
                 }
             }
         }
-    div { 
-        display: flex;
-        align-items: center;    
-        gap:$size-4;
-        .login{
-            @include tablet {
-                display: none;
+        div {
+            display: flex;
+            align-items: center;
+            gap: $size-4;
+            .login {
+                @include tablet {
+                    display: none;
+                }
             }
-        
-        }
-        .signup{
-            @include mobile {
+            .signup {
+                @include mobile {
+                    display: none;
+                }
+            }
+            .mobileBurgerButton {
                 display: none;
+                @include tablet {
+                    display: block;
+                }
             }
         }
-        .mobileBurgerButton{
-            display:none;
-            @include tablet {
-                display: block;
-            }     
-        }
-    }}
+    }
 }
