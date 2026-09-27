@@ -15,19 +15,38 @@ ul.categories {
     }
 
     li {
+        width: max-content;
+    }
+
+    .category-chip {
         color: $color-on-primary;
         font-size: $font-size-body-medium;
         font-weight: $font-weight-bold;
         border: 1px solid $color-on-primary;
         border-radius: $corner-extra-large;
         padding: $size-1 $size-2;
-        width: max-content;
+        background-color: transparent;
+        font-family: inherit;
         text-wrap: nowrap;
         cursor: pointer;
+        transition:
+            background-color 150ms ease,
+            box-shadow 150ms ease,
+            transform 150ms ease;
+
+        &:hover {
+            background-color: $color-primary-low;
+            box-shadow: 2px 2px 0 $color-on-primary;
+            transform: translate(-1px, -1px);
+        }
 
         &.active {
-            color: $color-on-primary;
             background-color: $color-primary;
+        }
+
+        &:focus-visible {
+            outline: 2px solid $color-tertiary;
+            outline-offset: 3px;
         }
     }
 }
