@@ -1,8 +1,9 @@
-import'./hero.scss';
-import heroImage from'../../assets/hero-section.png';
-import{ createButton } from'../../shared/components/button/button';
+import './hero.scss';
+import heroImage from '../../assets/hero-section.png';
+import { createButton } from '../../shared/components/button/button';
+import { getNavigationUrl } from '@/shared/navigation';
 
-export function createHero(): HTMLElement{
+export function createHero(): HTMLElement {
     const hero = document.createElement('section');
     hero.className = 'hero';
     hero.setAttribute('aria-labelledby', 'hero-title');
@@ -20,6 +21,9 @@ export function createHero(): HTMLElement{
         'Discover hundreds of curated casual mini-games. Play instantly in your browser - puzzle, match 3, farm, and board classics.';
 
     const button = createButton({ label: 'Browse Library', variant: 'primary' });
+    button.addEventListener('click', () => {
+        globalThis.location.assign(getNavigationUrl('/library'));
+    });
     content.append(title, description, button);
     hero.append(content);
     return hero;

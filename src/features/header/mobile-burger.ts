@@ -1,7 +1,8 @@
-import logoIconSrc from'@/assets/Logo.svg';
-import{ createButton } from'@/shared/components/button/button';
-import{ createElement, X } from'lucide';
-import'./mobile-burger.scss';
+import logoIconSrc from '@/assets/Logo.svg';
+import { createButton } from '@/shared/components/button/button';
+import { getNavigationUrl } from '@/shared/navigation';
+import { createElement, X } from 'lucide';
+import './mobile-burger.scss';
 export type NAV_ELEM = { name: string; link: string };
 const NAV_ELEMS: NAV_ELEM[] = [
     {
@@ -10,7 +11,7 @@ const NAV_ELEMS: NAV_ELEM[] = [
     },
     {
         name: 'Library',
-        link: '/',
+        link: '/library',
     },
     {
         name: 'Tournaments',
@@ -21,7 +22,7 @@ const NAV_ELEMS: NAV_ELEM[] = [
         link: '/',
     },
 ];
-export function createMobileBurger(){
+export function createMobileBurger() {
     const aside = document.createElement('aside');
     aside.classList.add('closed');
 
@@ -50,11 +51,11 @@ export function createMobileBurger(){
 
     const nav = document.createElement('nav');
     const ul = document.createElement('ul');
-    for(const element of NAV_ELEMS){
+    for (const element of NAV_ELEMS) {
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.textContent = element.name;
-        a.href = element.link;
+        a.href = getNavigationUrl(element.link);
         li.append(a);
         ul.append(li);
     }
