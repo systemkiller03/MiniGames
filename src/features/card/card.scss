@@ -127,3 +127,94 @@
         }
     }
 }
+
+@include mobile {
+    .gameCardsSection {
+        grid-template-columns: 1fr;
+        gap: $size-2;
+        padding: 0 $size-2;
+    }
+
+    .card {
+        min-height: 0;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        overflow: hidden;
+        background-color: $color-white;
+        border-width: 2.5px;
+        border-radius: $corner-large;
+
+        > img {
+            flex: none;
+            width: 100%;
+            height: 160px;
+            border-radius: 0;
+        }
+
+        > div {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-areas:
+                'title title'
+                'description description'
+                'stats price'
+                'details details';
+            gap: $size-2;
+            width: 100%;
+            height: auto;
+            padding: $size-2;
+
+            .cardHeader {
+                display: contents;
+
+                > div {
+                    grid-area: title;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: $size-1;
+
+                    h3 {
+                        font-size: $font-size-headline-small;
+                    }
+
+                    p.category {
+                        background-color: $color-secondary;
+                        border-width: 1.5px;
+                        padding: 2px $size-1;
+                        font-size: $font-size-label-medium;
+                    }
+                }
+
+                > p {
+                    grid-area: price;
+                    font-size: $font-size-headline-small;
+                }
+            }
+
+            > p {
+                grid-area: description;
+                font-size: $font-size-body-small;
+                line-height: 1.4;
+            }
+
+            .cardFooter {
+                display: contents;
+
+                > div {
+                    grid-area: stats;
+                    gap: $size-2;
+
+                    .cardElem p {
+                        font-size: $font-size-label-medium;
+                    }
+                }
+
+                > .btn {
+                    grid-area: details;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

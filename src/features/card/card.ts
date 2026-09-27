@@ -90,7 +90,7 @@ export function createCard(
 
     const detailsButton = createButton({ label: 'Details', variant: 'primary' });
     detailsButton.addEventListener('click', () => {
-        if (onDetailsClick) {
+        if(onDetailsClick){
             onDetailsClick();
             return;
         }
