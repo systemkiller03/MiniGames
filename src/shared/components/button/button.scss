@@ -54,4 +54,11 @@
             background-color: $color-surface;
         }
     }
+    &:has(:only-child){
+        padding:$button-icon-padding;
+    }
+    :only-child{
+        width:$size-2;
+        height:$size-2;
+    }
 }
