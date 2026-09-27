@@ -1,14 +1,54 @@
-import'./leaderboard.scss';
+import './leaderboard.scss';
 
 const PLAYERS = [
-    { rank: '01', name: 'BubblyPea', score: '12,480', games: '87', streak: '8 days' },
-    { rank: '02', name: 'CozyMoss', score: '11,920', games: '76', streak: '6 days' },
-    { rank: '03', name: 'PixelPanda', score: '10,845', games: '69', streak: '5 days' },
-    { rank: '04', name: 'SunnySide', score: '9,760', games: '62', streak: '4 days' },
-    { rank: '05', name: 'MoonlitFox', score: '9,210', games: '58', streak: '3 days' },
+    {
+        name: 'Alex_Pro99',
+        games: '142',
+        score: '94,250',
+        streak: '12 days',
+        favorite: 'Heartopia',
+        initials: 'AP',
+        color: '#ffd02b',
+    },
+    {
+        name: 'CozyGamer_x',
+        games: '118',
+        score: '81,400',
+        streak: '8 days',
+        favorite: 'Cat Mail Co.',
+        initials: 'CG',
+        color: '#a3e2c9',
+    },
+    {
+        name: 'MatchMaster',
+        games: '98',
+        score: '72,110',
+        streak: '5 days',
+        favorite: 'Tiny Glade',
+        initials: 'MM',
+        color: '#bce3ff',
+    },
+    {
+        name: 'BubblePop',
+        games: '87',
+        score: '65,900',
+        streak: '3 days',
+        favorite: 'Whisper of the House',
+        initials: 'BP',
+        color: '#ffc6ff',
+    },
+    {
+        name: 'SudokuGod',
+        games: '74',
+        score: '59,320',
+        streak: '2 days',
+        favorite: 'Cat Chess',
+        initials: 'SG',
+        color: '#e8dff5',
+    },
 ];
 
-export function createLeaderboard(): HTMLElement{
+export function createLeaderboard(): HTMLElement {
     const section = document.createElement('section');
     section.className = 'leaderboard';
     section.setAttribute('aria-labelledby', 'leaderboard-title');
@@ -17,6 +57,8 @@ export function createLeaderboard(): HTMLElement{
     title.id = 'leaderboard-title';
     title.textContent = 'Top Players This Week';
 
+    const tableWrap = document.createElement('div');
+    tableWrap.className = 'leaderboard__table-wrap';
     const table = document.createElement('table');
     table.className = 'leaderboard__table';
 
@@ -24,7 +66,14 @@ export function createLeaderboard(): HTMLElement{
     caption.textContent = 'Top players ranked by weekly score';
     const head = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    for(const label of['Rank', 'Player', 'Score', 'Games', 'Streak']){
+    for (const label of [
+        'Rank',
+        'Player',
+        'Games Played',
+        'Total Score',
+        'Streak',
+        'Favorite Game',
+    ]) {
         const cell = document.createElement('th');
         cell.scope = 'col';
         cell.textContent = label;
@@ -33,20 +82,43 @@ export function createLeaderboard(): HTMLElement{
     head.append(headerRow);
 
     const body = document.createElement('tbody');
-    for(const player of PLAYERS){
+    for (const [index, player] of PLAYERS.entries()) {
         const row = document.createElement('tr');
-        const values = [player.rank, player.name, player.score, player.games, player.streak];
-        for(const[index, value] of values.entries()){
-            const cell = document.createElement('td');
-            if(index === 0) cell.className = 'leaderboard__rank';
-            else if(index === 1) cell.className = 'leaderboard__player';
-            cell.textContent = value;
-            row.append(cell);
-        }
+        const rank = document.createElement('td');
+        rank.className = 'leaderboard__rank';
+        rank.textContent = `#${index + 1}`;
+
+        const playerCell = document.createElement('td');
+        playerCell.className = 'leaderboard__player';
+        const avatar = document.createElement('span');
+        avatar.className = 'leaderboard__avatar';
+        avatar.style.setProperty('--avatar-color', player.color);
+        avatar.textContent = player.initials;
+        const name = document.createElement('span');
+        name.className = 'leaderboard__name';
+        name.textContent = player.name;
+        playerCell.append(avatar, name);
+
+        const games = document.createElement('td');
+        games.textContent = player.games;
+        const score = document.createElement('td');
+        score.textContent = player.score;
+        const streak = document.createElement('td');
+        streak.className = 'leaderboard__streak';
+        streak.textContent = `🔥 ${player.streak}`;
+
+        const favoriteCell = document.createElement('td');
+        const favorite = document.createElement('span');
+        favorite.className = 'leaderboard__favorite';
+        favorite.textContent = player.favorite;
+        favoriteCell.append(favorite);
+
+        row.append(rank, playerCell, games, score, streak, favoriteCell);
         body.append(row);
     }
 
     table.append(caption, head, body);
-    section.append(title, table);
+    tableWrap.append(table);
+    section.append(title, tableWrap);
     return section;
 }

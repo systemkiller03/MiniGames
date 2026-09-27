@@ -1,8 +1,9 @@
-import'./developer.scss';
-import illustration from'../../assets/illustration-side.png';
-import{ createButton } from'../../shared/components/button/button';
+import './developer.scss';
+import illustration from '../../assets/illustration-side.png';
+import { createElement, Upload } from 'lucide';
+import { createButton } from '../../shared/components/button/button';
 
-export function createDeveloperSection(): HTMLElement{
+export function createDeveloperSection(): HTMLElement {
     const section = document.createElement('section');
     section.className = 'developer';
     section.setAttribute('aria-labelledby', 'developer-title');
@@ -24,7 +25,11 @@ export function createDeveloperSection(): HTMLElement{
     description.textContent =
         "Want to see your game on MiniGames? We're always looking for fun, engaging mini games to add to our platform. Submit your game and reach thousands of players!";
 
-    const button = createButton('Submit Form', 'primary');
+    const button = createButton({
+        label: 'Submit Form',
+        icon: createElement(Upload),
+        variant: 'primary',
+    });
 
     const contact = document.createElement('p');
     contact.className = 'developer__contact';

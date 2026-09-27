@@ -1,7 +1,7 @@
-import'./game-dialog.scss';
-import heroImage from'@/assets/game-dialog-hero.jpg';
-import{ createButton } from'@/shared/components/button/button';
-import{ createElement, Heart, Send, Star, Trophy, X } from'lucide';
+import './game-dialog.scss';
+import heroImage from '@/assets/grimshire-hero.jpg';
+import { createButton } from '@/shared/components/button/button';
+import { createElement, Heart, Send, Star, Trophy, X } from 'lucide';
 
 type IconNode = Parameters<typeof createElement>[0];
 
@@ -76,7 +76,7 @@ const INITIAL_COMMENTS: GameComment[] = [
     },
 ];
 
-function createIconButton(label: string, icon: IconNode, className: string): HTMLButtonElement{
+function createIconButton(label: string, icon: IconNode, className: string): HTMLButtonElement {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = className;
@@ -85,7 +85,7 @@ function createIconButton(label: string, icon: IconNode, className: string): HTM
     return button;
 }
 
-function createScore(label: string, value: string, icon: IconNode): HTMLDivElement{
+function createScore(label: string, value: string, icon: IconNode): HTMLDivElement {
     const item = document.createElement('div');
     item.className = 'game-dialog__score';
     item.setAttribute('aria-label', `${label} ${value}`);
@@ -102,7 +102,7 @@ function createScore(label: string, value: string, icon: IconNode): HTMLDivEleme
     return item;
 }
 
-function createStat(label: string, value: string): HTMLDivElement{
+function createStat(label: string, value: string): HTMLDivElement {
     const stat = document.createElement('div');
     stat.className = 'game-dialog__stat';
 
@@ -118,7 +118,7 @@ function createStat(label: string, value: string): HTMLDivElement{
     return stat;
 }
 
-function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement{
+function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement {
     const row = document.createElement('div');
     row.className = 'game-dialog__record';
 
@@ -144,7 +144,7 @@ function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement{
     return row;
 }
 
-function createComment(comment: GameComment): HTMLDivElement{
+function createComment(comment: GameComment): HTMLElement {
     const card = document.createElement('article');
     card.className = 'game-dialog__comment';
 
@@ -183,7 +183,7 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     setGame: (game: GameDialogData) => void;
     open: () => void;
     close: () => void;
-}{
+} {
     const dialog = document.createElement('dialog');
     dialog.className = 'game-dialog';
     dialog.setAttribute('aria-labelledby', 'game-dialog-title');
@@ -269,7 +269,7 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     composer.addEventListener('submit', (event) => {
         event.preventDefault();
         const text = commentInput.value.trim();
-        if(!text) return;
+        if (!text) return;
         commentData.unshift({
             name: 'You',
             avatar: 'U',
@@ -306,18 +306,18 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     };
 
     dialog.addEventListener('click', (event) => {
-        if(event.target === dialog){
+        if (event.target === dialog) {
             dialog.close();
         }
     });
 
     setGame(initialGame);
 
-    return{
+    return {
         dialog,
         setGame,
         open: () => {
-            if(typeof dialog.showModal === 'function'){
+            if (typeof dialog.showModal === 'function') {
                 dialog.showModal();
                 return;
             }
@@ -327,9 +327,9 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     };
 }
 
-function formatCount(value: number): string{
-    if(value >= 1_000_000){
-        return`${(value / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+function formatCount(value: number): string {
+    if (value >= 1_000_000) {
+        return `${(value / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
     }
     return value >= 1000 ? `${(value / 1000).toFixed(1).replace(/\.0$/, '')}K` : value.toString();
 }
