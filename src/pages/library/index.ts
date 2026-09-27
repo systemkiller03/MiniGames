@@ -2,7 +2,7 @@ import{ createCard } from'@/features/card/card';
 import{ createCategories } from'@/features/categories/categories';
 import{ createDescription } from'@/features/description/description';
 import{ createGameDialog } from'@/features/game-dialog/game-dialog';
-import{ createButton } from'@/shared/components/button/button';
+import{ createPagination } from'@/features/pagination/pagination';
 
 import i1 from'@/assets/vacation-cafe-simulator-card.jpg';
 import i2 from'@/assets/winter-burrow-card.jpg';
@@ -102,35 +102,32 @@ export function createLibraryPage(){
     const categories = createCategories(CATEGORY_LABELS);
     main.append(categories);
 
+    const previewDialog = createGameDialog();
     const gameCards = document.createElement('section');
     gameCards.classList.add('gameCardsSection');
     for(const gameCardData of GAME_CARD_DATA){
-        const gameCard = createCard(gameCardData);
+        const gameCard = createCard(gameCardData, () => {
+            previewDialog.setGame({
+                image: gameCardData.imgSrc,
+                title: gameCardData.name,
+                category: gameCardData.category,
+                price: gameCardData.cost,
+                rating: gameCardData.stars,
+                likes: gameCardData.likes,
+                description: gameCardData.description,
+                tags: [],
+                players: 'Solo',
+                duration: '40-90 min',
+                mode: 'Desktop',
+            });
+            previewDialog.open();
+        });
         gameCards.append(gameCard);
     }
 
-    const previewDialog = createGameDialog({
-        image: i1,
-        title: 'Vacation Cafe Simulator',
-        category: 'Strategy',
-        price: 'Free',
-        rating: 4.8,
-        likes: 28_700,
-        description:
-            'Craft cozy dishes, decorate your dream café, and unwind with relaxing daily routines in a warm, low-stress world full of charming characters.',
-        tags: ['Cozy', 'Management', 'Relaxing', 'Casual'],
-        players: 'Single-player',
-        duration: '2–4 hours',
-        mode: 'Desktop & Mobile',
-    });
+    const pagination = createPagination();
 
-    const previewButton = createButton({
-        label: 'Preview game dialog',
-        variant: 'primary',
-    });
-    previewButton.addEventListener('click', () => previewDialog.open());
-
-    main.append(gameCards, previewButton, previewDialog.dialog);
+    main.append(gameCards, pagination, previewDialog.dialog);
 
     return main;
 }
