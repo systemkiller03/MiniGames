@@ -1,0 +1,32 @@
+@use '/src/styles/tokens' as *;
+
+body:has(.home-page) > header {
+    border: 0;
+    border-bottom: 2px solid $color-on-primary;
+}
+
+body:has(.home-page) > header > nav ul li:first-child a {
+    color: $color-on-primary;
+    font-weight: $font-weight-bold;
+}
+
+body:has(.home-page) > header > nav ul li:not(:first-child) a {
+    color: $color-on-bg;
+    font-weight: $font-weight-medium;
+}
+
+@media (min-width: 1200px) {
+    body:has(.home-page) > header {
+        padding: $size-3 $size-10;
+    }
+
+    body:has(.home-page) > .footer .footer__inner {
+        padding: $size-5 $size-15;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1199px) {
+    body:has(.home-page) > .footer .footer__inner {
+        padding: $size-5 $size-5;
+    }
+}

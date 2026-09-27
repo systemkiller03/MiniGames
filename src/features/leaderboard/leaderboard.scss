@@ -3,7 +3,7 @@
 
 .leaderboard {
     width: 100%;
-    padding: $size-4 $size-2 $size-6;
+    padding: $size-5 $size-2;
     background: $color-bg;
 
     h2 {
@@ -12,35 +12,40 @@
         align-items: center;
         width: 100%;
         max-width: 1680px;
-        margin: 0 auto $size-2;
+        margin: 0 auto $size-5;
         padding-left: $size-3;
         color: $color-on-primary;
-        font-size: $font-size-headline-small;
+        font-size: $font-size-headline-medium;
         line-height: 1.2;
 
         &::before {
-            content: '';
             position: absolute;
             left: 0;
-            width: 6px;
+            width: 8px;
             height: 100%;
-            border: 2px solid $color-bg-footer;
-            border-radius: $corner-small;
+            border: 1.5px solid $color-on-primary;
+            border-radius: $corner-extra-small;
             background: $color-primary;
+            content: '';
         }
+    }
+
+    &__table-wrap {
+        width: 100%;
+        max-width: 1680px;
+        margin: 0 auto;
+        overflow-x: auto;
+        border: 2.5px solid $color-on-primary;
+        border-radius: $corner-large;
+        box-shadow: 6px 6px 0 $color-on-primary;
+        background: $color-white;
     }
 
     &__table {
         width: 100%;
-        max-width: 1680px;
-        margin: 0 auto;
-        border-collapse: separate;
-        border-spacing: 0;
-        overflow: hidden;
-        border: 2px solid $color-on-primary;
-        border-radius: $corner-medium;
+        min-width: 940px;
+        border-collapse: collapse;
         color: $color-on-primary;
-        background: $color-white;
         table-layout: fixed;
     }
 
@@ -55,42 +60,82 @@
 
     th,
     td {
-        padding: $size-1 $size-2;
-        text-align: left;
+        text-align: center;
     }
 
     th {
-        color: $color-on-bg-footer;
-        background: $color-bg-footer;
-        font-size: $font-size-label-large;
+        padding: $size-3;
+        border-bottom: 1.5px solid $color-on-primary;
+        color: $color-white;
+        background: $color-tertiary;
+        font-size: $font-size-body-medium;
         font-weight: $font-weight-bold;
+        text-transform: uppercase;
     }
 
     td {
-        border-top: 1px solid $color-outline-variant;
-        font-size: $font-size-body-small;
+        padding: $size-2 $size-3;
+        border-bottom: 1px solid $color-outline;
+        font-size: $font-size-body-medium;
         font-weight: $font-weight-medium;
     }
 
-    th:nth-child(1),
-    td:nth-child(1) {
-        width: 18%;
+    th:first-child,
+    td:first-child {
+        width: 80px;
     }
 
-    th:nth-child(n + 3),
-    td:nth-child(n + 3) {
-        text-align: right;
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 24%;
     }
 
     &__rank {
-        color: $color-tertiary;
+        color: $color-on-primary;
         font-weight: $font-weight-bold;
     }
 
     &__player {
+        text-align: left;
+    }
+
+    &__avatar {
+        display: inline-grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+        border: 1.5px solid $color-on-primary;
+        border-radius: 50%;
+        background: var(--avatar-color);
+        color: $color-on-primary;
+        font-size: $font-size-label-large;
+        font-weight: $font-weight-bold;
+        vertical-align: middle;
+    }
+
+    &__name {
+        font-weight: $font-weight-bold;
+        vertical-align: middle;
+    }
+
+    &__streak {
+        white-space: nowrap;
+    }
+
+    &__favorite {
+        display: inline-block;
+        max-width: 100%;
         overflow: hidden;
+        padding: 4px 12px;
+        border: 1.5px solid $color-on-primary;
+        border-radius: $corner-full;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    tbody tr:nth-child(odd) {
+        background: $color-bg;
     }
 
     tbody tr:first-child td:first-child {
@@ -98,40 +143,18 @@
     }
 }
 
-@include tablet {
+@media (min-width: 481px) and (max-width: 1199px) {
     .leaderboard {
         padding-inline: $size-5;
-
-        h2 {
-            margin-bottom: $size-3;
-            font-size: $font-size-headline-medium;
-        }
-
-        th,
-        td {
-            padding: $size-2 $size-3;
-        }
-
-        th:nth-child(1),
-        td:nth-child(1) {
-            width: 12%;
-        }
     }
 }
 
-@include desktop {
+@media (min-width: 1200px) {
     .leaderboard {
-        padding: $size-5 $size-15 $size-12;
+        padding: $size-5 $size-15;
 
         h2 {
-            margin-bottom: $size-3;
-            font-size: $font-size-headline-medium;
-        }
-
-        th,
-        td {
-            padding: $size-2 $size-3;
-            font-size: $font-size-body-medium;
+            font-size: $font-size-headline-large;
         }
     }
 }

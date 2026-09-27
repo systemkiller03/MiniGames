@@ -12,7 +12,7 @@ const NAV_ELEMS: NAV_ELEM[] = [
     },
     {
         name: 'Library',
-        link: '/',
+        link: '/library',
     },
     {
         name: 'Tournaments',
