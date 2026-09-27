@@ -54,7 +54,6 @@ $corner-large: 16px;
 $corner-extra-large: 24px;
 $corner-full: 9999px;
 
-// Typography
 $font-family-inter: 'Inter', sans-serif;
 $font-family-roboto: 'Roboto', sans-serif;
 
@@ -92,6 +91,6 @@ $shadow-level-2: 6px 6px 0 $color-primary;
 $shadow-level-3: 8px 8px 0 $color-primary;
 
 // Breakpoints
-$breakpoint-mobile: 375px;
+$breakpoint-mobile: 480px;
 $breakpoint-tablet: 768px;
-$breakpoint-desktop: 1920px;
+$breakpoint-desktop: 1200px;
