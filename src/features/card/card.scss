@@ -1,0 +1,129 @@
+@use '/src/styles/mixins' as *;
+@use '/src/styles/tokens' as *;
+
+.gameCardsSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $size-3;
+    padding: $size-5 $size-15;
+    width: 100%;
+    @include desktop {
+        grid-template-columns: 1fr;
+        padding: 0 $size-5;
+    }
+}
+.card {
+    display: flex;
+    min-height: 200px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $color-on-primary;
+    border-radius: $corner-medium;
+    box-shadow: 4px 4px 0 $color-on-primary;
+    @include tablet {
+        min-height: 152px;
+    }
+    > img {
+        height: 100%;
+        width: 320px;
+        object-fit: cover;
+        border-top-left-radius: $corner-medium;
+        border-bottom-left-radius: $corner-medium;
+        @include tablet {
+            width: 270px;
+            border-top-right-radius: $corner-medium;
+        }
+    }
+    > div {
+        padding: $size-2;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .cardHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            div {
+                display: flex;
+                align-items: center;
+                gap: $size-2;
+
+                h3 {
+                    font-size: $font-size-display-small;
+                    font-family: $font-family-inter;
+                    font-weight: $font-weight-bold;
+                    color: $color-on-primary;
+                    margin: 0;
+                    @include tablet {
+                        font-size: $font-size-headline-small;
+                    }
+                }
+                p.category {
+                    color: $color-on-primary;
+                    font-size: $font-size-body-medium;
+                    font-weight: $font-weight-bold;
+                    border: 1px solid $color-on-primary;
+                    border-radius: $corner-extra-large;
+                    padding: $size-1 $size-2;
+                    cursor: pointer;
+                    @include tablet {
+                        font-size: $font-size-body-small;
+                    }
+                }
+            }
+            p {
+                font-size: $font-size-headline-medium;
+                font-family: $font-family-inter;
+                font-weight: $font-weight-bold;
+                color: $color-on-primary;
+                margin: 0;
+                @include tablet {
+                    font-size: $font-size-headline-small;
+                }
+                &.free {
+                    color: $color-price-free;
+                }
+            }
+        }
+        > p {
+            font-size: $font-size-body-medium;
+            font-family: $font-family-inter;
+            font-weight: $font-weight-medium;
+            color: $color-on-bg;
+            margin: 0;
+        }
+        .cardFooter {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: $size-2 $size-3;
+            > div {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: $size-3;
+
+                .cardElem {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    img {
+                        width: $size-3;
+                        height: $size-3;
+                        object-fit: contain;
+                    }
+                    p {
+                        font-size: $font-size-body-small;
+                        font-family: $font-family-inter;
+                        font-weight: $font-weight-bold;
+                        color: $color-on-primary;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+}
