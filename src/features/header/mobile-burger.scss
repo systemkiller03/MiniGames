@@ -15,7 +15,7 @@ aside {
         left: 0;
         background: $color-bg-footer;
         padding: $size-3;
-        gap:$size-4;
+        gap: $size-4;
     }
     div {
         display: flex;
@@ -38,7 +38,7 @@ aside {
                 }
             }
         }
-        .closeButton{
+        .closeButton {
             background: $color-bg-footer-low;
             padding: 0;
             outline: none;
@@ -60,7 +60,7 @@ aside {
             flex-direction: column;
             gap: $size-3;
             list-style: none;
-            padding:0;
+            padding: 0;
             a {
                 color: $color-on-bg-footer;
                 font-size: $font-size-body-large;
@@ -76,18 +76,18 @@ aside {
                 }
             }
         }
-        div{
+        div {
             display: flex;
             align-items: center;
             flex-direction: column;
             gap: $size-2;
-            button{
+            button {
                 width: 100%;
             }
-            .login{
-                outline-color:$color-bg;
-                color:$color-bg;
-                background-color:$color-bg-footer;
+            .login {
+                outline-color: $color-bg;
+                color: $color-bg;
+                background-color: $color-bg-footer;
             }
         }
     }
