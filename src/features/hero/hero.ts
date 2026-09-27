@@ -1,8 +1,8 @@
-import './hero.scss';
-import heroImage from '../../assets/hero-section.png';
-import { createButton } from '../../shared/components/button/button';
+import'./hero.scss';
+import heroImage from'../../assets/hero-section.png';
+import{ createButton } from'../../shared/components/button/button';
 
-export function createHero(): HTMLElement {
+export function createHero(): HTMLElement{
     const hero = document.createElement('section');
     hero.className = 'hero';
     hero.setAttribute('aria-labelledby', 'hero-title');

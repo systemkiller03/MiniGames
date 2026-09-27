@@ -1,9 +1,9 @@
-import './developer.scss';
-import illustration from '../../assets/illustration-side.png';
-import { createElement, Upload } from 'lucide';
-import { createButton } from '../../shared/components/button/button';
+import'./developer.scss';
+import illustration from'../../assets/illustration-side.png';
+import{ createElement, Upload } from'lucide';
+import{ createButton } from'../../shared/components/button/button';
 
-export function createDeveloperSection(): HTMLElement {
+export function createDeveloperSection(): HTMLElement{
     const section = document.createElement('section');
     section.className = 'developer';
     section.setAttribute('aria-labelledby', 'developer-title');
