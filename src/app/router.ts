@@ -3,7 +3,7 @@ import{ createLibraryPage } from'@/pages/library';
 
 const ROUTES: { [key: string]: HTMLElement } = {
     '/': createHomePage(),
-    library: createLibraryPage(),
+    '/library': createLibraryPage(),
 };
 export function createRouter(main: HTMLElement): void{
     const path = globalThis.location.pathname;
