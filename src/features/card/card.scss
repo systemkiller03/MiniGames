@@ -68,8 +68,6 @@
                     border-radius: $corner-extra-large;
                     padding: $size-05 $size-1;
                     cursor: pointer;
-                    @include tablet {
-                    }
                 }
             }
             p {
@@ -139,7 +137,6 @@
         }
     }
 }
-
 @include mobile {
     .game-cards {
         grid-template-columns: 1fr;
@@ -148,7 +145,7 @@
     }
 
     .game-card {
-        min-height: 0;
+        height: auto;
         flex-direction: column;
         align-items: stretch;
         justify-content: flex-start;
@@ -180,7 +177,7 @@
             header {
                 display: contents;
 
-                > div {
+                > [data-role='title'] {
                     grid-area: title;
                     flex-direction: column;
                     align-items: flex-start;
@@ -188,41 +185,60 @@
 
                     h3 {
                         font-size: $font-size-headline-small;
+                        line-height: normal;
                     }
 
                     p[data-role='category'] {
                         background-color: $color-secondary;
-                        border-width: 1.5px;
+                        border: 0;
+                        box-shadow: inset 0 0 0 1.5px $color-on-primary;
                         padding: 2px $size-1;
                         font-size: $font-size-label-medium;
+                        line-height: normal;
                     }
                 }
 
                 > p {
                     grid-area: price;
+                    align-self: center;
+                    justify-self: end;
                     font-size: $font-size-headline-small;
+                    line-height: normal;
                 }
             }
 
             > p {
                 grid-area: description;
                 font-size: $font-size-body-small;
-                line-height: 1.4;
+                line-height: 20px;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
             }
 
             footer {
                 display: contents;
 
-                > div {
+                > [data-role='stats'] {
                     grid-area: stats;
                     gap: $size-2;
 
-                    > div > div p {
-                        font-size: $font-size-label-medium;
+                    > div {
+                        gap: $size-05;
+
+                        img {
+                            width: $icon-size-medium;
+                            height: $icon-size-medium;
+                            margin-right: 0;
+                        }
+
+                        p {
+                            font-size: $font-size-label-medium;
+                            line-height: normal;
+                        }
                     }
                 }
 
-                > .btn {
+                > [data-role='details'] {
                     grid-area: details;
                     width: 100%;
                 }

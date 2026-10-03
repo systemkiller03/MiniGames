@@ -35,6 +35,7 @@ export function createCard(
     const header = document.createElement('header');
 
     const headerDiv = document.createElement('div');
+    headerDiv.dataset.role = 'title';
 
     const h3 = document.createElement('h3');
     h3.textContent = name;
@@ -61,10 +62,12 @@ export function createCard(
     const footer = document.createElement('footer');
 
     const cardElement = document.createElement('div');
+    cardElement.dataset.role = 'stats';
 
     const starsElement = document.createElement('div');
     const starsImage = document.createElement('img');
     starsImage.src = star;
+    starsImage.alt = '';
     const starsNumber = document.createElement('p');
     starsNumber.textContent = formatLikes(stars);
     starsElement.append(starsImage, starsNumber);
@@ -74,6 +77,7 @@ export function createCard(
     const likesElement = document.createElement('div');
     const likesImage = document.createElement('img');
     likesImage.src = heart;
+    likesImage.alt = '';
     const likesNumber = document.createElement('p');
     likesNumber.textContent = formatLikes(likes);
     likesElement.append(likesImage, likesNumber);
@@ -83,6 +87,7 @@ export function createCard(
     footer.append(cardElement);
 
     const detailsButton = createButton({ label: 'Details', variant: 'primary', size: 'md' });
+    detailsButton.dataset.role = 'details';
     detailsButton.addEventListener('click', () => {
         if (!onDetailsClick) {
             return;
