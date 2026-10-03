@@ -3,6 +3,7 @@ import { createCategories } from '@/features/categories/categories';
 import { createDescription } from '@/features/description/description';
 import { createGameDialog } from '@/features/game-dialog/game-dialog';
 import { createPagination } from '@/features/pagination/pagination';
+import { createSortDropdown } from '@/features/sort-dropdown/sort-dropdown';
 
 import i1 from '@/assets/vacation-cafe-simulator-card.jpg';
 import i2 from '@/assets/winter-burrow-card.jpg';
@@ -99,31 +100,63 @@ export function createLibraryPage() {
     );
     main.append(description);
 
-    const categories = createCategories(CATEGORY_LABELS);
-    main.append(categories);
-
     const previewDialog = createGameDialog();
     const gameCards = document.createElement('section');
     gameCards.classList.add('game-cards');
-    for (const gameCardData of GAME_CARD_DATA) {
-        const gameCard = createCard(gameCardData, () => {
-            previewDialog.setGame({
-                image: gameCardData.imgSrc,
-                title: gameCardData.name,
-                category: gameCardData.category,
-                price: gameCardData.cost,
-                rating: gameCardData.stars,
-                likes: gameCardData.likes,
-                description: gameCardData.description,
-                tags: [],
-                players: 'Solo',
-                duration: '40-90 min',
-                mode: 'Desktop',
+    const renderGames = (games: typeof GAME_CARD_DATA): void => {
+        gameCards.replaceChildren();
+        for (const gameCardData of games) {
+            const gameCard = createCard(gameCardData, () => {
+                previewDialog.setGame({
+                    image: gameCardData.imgSrc,
+                    title: gameCardData.name,
+                    category: gameCardData.category,
+                    price: gameCardData.cost,
+                    rating: gameCardData.stars,
+                    likes: gameCardData.likes,
+                    description: gameCardData.description,
+                    tags: [],
+                    players: 'Solo',
+                    duration: '40-90 min',
+                    mode: 'Desktop',
+                });
+                previewDialog.open();
             });
-            previewDialog.open();
-        });
-        gameCards.append(gameCard);
-    }
+            gameCards.append(gameCard);
+        }
+    };
+
+    const filterSortBar = document.createElement('div');
+    filterSortBar.className = 'library-filter-sort-bar';
+    const categories = createCategories(CATEGORY_LABELS);
+    const sortDropdown = createSortDropdown((sortKey) => {
+        let sortedGames = GAME_CARD_DATA;
+        switch (sortKey) {
+            case 'rating-desc': {
+                sortedGames = GAME_CARD_DATA.toSorted((left, right) => right.stars - left.stars);
+                break;
+            }
+            case 'rating-asc': {
+                sortedGames = GAME_CARD_DATA.toSorted((left, right) => left.stars - right.stars);
+                break;
+            }
+            case 'most-liked': {
+                sortedGames = GAME_CARD_DATA.toSorted((left, right) => right.likes - left.likes);
+                break;
+            }
+            case 'name-asc': {
+                sortedGames = GAME_CARD_DATA.toSorted((left, right) =>
+                    left.name.localeCompare(right.name),
+                );
+                break;
+            }
+        }
+        renderGames(sortedGames);
+    });
+    filterSortBar.append(categories, sortDropdown);
+    main.append(filterSortBar);
+
+    renderGames(GAME_CARD_DATA.toSorted((left, right) => right.stars - left.stars));
 
     const pagination = createPagination();
 
