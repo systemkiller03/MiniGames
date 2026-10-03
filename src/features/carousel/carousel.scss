@@ -194,9 +194,9 @@
     }
 }
 
-@include desktop {
+@include desktop-up {
     .carousel {
-        padding: $size-5 $size-15 $size-2;
+        padding: $size-5 $size-15;
 
         > header {
             margin: 0 0 $size-5;
@@ -215,8 +215,7 @@
             position: static;
             width: 100%;
             max-width: 1680px;
-            justify-content: space-between;
-            gap: 0;
+            gap: $size-1;
             margin-inline: auto;
             padding: 0 $size-1;
             transform: none;
@@ -229,15 +228,15 @@
         }
 
         article[data-slot='peek'] {
-            flex-basis: 80px;
+            flex-basis: 120px;
         }
 
         article[data-slot='side'] {
-            flex-basis: 240px;
+            flex-basis: 288px;
         }
 
         article[data-slot='featured'] {
-            flex-basis: 600px;
+            flex-basis: 816px;
         }
 
         > nav {

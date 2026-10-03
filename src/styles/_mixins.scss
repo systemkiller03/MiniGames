@@ -6,6 +6,18 @@
     }
 }
 
+@mixin tablet-up {
+    @media (min-width: $breakpoint-tablet) {
+        @content;
+    }
+}
+
+@mixin desktop-up {
+    @media (min-width: $breakpoint-desktop) {
+        @content;
+    }
+}
+
 @mixin tablet {
     @media (max-width: $breakpoint-tablet) {
         @content;
