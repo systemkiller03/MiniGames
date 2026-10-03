@@ -7,7 +7,7 @@
     align-items: center;
     gap: $size-3;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1920px;
     margin-inline: auto;
     padding: $size-5 $size-2;
     color: $color-on-primary;
@@ -54,14 +54,14 @@
     }
 
     .developer-cta.btn {
-        @media (width >= $breakpoint-tablet) {
+        @include tablet-up {
             height: $button-height-medium;
             padding: $button-medium-padding;
             border-radius: $corner-small;
             font-size: $font-size-label-large;
         }
 
-        @media (width >= $breakpoint-desktop) {
+        @include desktop-up {
             height: $button-height-large;
             padding: $button-large-padding;
             border-radius: $corner-medium;
@@ -69,7 +69,7 @@
         }
     }
 
-    @include desktop {
+    @include desktop-up {
         flex-direction: row;
         gap: $size-4;
         padding: $size-6 $size-5;
@@ -87,18 +87,19 @@
         }
     }
 
-    @include desktop {
+    @include desktop-up {
         gap: $size-5;
-        padding: $size-5 0;
+        padding: $size-5 $size-15;
 
         > img {
-            flex: 1 1 0;
+            flex: 5 1 0;
             min-width: 0;
             border: 0;
             border-radius: $corner-extra-large;
         }
 
         > div {
+            flex: 7 1 0;
             padding: $size-5;
         }
 
