@@ -1,0 +1,73 @@
+@use '/src/styles/tokens' as *;
+
+.toggle-button {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: $button-gap;
+    height: $button-height-large;
+    padding: $button-large-padding;
+    border: $button-border-width-thin solid $color-outline-variant;
+    border-radius: $corner-medium;
+    color: $color-black;
+    background: $color-white;
+    box-shadow: $shadow-hard;
+    font-family: $font-family-inter;
+    font-size: $font-size-label-extra-large;
+    font-weight: $font-weight-bold;
+    line-height: $button-line-height;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color $transition-fast,
+        border-color $transition-fast,
+        transform $transition-fast;
+
+    &:hover:not(:disabled) {
+        background: $color-surface;
+    }
+
+    &:focus-visible {
+        outline: $focus-ring-width solid $focus-ring-color;
+        outline-offset: $focus-ring-offset;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    > svg {
+        width: $icon-size-medium;
+        height: $icon-size-medium;
+        color: $color-black;
+        fill: transparent;
+    }
+
+    &[data-pressed='true'] > svg {
+        color: $color-like;
+        fill: $color-like;
+    }
+
+    &[data-icon-only='true'] {
+        width: $button-height-large;
+        padding: $button-icon-padding-large;
+    }
+
+    &[data-compact='true'] {
+        width: auto;
+        height: $icon-size-medium;
+        gap: $size-05;
+        padding: 0 $size-1;
+        border: 0;
+        border-radius: $corner-small;
+        box-shadow: none;
+        font-size: $font-size-label-medium;
+    }
+
+    &[data-compact='true'] > svg {
+        width: $icon-size-small;
+        height: $icon-size-small;
+        color: $color-like;
+    }
+}

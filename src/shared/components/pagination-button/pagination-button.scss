@@ -1,0 +1,52 @@
+@use '/src/styles/tokens' as *;
+
+.pagination-button {
+    display: inline-flex;
+    flex: 0 0 $pagination-size;
+    align-items: center;
+    justify-content: center;
+    width: $pagination-size;
+    height: $pagination-size;
+    padding: 0;
+    border: $button-border-width solid $color-black;
+    border-radius: $corner-full;
+    color: $color-on-primary;
+    background: $color-white;
+    font-family: $font-family-inter;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+        background-color $transition-fast,
+        border $transition-fast,
+        transform $transition-fast;
+
+    &:hover:not(:disabled, [aria-current='page']) {
+        border-width: $button-border-width-hover;
+        border-color: $color-on-primary;
+        background: $color-surface;
+    }
+
+    &:focus-visible {
+        outline: $focus-ring-width solid $focus-ring-color;
+        outline-offset: $focus-ring-offset;
+    }
+
+    &[aria-current='page'] {
+        color: $color-white;
+        background: $color-bg-footer-low;
+    }
+
+    &:disabled {
+        border-color: $color-outline-variant;
+        background: $color-surface-disabled;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    > svg {
+        width: $icon-size-medium;
+        height: $icon-size-medium;
+    }
+}

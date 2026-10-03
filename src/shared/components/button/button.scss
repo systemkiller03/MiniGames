@@ -1,64 +1,109 @@
 @use '/src/styles/tokens' as *;
-@use '/src/styles/mixins' as *;
-
-@mixin btn-size($padding, $font-size, $radius) {
-    padding: $padding;
-    font-size: $font-size;
-    border-radius: $radius;
-}
 
 .btn {
-    @include interactive;
-
-    outline: 2px solid $color-on-primary;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: $button-gap;
+    border: $button-border-width solid $color-black;
+    color: $color-on-primary;
     font-family: $font-family-inter;
     font-weight: $font-weight-bold;
-    color: $color-on-primary;
-    transition: background-color 0.15s ease;
-
-    @include btn-size($button-small-padding, $font-size-label-small, $corner-small);
-
-    @include tablet {
-        @include btn-size($button-medium-padding, $font-size-label-medium, $corner-medium);
-    }
-
-    @include desktop {
-        @include btn-size($button-medium-padding, $font-size-label-large, $corner-small);
-    }
+    line-height: $button-line-height;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color $transition-fast,
+        border-color $transition-fast,
+        transform $transition-fast;
 
     &:focus-visible {
-        outline: 2px solid $color-tertiary;
-        outline-offset: $size-05;
+        outline: $focus-ring-width solid $focus-ring-color;
+        outline-offset: $focus-ring-offset;
     }
 
     &:active:not(:disabled) {
-        transform: translateY(1px);
+        transform: translateY($size-05);
     }
 
     &:disabled {
-        opacity: 0.5;
+        border-color: $color-outline-variant;
+        color: $color-on-bg-low;
+        background: $color-surface-disabled;
+        box-shadow: none;
+        cursor: not-allowed;
     }
 
-    &--primary {
-        background-color: $color-primary;
+    &[data-size='sm'] {
+        height: $button-height-small;
+        padding: $button-small-padding;
+        border-radius: $corner-small;
+        font-size: $font-size-label-large;
+    }
+
+    &[data-size='md'] {
+        height: $button-height-medium;
+        padding: $button-medium-padding;
+        border-radius: $corner-small;
+        font-size: $font-size-label-large;
+    }
+
+    &[data-size='lg'] {
+        height: $button-height-large;
+        padding: $button-large-padding;
+        border-radius: $corner-medium;
+        font-size: $font-size-label-extra-large;
+    }
+
+    &[data-full-width] {
+        width: 100%;
+    }
+
+    &[data-shadow] {
+        box-shadow: $shadow-hard;
+    }
+
+    &[data-variant='primary'] {
+        background: $color-primary;
 
         &:hover:not(:disabled) {
-            background-color: $color-primary-high;
+            background: $color-primary-high;
         }
     }
 
-    &--outline {
-        background-color: $color-white;
+    &[data-variant='outline'] {
+        background: transparent;
 
         &:hover:not(:disabled) {
-            background-color: $color-surface;
+            background: $color-surface;
         }
     }
-    &:has(:only-child) {
-        padding: $button-icon-padding;
+
+    &[data-variant='outline-inverse'] {
+        border-color: $color-white;
+        color: $color-white;
+        background: transparent;
+
+        &:hover:not(:disabled) {
+            border-color: $color-primary;
+        }
     }
-    :only-child {
-        width: $size-2;
-        height: $size-2;
+
+    &:disabled {
+        border-color: $color-outline-variant;
+        color: $color-on-bg-low;
+        background: $color-surface-disabled;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
+
+    > svg {
+        display: block;
+        flex: 0 0 auto;
+        width: $icon-size-medium;
+        height: $icon-size-medium;
     }
 }

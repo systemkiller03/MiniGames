@@ -18,21 +18,6 @@
     }
 }
 
-@mixin container {
-    width: 100%;
-    max-width: $container-max-width;
-    margin-inline: auto;
-    padding-inline: $size-10;
-
-    @include desktop {
-        padding-inline: $size-4;
-    }
-
-    @include tablet {
-        padding-inline: $size-2;
-    }
-}
-
 @mixin interactive {
     cursor: pointer;
 

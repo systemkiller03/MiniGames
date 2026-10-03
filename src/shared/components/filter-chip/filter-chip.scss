@@ -1,0 +1,46 @@
+@use '/src/styles/tokens' as *;
+
+.filter-chip {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    height: $chip-height;
+    padding: $button-small-padding;
+    border: $button-border-width-thin solid $color-outline-variant;
+    border-radius: $corner-full;
+    color: $color-on-primary;
+    background: $color-white;
+    font-family: $font-family-inter;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-medium;
+    line-height: $button-line-height;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color $transition-fast,
+        border-color $transition-fast,
+        transform $transition-fast;
+
+    &:hover:not(:disabled) {
+        background: $color-surface;
+    }
+
+    &:focus-visible {
+        outline: $focus-ring-width solid $focus-ring-color;
+        outline-offset: $focus-ring-offset;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+
+    &[aria-pressed='true'] {
+        border: $button-border-width solid $color-black;
+        background: $color-primary;
+    }
+
+    @media (width < $breakpoint-tablet) {
+        height: $chip-height-mobile;
+    }
+}

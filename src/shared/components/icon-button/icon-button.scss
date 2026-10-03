@@ -1,28 +1,106 @@
-@use '/src/styles/mixins' as *;
+@use '/src/styles/tokens' as *;
 
 .icon-button {
-    @include interactive;
-
+    position: relative;
     display: inline-flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    border: $button-border-width solid transparent;
+    color: $color-on-primary;
+    font-family: $font-family-inter;
     line-height: 1;
-    text-align: center;
+    cursor: pointer;
+    transition:
+        background-color $transition-fast,
+        border-color $transition-fast,
+        transform $transition-fast;
 
-    &__glyph {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
+    &:focus-visible {
+        outline: $focus-ring-width solid $focus-ring-color;
+        outline-offset: $focus-ring-offset;
+    }
 
-        svg {
-            display: block;
-            width: 18px;
-            height: 18px;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+    &[data-size='sm'] {
+        width: $icon-button-size-small;
+        height: $icon-button-size-small;
+    }
+
+    &[data-size='md'] {
+        width: $icon-button-size-medium;
+        height: $icon-button-size-medium;
+    }
+
+    &[data-shape='square'] {
+        border-radius: $corner-small;
+    }
+
+    &[data-shape='circle'] {
+        border-radius: $corner-full;
+    }
+
+    &[data-variant='plain'] {
+        background: transparent;
+
+        &:hover:not(:disabled) {
+            color: $color-primary;
+        }
+    }
+
+    &[data-variant='surface'] {
+        border-color: $color-outline-variant;
+        background: $color-white;
+
+        &:hover:not(:disabled) {
+            background: $color-surface;
+        }
+    }
+
+    &[data-variant='primary'] {
+        color: $color-on-primary;
+        background: $color-primary;
+
+        &:hover:not(:disabled) {
+            background: $color-primary-high;
+        }
+    }
+
+    &[data-tone='dark'] {
+        color: $color-white;
+        background: $color-bg-footer-low;
+
+        &:hover:not(:disabled) {
+            border-color: transparent;
+            background: $color-bg-footer-lowest;
+            box-shadow: inset 0 0 0 $button-border-width $color-primary;
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+    }
+
+    > svg {
+        display: block;
+        width: $icon-size-small;
+        height: $icon-size-small;
+    }
+
+    &[data-size='md'] > svg {
+        width: $icon-size-medium;
+        height: $icon-size-medium;
+    }
+
+    @media (pointer: coarse) {
+        &::after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: max(100%, $touch-target-min);
+            height: max(100%, $touch-target-min);
+            content: '';
+            transform: translate(-50%, -50%);
         }
     }
 }
