@@ -1,7 +1,7 @@
-import heart from'@/assets/heart.svg';
-import star from'@/assets/start.svg';
-import'./card.scss';
-import{ createButton } from'@/shared/components/button/button';
+import heart from '@/assets/heart.svg';
+import star from '@/assets/start.svg';
+import './card.scss';
+import { createButton } from '@/shared/components';
 
 export function createCard(
     {
@@ -9,7 +9,6 @@ export function createCard(
         name,
         description,
         category,
-        detailsLink,
         cost,
         stars,
         likes,
@@ -18,15 +17,14 @@ export function createCard(
         name: string;
         description: string;
         category: string;
-        detailsLink: string;
         cost: string;
         stars: number;
         likes: number;
     },
     onDetailsClick?: () => void,
-){
+) {
     const card = document.createElement('div');
-    card.classList.add('card');
+    card.className = 'game-card';
 
     const img = document.createElement('img');
     img.src = imgSrc;
@@ -34,8 +32,7 @@ export function createCard(
     card.append(img);
 
     const div = document.createElement('div');
-    const header = document.createElement('div');
-    header.classList.add('cardHeader');
+    const header = document.createElement('header');
 
     const headerDiv = document.createElement('div');
 
@@ -44,7 +41,7 @@ export function createCard(
     headerDiv.append(h3);
 
     const categoryElement = document.createElement('p');
-    categoryElement.classList.add('category');
+    categoryElement.dataset.role = 'category';
     categoryElement.textContent = category;
     headerDiv.append(categoryElement);
 
@@ -52,7 +49,7 @@ export function createCard(
 
     const costElement = document.createElement('p');
     costElement.textContent = cost;
-    costElement.classList.add(cost === 'Free' ? 'free' : 'costly');
+    costElement.dataset.price = cost === 'Free' ? 'free' : 'paid';
     header.append(costElement);
 
     div.append(header);
@@ -61,8 +58,7 @@ export function createCard(
     descriptionElement.textContent = description;
     div.append(descriptionElement);
 
-    const footer = document.createElement('div');
-    footer.classList.add('cardFooter');
+    const footer = document.createElement('footer');
 
     const cardElement = document.createElement('div');
 
@@ -72,7 +68,6 @@ export function createCard(
     const starsNumber = document.createElement('p');
     starsNumber.textContent = formatLikes(stars);
     starsElement.append(starsImage, starsNumber);
-    starsElement.classList.add('cardElem');
 
     cardElement.append(starsElement);
 
@@ -82,19 +77,19 @@ export function createCard(
     const likesNumber = document.createElement('p');
     likesNumber.textContent = formatLikes(likes);
     likesElement.append(likesImage, likesNumber);
-    likesElement.classList.add('cardElem');
 
     cardElement.append(likesElement);
 
     footer.append(cardElement);
 
-    const detailsButton = createButton({ label: 'Details', variant: 'primary' });
+    const detailsButton = createButton({ label: 'Details', variant: 'primary', size: 'md' });
     detailsButton.addEventListener('click', () => {
-        if(onDetailsClick){
-            onDetailsClick();
+        if (!onDetailsClick) {
             return;
         }
-        console.log(detailsLink);
+
+        onDetailsClick();
+        return;
     });
     footer.append(detailsButton);
     div.append(footer);
@@ -102,9 +97,9 @@ export function createCard(
     return card;
 }
 
-function formatLikes(likes: number): string{
-    if(likes >= 1_000_000){
-        return(likes / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+function formatLikes(likes: number): string {
+    if (likes >= 1_000_000) {
+        return (likes / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
     }
     return likes >= 1000 ? (likes / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : likes.toString();
 }

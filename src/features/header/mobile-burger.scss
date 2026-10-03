@@ -1,10 +1,11 @@
 @use '/src/styles/mixins' as *;
 @use '/src/styles/tokens' as *;
 
-aside {
+.mobile-menu {
     display: none;
-    z-index: 100;
-    @include tablet {
+    z-index: 1000;
+
+    @media (width < $breakpoint-tablet) {
         display: flex;
         justify-content: space-between;
         flex-direction: column;
@@ -31,20 +32,12 @@ aside {
             }
             h1 {
                 font-size: $font-size-headline-medium;
-                color: white;
-                margin: 0;
+                color: $color-white;
+
                 @include tablet {
                     font-size: $font-size-headline-small;
                 }
             }
-        }
-        .closeButton {
-            background: $color-bg-footer-low;
-            padding: 0;
-            outline: none;
-            color: white;
-            font-size: $font-size-display-small;
-            cursor: pointer;
         }
     }
     nav {
@@ -66,7 +59,7 @@ aside {
                 font-size: $font-size-body-large;
                 font-weight: $font-weight-bold;
                 text-decoration: none;
-                transition: color 0.2s ease;
+                transition: color 150ms ease;
 
                 &:hover {
                     color: $color-primary;
@@ -81,17 +74,9 @@ aside {
             align-items: center;
             flex-direction: column;
             gap: $size-2;
-            button {
-                width: 100%;
-            }
-            .login {
-                outline-color: $color-bg;
-                color: $color-bg;
-                background-color: $color-bg-footer;
-            }
         }
     }
-    &.closed {
+    &[hidden] {
         display: none;
     }
 }

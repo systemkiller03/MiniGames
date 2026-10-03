@@ -1,7 +1,7 @@
 @use '/src/styles/mixins' as *;
 @use '/src/styles/tokens' as *;
 
-.gameCardsSection {
+.game-cards {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: $size-3;
@@ -12,16 +12,16 @@
         padding: 0 $size-5;
     }
 }
-.card {
+.game-card {
     display: flex;
-    min-height: 200px;
+    height: 200px;
     align-items: center;
     justify-content: center;
     border: 1px solid $color-on-primary;
     border-radius: $corner-medium;
     box-shadow: 4px 4px 0 $color-on-primary;
     @include tablet {
-        min-height: 152px;
+        height: 152px;
     }
     > img {
         height: 100%;
@@ -31,7 +31,6 @@
         border-bottom-left-radius: $corner-medium;
         @include tablet {
             width: 270px;
-            border-top-right-radius: $corner-medium;
         }
     }
     > div {
@@ -40,9 +39,9 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: space-betweem;
 
-        .cardHeader {
+        header {
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -56,12 +55,11 @@
                     font-family: $font-family-inter;
                     font-weight: $font-weight-bold;
                     color: $color-on-primary;
-                    margin: 0;
                     @include tablet {
                         font-size: $font-size-headline-small;
                     }
                 }
-                p.category {
+                p[data-role='category'] {
                     color: $color-on-primary;
                     font-size: $font-size-label-medium;
                     font-weight: $font-weight-bold;
@@ -70,7 +68,6 @@
                     padding: $size-05 $size-1;
                     cursor: pointer;
                     @include tablet {
-                        font-size: $font-size-body-small;
                     }
                 }
             }
@@ -79,49 +76,62 @@
                 font-family: $font-family-inter;
                 font-weight: $font-weight-bold;
                 color: $color-on-primary;
-                margin: 0;
                 @include tablet {
                     font-size: $font-size-headline-small;
                 }
-                &.free {
+                &[data-price='free'] {
                     color: $color-price-free;
                 }
             }
         }
         > p {
+            background-color: red;
+            display: -webkit-box;
+            overflow: hidden;
             font-size: $font-size-body-medium;
             font-family: $font-family-inter;
             font-weight: $font-weight-medium;
             color: $color-on-bg;
-            margin: 0;
+            flex-shrink: 0;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            line-height: 1.4;
+            @include desktop {
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+            }
+
+            @include tablet {
+                font-size: $font-size-body-small;
+            }
         }
-        .cardFooter {
+    }
+    footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: $size-2 $size-3;
+        > div {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: $size-2 $size-3;
+            gap: $size-3;
+
             > div {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                gap: $size-3;
-
-                .cardElem {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    img {
-                        width: $size-3;
-                        height: $size-3;
-                        object-fit: contain;
-                    }
-                    p {
-                        font-size: $font-size-body-small;
-                        font-family: $font-family-inter;
-                        font-weight: $font-weight-bold;
-                        color: $color-on-primary;
-                        margin: 0;
-                    }
+                justify-content: center;
+                img {
+                    width: $size-3;
+                    height: $size-3;
+                    object-fit: contain;
+                }
+                p {
+                    font-size: $font-size-body-small;
+                    font-family: $font-family-inter;
+                    font-weight: $font-weight-bold;
+                    color: $color-on-primary;
                 }
             }
         }
@@ -129,13 +139,13 @@
 }
 
 @include mobile {
-    .gameCardsSection {
+    .game-cards {
         grid-template-columns: 1fr;
         gap: $size-2;
         padding: 0 $size-2;
     }
 
-    .card {
+    .game-card {
         min-height: 0;
         flex-direction: column;
         align-items: stretch;
@@ -165,7 +175,7 @@
             height: auto;
             padding: $size-2;
 
-            .cardHeader {
+            header {
                 display: contents;
 
                 > div {
@@ -178,7 +188,7 @@
                         font-size: $font-size-headline-small;
                     }
 
-                    p.category {
+                    p[data-role='category'] {
                         background-color: $color-secondary;
                         border-width: 1.5px;
                         padding: 2px $size-1;
@@ -198,14 +208,14 @@
                 line-height: 1.4;
             }
 
-            .cardFooter {
+            footer {
                 display: contents;
 
                 > div {
                     grid-area: stats;
                     gap: $size-2;
 
-                    .cardElem p {
+                    > div > div p {
                         font-size: $font-size-label-medium;
                     }
                 }
@@ -216,5 +226,14 @@
                 }
             }
         }
+    }
+}
+
+@media (width < $breakpoint-tablet) {
+    .game-card footer > .btn[data-size='md'] {
+        height: $button-height-small;
+        padding: $button-small-padding;
+        border-radius: $corner-small;
+        font-size: $font-size-label-large;
     }
 }

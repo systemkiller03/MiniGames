@@ -1,39 +1,28 @@
 @use '/src/styles/tokens' as *;
 @use '/src/styles/mixins' as *;
 
-$footer-wide: 1024px;
-$footer-max-width: 1920px;
-
-@mixin wide {
-    @media (min-width: $footer-wide) {
-        @content;
-    }
-}
-
 .footer {
     background: $color-bg-footer;
     color: $color-on-bg-footer;
     font-family: $font-family-inter;
     font-size: $font-size-body-small;
 
-    // Full-width background, content centered and capped at 1920 (only side space grows)
-    &__inner {
+    > div {
         box-sizing: border-box;
-        max-width: $footer-max-width;
+        max-width: 1200px;
         margin-inline: auto;
-        padding: $size-4 $size-2; // 32 / 16
+        padding: $size-4 $size-2;
 
         @include tablet {
-            padding: $size-5; // 40
+            padding: $size-5;
         }
 
         @include desktop {
-            padding-inline: $size-15; // 120
+            padding-inline: $size-15;
         }
     }
 
-    // ---------- top block ----------
-    &__top {
+    > div > header {
         display: flex;
         flex-direction: column;
         gap: $size-3;
@@ -43,25 +32,18 @@ $footer-max-width: 1920px;
             margin-bottom: $size-5;
         }
 
-        @include wide {
-            flex-direction: row;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: $size-5;
-        }
-
         @include desktop {
             margin-bottom: $size-8;
         }
     }
 
-    &__about {
+    > div > header > section {
         display: flex;
         flex-direction: column;
         gap: $size-3;
     }
 
-    &__brand {
+    > div > header > section > a {
         @include interactive;
 
         display: inline-flex;
@@ -69,13 +51,13 @@ $footer-max-width: 1920px;
         align-self: flex-start;
         gap: $size-1;
         color: $color-white;
-        font-size: $font-size-headline-small; // 20
+        font-size: $font-size-headline-small;
         font-weight: $font-weight-bold;
-        line-height: normal;
+        line-height: 1.5;
         text-decoration: none;
 
         @include desktop {
-            font-size: $font-size-headline-medium; // 24
+            font-size: $font-size-headline-medium;
         }
 
         &:focus-visible {
@@ -84,80 +66,74 @@ $footer-max-width: 1920px;
         }
     }
 
-    &__logo {
+    > div > header > section > a img {
         width: $size-4;
         height: $size-4;
     }
 
-    &__description {
-        margin: 0;
+    > div > header > section > p {
         line-height: 1.5;
 
-        @include wide {
-            max-width: 392px;
+        @include tablet {
+            max-width: 640px;
         }
     }
 
-    // ---------- link columns ----------
-    // mobile: Explore | Company, Community below. tablet+: three columns in a row.
-    &__columns {
+    > div > header > div {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: $size-3 $size-5;
 
         @include tablet {
-            grid-template-columns: repeat(3, auto);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             justify-content: start;
         }
 
         @include desktop {
-            column-gap: $size-10; // 80
+            column-gap: $size-10;
         }
     }
 
-    &__column {
+    > div > header nav,
+    > div > header > div > section {
         display: flex;
         flex-direction: column;
         gap: $size-2;
+    }
 
-        &--social {
-            grid-column: 1 / -1;
+    > div > header > div > section {
+        grid-column: 1 / -1;
 
-            @include tablet {
-                grid-column: auto;
-            }
+        @include tablet {
+            grid-column: auto;
         }
     }
 
-    &__heading {
-        margin: 0;
+    h2 {
         color: $color-white;
         font-size: $font-size-body-medium;
         font-weight: $font-weight-bold;
-        line-height: normal;
+        line-height: 1.5;
     }
 
-    &__list,
-    &__social {
+    ul {
         display: flex;
-        margin: 0;
         padding: 0;
         list-style: none;
     }
 
-    &__list {
+    nav ul {
         flex-direction: column;
         gap: $size-2;
     }
 
-    // ---------- shared link states ----------
-    &__link,
-    &__chip {
+    nav a,
+    > div > div:last-child > a {
         @include interactive;
 
         color: $color-on-bg-footer;
         text-decoration: none;
-        transition: color 0.2s ease;
+        transition: color 150ms ease;
 
         &:hover {
             color: $color-primary;
@@ -174,8 +150,8 @@ $footer-max-width: 1920px;
         }
     }
 
-    &__link {
-        line-height: normal;
+    nav a {
+        line-height: 1.5;
 
         &:hover {
             text-decoration: underline;
@@ -183,37 +159,36 @@ $footer-max-width: 1920px;
         }
     }
 
-    // ---------- social ----------
-    &__social {
+    > div > header > div > section ul {
         gap: $size-2;
     }
 
-    &__social-link {
+    > div > header > div > section a {
         @include interactive;
 
         display: grid;
         place-items: center;
-        width: $size-4; // 32
+        width: $size-4;
         height: $size-4;
         border-radius: $corner-full;
         background: $color-bg-footer-low;
         color: $color-white;
         transition:
-            box-shadow 0.2s ease,
-            background-color 0.2s ease;
+            box-shadow 150ms ease,
+            background-color 150ms ease;
 
         @include desktop {
-            width: $size-5; // 40
+            width: $size-5;
             height: $size-5;
         }
 
         svg {
-            width: 20px;
-            height: 20px;
+            width: $size-2;
+            height: $size-2;
             fill: currentColor;
 
             @include desktop {
-                width: $size-3; // 24
+                width: $size-3;
                 height: $size-3;
             }
         }
@@ -232,8 +207,7 @@ $footer-max-width: 1920px;
         }
     }
 
-    // ---------- bottom row ----------
-    &__bottom {
+    > div > div:last-child {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
@@ -241,12 +215,12 @@ $footer-max-width: 1920px;
         row-gap: $size-1;
         padding-top: $size-1;
         border-top: 1px solid $color-bg-footer-low;
-        font-size: $font-size-label-medium; // 12
+        font-size: $font-size-label-medium;
 
         @include tablet {
             justify-content: space-between;
             padding-top: $size-2;
-            font-size: $font-size-body-small; // 14
+            font-size: $font-size-body-small;
         }
 
         @include desktop {
@@ -254,14 +228,11 @@ $footer-max-width: 1920px;
         }
     }
 
-    &__copyright,
-    &__tagline {
-        margin: 0;
-        line-height: normal;
+    > div > div:last-child p {
+        line-height: 1.5;
     }
 
-    // copyright gets its own line on mobile
-    &__copyright {
+    > div > div:last-child p:first-child {
         flex: 0 0 100%;
 
         @include tablet {
@@ -269,8 +240,7 @@ $footer-max-width: 1920px;
         }
     }
 
-    // not in the 375 design
-    &__tagline {
+    > div > div:last-child p:last-child {
         display: none;
 
         @include tablet {
@@ -278,44 +248,44 @@ $footer-max-width: 1920px;
         }
     }
 
-    &__chip {
+    > div > div:last-child > a {
         display: inline-flex;
         align-items: center;
         gap: $size-1;
-        line-height: normal;
+        line-height: 1.5;
 
-        &:hover .footer__chip-label {
+        &:hover span:last-child {
             text-decoration: underline;
             text-underline-offset: $size-05;
         }
     }
 
-    &__chip-icon {
+    > div > div:last-child > a > span:first-child {
         display: grid;
         flex-shrink: 0;
         place-items: center;
-        width: 20px;
-        height: 20px;
+        width: $size-2;
+        height: $size-2;
         border-radius: $corner-full;
 
         @include desktop {
-            width: $size-3; // 24
+            width: $size-3;
             height: $size-3;
         }
 
-        &--rs {
+        &[data-icon='rs'] {
             background: $color-on-primary;
             color: $color-primary;
-            font-size: 8px;
+            font-size: $font-size-label-small;
             font-weight: $font-weight-bold;
             line-height: 1;
 
             @include desktop {
-                font-size: $font-size-label-small; // 10
+                font-size: $font-size-label-small;
             }
         }
 
-        &--code {
+        &[data-icon='code'] {
             background: $color-white;
             color: $color-on-primary;
 

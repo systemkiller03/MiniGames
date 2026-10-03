@@ -1,4 +1,4 @@
-import'./leaderboard.scss';
+import './leaderboard.scss';
 
 const PLAYERS = [
     {
@@ -48,7 +48,7 @@ const PLAYERS = [
     },
 ];
 
-export function createLeaderboard(): HTMLElement{
+export function createLeaderboard(): HTMLElement {
     const section = document.createElement('section');
     section.className = 'leaderboard';
     section.setAttribute('aria-labelledby', 'leaderboard-title');
@@ -58,22 +58,20 @@ export function createLeaderboard(): HTMLElement{
     title.textContent = 'Top Players This Week';
 
     const tableWrap = document.createElement('div');
-    tableWrap.className = 'leaderboard__table-wrap';
     const table = document.createElement('table');
-    table.className = 'leaderboard__table';
 
     const caption = document.createElement('caption');
     caption.textContent = 'Top players ranked by weekly score';
     const head = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    for(const label of[
+    for (const label of [
         'Rank',
         'Player',
         'Games Played',
         'Total Score',
         'Streak',
         'Favorite Game',
-    ]){
+    ]) {
         const cell = document.createElement('th');
         cell.scope = 'col';
         cell.textContent = label;
@@ -82,20 +80,16 @@ export function createLeaderboard(): HTMLElement{
     head.append(headerRow);
 
     const body = document.createElement('tbody');
-    for(const[index, player] of PLAYERS.entries()){
+    for (const [index, player] of PLAYERS.entries()) {
         const row = document.createElement('tr');
         const rank = document.createElement('td');
-        rank.className = 'leaderboard__rank';
         rank.textContent = `#${index + 1}`;
 
         const playerCell = document.createElement('td');
-        playerCell.className = 'leaderboard__player';
         const avatar = document.createElement('span');
-        avatar.className = 'leaderboard__avatar';
         avatar.style.setProperty('--avatar-color', player.color);
         avatar.textContent = player.initials;
         const name = document.createElement('span');
-        name.className = 'leaderboard__name';
         name.textContent = player.name;
         playerCell.append(avatar, name);
 
@@ -104,12 +98,10 @@ export function createLeaderboard(): HTMLElement{
         const score = document.createElement('td');
         score.textContent = player.score;
         const streak = document.createElement('td');
-        streak.className = 'leaderboard__streak';
         streak.textContent = `🔥 ${player.streak}`;
 
         const favoriteCell = document.createElement('td');
         const favorite = document.createElement('span');
-        favorite.className = 'leaderboard__favorite';
         favorite.textContent = player.favorite;
         favoriteCell.append(favorite);
 

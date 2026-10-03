@@ -1,20 +1,18 @@
 @use '/src/styles/tokens' as *;
 @use '/src/styles/mixins' as *;
 
-$developer-max-width: 1680px;
-
 .developer {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: $size-3;
     width: 100%;
-    max-width: $developer-max-width;
+    max-width: 1200px;
     margin-inline: auto;
     padding: $size-5 $size-2;
     color: $color-on-primary;
 
-    &__illustration {
+    > img {
         display: block;
         width: 100%;
         height: auto;
@@ -22,32 +20,30 @@ $developer-max-width: 1680px;
         border-radius: $corner-extra-large;
     }
 
-    &__content {
+    > div {
         width: 100%;
         padding: $size-3;
         border: 2px solid $color-on-primary;
         border-radius: $corner-extra-large;
         background: $color-white;
-        box-shadow:
-            0 2px 4px rgb(0 0 0 / 4%),
-            0 14px 15px rgb(0 0 0 / 8%);
+        box-shadow: $shadow-level-1;
     }
 
-    &__title {
+    h2 {
         margin: 0 0 $size-2;
         font-size: $font-size-headline-medium;
-        line-height: 1.15;
+        line-height: 1.2;
     }
 
-    &__description {
-        max-width: 36em;
+    p:first-of-type {
+        max-width: 640px;
         margin: 0 0 $size-3;
         color: $color-on-bg;
         font-size: $font-size-body-medium;
         line-height: 1.5;
     }
 
-    &__contact {
+    p:last-of-type {
         margin: $size-2 0 0;
         font-size: $font-size-body-small;
         color: $color-on-bg-low;
@@ -57,55 +53,56 @@ $developer-max-width: 1680px;
         }
     }
 
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: $size-1;
-        padding: $button-large-padding;
-        border-radius: $corner-medium;
-        font-size: $font-size-body-large;
-        box-shadow: 0 10px 10px rgb(0 0 0 / 10%);
+    .developer-cta.btn {
+        @media (width >= $breakpoint-tablet) {
+            height: $button-height-medium;
+            padding: $button-medium-padding;
+            border-radius: $corner-small;
+            font-size: $font-size-label-large;
+        }
 
-        svg {
-            width: $size-3;
-            height: $size-3;
+        @media (width >= $breakpoint-desktop) {
+            height: $button-height-large;
+            padding: $button-large-padding;
+            border-radius: $corner-medium;
+            font-size: $font-size-label-extra-large;
         }
     }
 
-    @media (min-width: 769px) {
+    @include desktop {
         flex-direction: row;
         gap: $size-4;
         padding: $size-6 $size-5;
 
-        &__illustration {
+        > img {
             flex: 1 1 0;
             width: auto;
             min-width: 0;
         }
 
-        &__content {
-            flex: 1.4 1 0;
+        > div {
+            flex: 1 1 0;
             min-width: 0;
             padding: $size-4;
         }
     }
 
-    @media (min-width: 1200px) {
+    @include desktop {
         gap: $size-5;
         padding: $size-5 0;
 
-        &__illustration {
+        > img {
             flex: 1 1 0;
             min-width: 0;
             border: 0;
             border-radius: $corner-extra-large;
         }
 
-        &__content {
+        > div {
             padding: $size-5;
         }
 
-        &__title {
+        h2 {
             font-size: $font-size-headline-large;
         }
     }

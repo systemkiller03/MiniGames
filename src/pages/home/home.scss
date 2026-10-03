@@ -1,32 +1,33 @@
 @use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
 
-body:has(.home-page) > header {
+body:has(.home-page) > .site-header {
     border: 0;
     border-bottom: 2px solid $color-on-primary;
 }
 
-body:has(.home-page) > header > nav ul li:first-child a {
+body:has(.home-page) > .site-header > nav ul li:first-child a {
     color: $color-on-primary;
     font-weight: $font-weight-bold;
 }
 
-body:has(.home-page) > header > nav ul li:not(:first-child) a {
+body:has(.home-page) > .site-header > nav ul li:not(:first-child) a {
     color: $color-on-bg;
     font-weight: $font-weight-medium;
 }
 
-@media (min-width: 1200px) {
-    body:has(.home-page) > header {
+@include desktop {
+    body:has(.home-page) > .site-header {
         padding: $size-3 $size-10;
     }
 
-    body:has(.home-page) > .footer .footer__inner {
+    body:has(.home-page) > .footer > div {
         padding: $size-5 $size-15;
     }
 }
 
-@media (min-width: 769px) and (max-width: 1199px) {
-    body:has(.home-page) > .footer .footer__inner {
+@include tablet {
+    body:has(.home-page) > .footer > div {
         padding: $size-5 $size-5;
     }
 }

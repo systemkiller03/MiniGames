@@ -30,7 +30,7 @@
         }
     }
 
-    &__table-wrap {
+    > div {
         width: 100%;
         max-width: 1680px;
         margin: 0 auto;
@@ -41,7 +41,7 @@
         background: $color-white;
     }
 
-    &__table {
+    table {
         width: 100%;
         min-width: 940px;
         border-collapse: collapse;
@@ -90,16 +90,16 @@
         width: 24%;
     }
 
-    &__rank {
+    tbody td:first-child {
         color: $color-on-primary;
         font-weight: $font-weight-bold;
     }
 
-    &__player {
+    tbody td:nth-child(2) {
         text-align: left;
     }
 
-    &__avatar {
+    tbody td:nth-child(2) > span:first-child {
         display: inline-grid;
         place-items: center;
         width: 40px;
@@ -114,16 +114,16 @@
         vertical-align: middle;
     }
 
-    &__name {
+    tbody td:nth-child(2) > span:last-child {
         font-weight: $font-weight-bold;
         vertical-align: middle;
     }
 
-    &__streak {
+    tbody td:nth-child(5) {
         white-space: nowrap;
     }
 
-    &__favorite {
+    tbody td:last-child span {
         display: inline-block;
         max-width: 100%;
         overflow: hidden;
@@ -143,13 +143,13 @@
     }
 }
 
-@media (min-width: 481px) and (max-width: 1199px) {
+@include desktop {
     .leaderboard {
         padding-inline: $size-5;
     }
 }
 
-@media (min-width: 1200px) {
+@include desktop {
     .leaderboard {
         padding: $size-5 $size-15;
 

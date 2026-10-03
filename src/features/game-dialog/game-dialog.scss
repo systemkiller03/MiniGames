@@ -1,15 +1,16 @@
-@use '../../styles/tokens' as *;
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
 
 .game-dialog {
     position: fixed;
     inset: auto;
-    top: 50dvh;
-    left: 50vw;
-    width: min(608px, calc(100vw - 32px), calc((100dvh - 32px) * 0.44805));
-    height: min(1357px, calc((100vw - 32px) * 2.23257), calc(100dvh - 32px));
+    top: 50%;
+    left: 50%;
+    width: min(608px, calc(100vw - #{$size-4}), calc((100vh - #{$size-4}) * 0.737));
+    height: min(1357px, calc((100vw - #{$size-4}) * 1.357), calc(100vh - #{$size-4}));
     max-width: none;
     max-height: none;
-    margin: 0;
+
     transform: translate(-50%, -50%);
     padding: 0;
     overflow: auto;
@@ -18,7 +19,7 @@
     background: $color-bg;
     border: 1px solid $color-outline-variant;
     border-radius: $corner-extra-large;
-    box-shadow: 8px 8px 0 $color-on-primary;
+    box-shadow: 0 16px 48px rgb(30 27 58 / 25%);
     overscroll-behavior: contain;
 }
 
@@ -27,14 +28,14 @@
 }
 
 .game-dialog::backdrop {
-    background: rgb(36 33 69 / 58%);
+    background: rgb(30 27 58 / 70%);
 }
 
-.game-dialog__panel {
+.game-dialog > div {
     position: relative;
 }
 
-.game-dialog__media {
+.game-dialog figure {
     display: block;
     position: relative;
     width: 100%;
@@ -44,7 +45,7 @@
     background: $color-surface;
 }
 
-.game-dialog__image {
+.game-dialog figure img {
     position: absolute;
     inset: 0;
     display: block;
@@ -54,61 +55,45 @@
     object-fit: cover;
 }
 
-.game-dialog__close {
+.game-dialog > div > .icon-button:first-child {
     position: absolute;
-    z-index: 1;
-    top: 16px;
-    right: 16px;
-    display: grid;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    color: $color-on-primary;
-    background: $color-white;
-    border: 2px solid $color-on-primary;
-    border-radius: $corner-full;
-    box-shadow: 2px 2px 0 $color-on-primary;
-    cursor: pointer;
-    place-items: center;
+    z-index: 10;
+    top: $size-2;
+    right: $size-2;
+    color: $color-white;
 }
 
-.game-dialog__close svg {
-    width: 20px;
-    height: 20px;
-}
-
-.game-dialog__content {
+.game-dialog main {
     display: flex;
     flex-direction: column;
     gap: $size-3;
     padding: $size-3;
 }
 
-.game-dialog__title-row {
+.game-dialog main > header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: $size-2;
 }
 
-.game-dialog__title {
+.game-dialog main h2 {
     min-width: 0;
-    margin: 0;
     color: $color-on-primary;
     font-size: $font-size-display-medium;
     font-weight: $font-weight-bold;
-    line-height: 1.15;
+    line-height: 1.2;
     overflow-wrap: anywhere;
 }
 
-.game-dialog__meta {
+.game-dialog main > header > div {
     display: flex;
     flex: 0 0 auto;
     align-items: center;
     gap: $size-2;
 }
 
-.game-dialog__score {
+.game-dialog main > header > div > div {
     display: flex;
     align-items: center;
     gap: $size-05;
@@ -116,35 +101,34 @@
     font-weight: $font-weight-bold;
 }
 
-.game-dialog__score-icon,
-.game-dialog__score-icon svg {
+.game-dialog main > header > div > div > span:first-child,
+.game-dialog main > header > div > div > span:first-child svg {
     display: block;
     width: 18px;
     height: 18px;
 }
 
-.game-dialog__score:first-child .game-dialog__score-icon {
-    color: #d8a900;
+.game-dialog main > header > div > div:first-child > span:first-child {
+    color: $color-primary-high;
 }
 
-.game-dialog__score:last-child .game-dialog__score-icon {
+.game-dialog main > header > div > div:last-child > span:first-child {
     color: $color-like;
 }
 
-.game-dialog__description {
-    margin: 0;
+.game-dialog main > p {
     color: $color-on-bg;
     font-size: $font-size-body-medium;
     line-height: 20px;
 }
 
-.game-dialog__stats {
+.game-dialog main > dl {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: $size-2;
 }
 
-.game-dialog__stat {
+.game-dialog main > dl > div {
     display: flex;
     min-width: 0;
     flex-direction: column;
@@ -153,93 +137,76 @@
     background: $color-white;
     border: 1px solid $color-outline-variant;
     border-radius: $corner-small;
-    box-shadow: 3px 3px 0 $color-on-primary;
+    box-shadow: 2px 2px 0 $color-outline;
 }
 
-.game-dialog__stat-label {
+.game-dialog main > dl dt {
     color: $color-on-bg;
     font-size: $font-size-label-medium;
 }
 
-.game-dialog__stat-value {
+.game-dialog main > dl dd {
     color: $color-on-primary;
     font-size: $font-size-label-large;
     overflow-wrap: anywhere;
 }
 
-.game-dialog__actions {
+.game-dialog main > div {
     display: flex;
     gap: $size-2;
 }
 
-.game-dialog__actions .btn {
+.game-dialog main > div > .btn,
+.game-dialog main > div > .toggle-button {
     display: flex;
     min-width: 0;
-    min-height: 48px;
     flex: 1 1 0;
     align-items: center;
     justify-content: center;
-    gap: $size-1;
-    padding: 10px $size-2;
-    border-radius: $corner-medium;
-    font-size: $font-size-label-extra-large;
-    font-weight: $font-weight-bold;
-    line-height: 1.2;
-    text-align: center;
 }
 
-.game-dialog__actions .game-dialog__primary-action {
-    color: $color-on-primary;
-    background: $color-primary;
-    border: 2px solid $color-on-primary;
-    box-shadow: 4px 4px 0 $color-on-primary;
+@media (width < $breakpoint-tablet) {
+    .game-dialog main > div > .game-dialog-favorite {
+        width: $button-height-large;
+        flex: 0 0 $button-height-large;
+        padding: $button-icon-padding-large;
+
+        > span {
+            display: none;
+        }
+    }
 }
 
-.game-dialog__actions .game-dialog__secondary-action {
-    color: $color-on-primary;
-    background: $color-white;
-    border: 1px solid $color-outline-variant;
-    box-shadow: 4px 4px 0 $color-on-primary;
-}
-
-.game-dialog__secondary-action svg {
-    width: 18px;
-    height: 18px;
-    color: $color-like;
-}
-
-.game-dialog__section {
+.game-dialog main > section {
     display: flex;
     flex-direction: column;
     gap: $size-2;
 }
 
-.game-dialog__section-title,
-.game-dialog__comments-title {
+.game-dialog main > section > h3 {
     display: flex;
     align-items: center;
     gap: $size-1;
-    margin: 0;
+
     color: $color-on-primary;
     font-size: $font-size-body-medium;
     font-weight: $font-weight-bold;
-    line-height: 1.3;
+    line-height: 1.2;
 }
 
-.game-dialog__section-title svg {
+.game-dialog main > section:first-of-type > h3 svg {
     width: 18px;
     height: 18px;
-    color: #b88600;
+    color: $color-primary-high;
 }
 
-.game-dialog__records,
-.game-dialog__comments {
+.game-dialog main > section > div {
     display: flex;
     flex-direction: column;
     gap: $size-1;
 }
 
-.game-dialog__record {
+.game-dialog main > section:first-of-type > div > div {
     display: flex;
     min-height: 52px;
     align-items: center;
@@ -250,50 +217,49 @@
     border-radius: $corner-small;
 }
 
-.game-dialog__record-player,
-.game-dialog__record-result {
+.game-dialog main > section:first-of-type > div > div > div {
     display: flex;
     min-width: 0;
     align-items: center;
     gap: $size-2;
 }
 
-.game-dialog__record-player {
+.game-dialog main > section:first-of-type > div > div > div:first-child {
     color: $color-on-primary;
     font-size: $font-size-label-large;
 }
 
-.game-dialog__medal {
+.game-dialog main > section:first-of-type > div > div > div:first-child > span {
     flex: 0 0 auto;
     font-size: $font-size-body-medium;
 }
 
-.game-dialog__record-result {
+.game-dialog main > section:first-of-type > div > div > div:last-child {
     justify-content: flex-end;
     font-size: $font-size-label-large;
     text-align: right;
 }
 
-.game-dialog__record-result span {
+.game-dialog main > section:first-of-type > div > div > div:last-child span {
     color: $color-on-bg;
     font-size: $font-size-label-medium;
     white-space: nowrap;
 }
 
-.game-dialog__comments-section {
+.game-dialog main > section:last-child {
     gap: $size-2;
 }
 
-.game-dialog__composer {
+.game-dialog main > section:last-child > form {
     display: flex;
     align-items: center;
     gap: $size-2;
 }
 
-.game-dialog__composer-avatar {
+.game-dialog main > section:last-child > form > span:first-child {
     display: grid;
-    width: 40px;
-    height: 40px;
+    width: $size-5;
+    height: $size-5;
     flex: 0 0 auto;
     color: $color-on-primary;
     background: $color-primary;
@@ -304,10 +270,10 @@
     place-items: center;
 }
 
-.game-dialog__comment-input {
+.game-dialog main > section:last-child > form textarea {
     width: 100%;
     min-width: 0;
-    height: 48px;
+    height: $size-6;
     flex: 1 1 auto;
     padding: $size-1 $size-2;
     color: $color-on-primary;
@@ -320,95 +286,82 @@
     resize: vertical;
 }
 
-.game-dialog__comment-input::placeholder {
-    color: #969696;
+.game-dialog main > section:last-child > form textarea::placeholder {
+    color: $color-on-bg-low;
 }
 
-.game-dialog__send {
+.game-dialog main > section:last-child > form .icon-button {
     display: grid;
-    width: 40px;
-    height: 40px;
     flex: 0 0 auto;
-    color: $color-white;
-    background: $color-bg-footer-low;
-    border: 1.5px solid $color-on-primary;
     border-radius: $corner-small;
-    cursor: pointer;
-    place-items: center;
 }
 
-.game-dialog__send svg {
-    width: 18px;
-    height: 18px;
-}
-
-.game-dialog__comment {
+.game-dialog main > section:last-child > div > article {
     display: flex;
     flex-direction: column;
     gap: $size-1;
     padding: $size-2;
     background: $color-white;
     border-radius: $corner-medium;
-    box-shadow: 3px 3px 0 $color-on-primary;
+    box-shadow: 2px 2px 0 $color-outline;
 }
 
-.game-dialog__comment-heading,
-.game-dialog__comment-author {
+.game-dialog main > section:last-child > div > article > header,
+.game-dialog main > section:last-child > div > article > header > div {
     display: flex;
     align-items: center;
 }
 
-.game-dialog__comment-heading {
+.game-dialog main > section:last-child > div > article > header {
     justify-content: space-between;
     gap: $size-2;
 }
 
-.game-dialog__comment-author {
+.game-dialog main > section:last-child > div > article > header > div {
     min-width: 0;
     gap: $size-1;
     font-size: $font-size-body-small;
 }
 
-.game-dialog__avatar {
+.game-dialog main > section:last-child > div > article > header > div > span:first-child {
     display: grid;
     width: 28px;
     height: 28px;
     flex: 0 0 auto;
     color: $color-on-primary;
     border: 1px solid $color-on-primary;
-    border-radius: 14px;
+    border-radius: 50%;
     font-size: $font-size-label-medium;
     font-weight: $font-weight-bold;
     place-items: center;
 }
 
-.game-dialog__avatar--blue {
+.game-dialog [data-tone='blue'] {
     background: #bce3ff;
 }
 
-.game-dialog__avatar--yellow {
+.game-dialog [data-tone='yellow'] {
     background: $color-primary;
 }
 
-.game-dialog__avatar--mist {
-    background: #e9eef6;
+.game-dialog [data-tone='mist'] {
+    background: #e8dff5;
 }
 
-.game-dialog__comment-heading time {
+.game-dialog main > section:last-child > div > article > header time {
     flex: 0 0 auto;
     color: $color-on-bg;
     font-size: $font-size-label-medium;
 }
 
-.game-dialog__comment-text {
-    margin: 0;
+.game-dialog main > section:last-child > div > article > p {
     color: $color-on-primary;
     font-size: $font-size-body-small;
     line-height: 18px;
     overflow-wrap: anywhere;
 }
 
-.game-dialog__comment-likes {
+.game-dialog main > section:last-child > div > article > button[data-role='likes'] {
     display: flex;
     align-items: center;
     gap: $size-05;
@@ -417,77 +370,75 @@
     font-weight: $font-weight-bold;
 }
 
-.game-dialog__comment-likes svg {
-    width: 14px;
-    height: 14px;
-    color: $color-like;
+.game-dialog main > section:last-child > div > article > button[data-role='likes'] > span {
+    color: $color-on-primary;
 }
 
 .game-dialog :focus-visible {
-    outline: 3px solid $color-tertiary;
-    outline-offset: 3px;
+    outline: $focus-ring-width solid $focus-ring-color;
+    outline-offset: $focus-ring-offset;
 }
 
-@media (max-width: 520px) {
+@include tablet {
     .game-dialog {
-        width: min(calc(100vw - 24px), calc((100dvh - 24px) * 0.44805));
-        height: min(calc((100vw - 24px) * 2.23257), calc(100dvh - 24px));
+        width: min(calc(100vw - #{$size-3}), calc((100vh - #{$size-3}) * 0.737));
+        height: min(calc((100vw - #{$size-3}) * 1.357), calc(100vh - #{$size-3}));
         border-radius: $corner-large;
     }
 
-    .game-dialog__media {
+    .game-dialog figure {
         height: 180px;
     }
 
-    .game-dialog__content {
+    .game-dialog main {
         gap: 20px;
         padding: 20px;
     }
 
-    .game-dialog__title-row {
+    .game-dialog main > header {
         align-items: flex-start;
         flex-direction: column;
         gap: $size-1;
     }
 
-    .game-dialog__title {
+    .game-dialog main h2 {
         font-size: $font-size-headline-medium;
     }
 
-    .game-dialog__stats {
+    .game-dialog main > dl {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .game-dialog__record {
+    .game-dialog main > section:first-of-type > div > div {
         align-items: flex-start;
         flex-direction: column;
         gap: $size-1;
         padding: 12px;
     }
 
-    .game-dialog__record-result {
+    .game-dialog main > section:first-of-type > div > div > div:last-child {
         width: 100%;
         justify-content: space-between;
         padding-left: 36px;
         text-align: left;
     }
 
-    .game-dialog__composer {
+    .game-dialog main > section:last-child > form {
         gap: $size-1;
     }
 }
 
-@media (max-width: 360px) {
-    .game-dialog__content {
-        padding: 16px;
+@include mobile {
+    .game-dialog main {
+        padding: $size-2;
     }
 
-    .game-dialog__actions {
+    .game-dialog main > div {
         flex-direction: column;
     }
 
-    .game-dialog__composer-avatar {
-        width: 32px;
-        height: 32px;
+    .game-dialog main > section:last-child > form > span:first-child {
+        width: $size-4;
+        height: $size-4;
     }
 }

@@ -1,5 +1,5 @@
-import'./description.scss';
-export function createDescription(h2Label: string, pLabel: string){
+import './description.scss';
+export function createDescription(h2Label: string, pLabel: string) {
     const div = document.createElement('div');
     div.classList.add('description');
 

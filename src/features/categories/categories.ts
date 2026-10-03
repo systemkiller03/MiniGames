@@ -1,21 +1,19 @@
-import'./categories.scss';
+import './categories.scss';
+import { createFilterChip } from '@/shared/components';
 
-export function createCategories(labels: string[]){
+export function createCategories(labels: string[]) {
     const categories = document.createElement('ul');
     categories.classList.add('categories');
-    for(const label of labels){
+    for (const label of labels) {
         const category = document.createElement('li');
-        const chip = document.createElement('button');
-        chip.classList.add('category-chip');
-        chip.type = 'button';
-        chip.textContent = label;
-        chip.setAttribute('aria-pressed', 'false');
-        chip.addEventListener('click', () => {
-            for(const otherChip of categories.querySelectorAll('.category-chip')){
-                const isActive = otherChip === chip;
-                otherChip.classList.toggle('active', isActive);
-                otherChip.setAttribute('aria-pressed', String(isActive));
-            }
+        const chip = createFilterChip({
+            children: label,
+            selected: label === 'All Games',
+            onClick: () => {
+                for (const otherChip of categories.querySelectorAll('button')) {
+                    otherChip.setAttribute('aria-pressed', String(otherChip === chip));
+                }
+            },
         });
         category.append(chip);
         categories.append(category);
