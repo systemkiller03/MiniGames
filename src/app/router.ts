@@ -12,7 +12,6 @@ export function createRouter(main: HTMLElement): void {
     const path =
         requestedRoute ??
         (pathname.startsWith(basePath) ? `/${pathname.slice(basePath.length)}` : pathname);
-    console.log(path);
 
     const page = ROUTES[path || '/'];
     if (!page) {
