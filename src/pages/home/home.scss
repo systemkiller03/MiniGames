@@ -20,14 +20,4 @@ body:has(.home-page) > .site-header > nav ul li:not(:first-child) a {
     body:has(.home-page) > .site-header {
         padding: $size-3 $size-10;
     }
-
-    body:has(.home-page) > .footer > div {
-        padding: $size-5 $size-15;
-    }
-}
-
-@include tablet {
-    body:has(.home-page) > .footer > div {
-        padding: $size-5 $size-5;
-    }
 }
