@@ -56,6 +56,7 @@ function createBrand(): HTMLAnchorElement {
 
 function createLinkColumn(title: string, id: string, links: FooterLink[]): HTMLElement {
     const column = create('nav');
+    column.className = 'footer-links';
     column.setAttribute('aria-labelledby', id);
 
     const heading = create('h2', title);
@@ -76,6 +77,7 @@ function createLinkColumn(title: string, id: string, links: FooterLink[]): HTMLE
 
 function createSocialColumn(): HTMLElement {
     const column = create('section');
+    column.className = 'footer-community';
     const heading = create('h2', 'Community');
     const list = create('ul');
 
@@ -106,6 +108,7 @@ function createSocialColumn(): HTMLElement {
 
 function createChip(href: string, icon: HTMLElement, label: string): HTMLAnchorElement {
     const chip = create('a');
+    chip.className = 'footer-credit';
     chip.href = href;
     chip.target = '_blank';
     chip.rel = 'noreferrer noopener';
@@ -115,8 +118,10 @@ function createChip(href: string, icon: HTMLElement, label: string): HTMLAnchorE
 
 function createBottom(): HTMLElement {
     const bottom = create('div');
+    bottom.className = 'footer-bottom';
 
     const copyright = create('p', `© ${new Date().getFullYear()} MiniGames. All rights reserved.`);
+    copyright.className = 'footer-copyright';
 
     const rsIcon = create('span', 'RS');
     rsIcon.dataset.icon = 'rs';
@@ -136,13 +141,15 @@ function createBottom(): HTMLElement {
     rssFeedIcon.append(rssImage);
 
     const tagline = create('p', 'Designed with love');
+    tagline.className = 'footer-tagline';
 
-    bottom.append(
-        copyright,
+    const credits = create('div');
+    credits.className = 'footer-credits';
+    credits.append(
         createChip(SCHOOL_URL, rssFeedIcon, 'RS School'),
         createChip(`https://github.com/${GITHUB_USER}`, codeIcon, `@${GITHUB_USER}`),
-        tagline,
     );
+    bottom.append(copyright, credits, tagline);
     return bottom;
 }
 
@@ -153,9 +160,11 @@ export function createFooter(): HTMLElement {
     const top = create('header');
 
     const about = create('section');
+    about.className = 'footer-about';
     about.append(createBrand(), create('p', DESCRIPTION));
 
     const columns = create('div');
+    columns.className = 'footer-columns';
     columns.append(
         createLinkColumn('Explore', 'footer-explore', EXPLORE_LINKS),
         createLinkColumn('Company', 'footer-company', COMPANY_LINKS),
