@@ -1,33 +1,22 @@
-import'./auth.scss';
-import{ Eye, LockKeyhole, Mail, UserRound, X, createElement } from'lucide';
+import './auth.scss';
+import { Eye, LockKeyhole, Mail, UserRound, X, createElement } from 'lucide';
+import { createButton, createIconButton } from '@/shared/components';
 
 type IconNode = Parameters<typeof createElement>[0];
 export type AuthMode = 'login' | 'register';
-
-function createIconButton(label: string, icon: IconNode, className: string): HTMLButtonElement{
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = className;
-    button.setAttribute('aria-label', label);
-    button.append(createElement(icon));
-    return button;
-}
 
 function createAuthField(
     labelText: string,
     inputType: string,
     placeholder: string,
     icon: IconNode,
-): HTMLLabelElement{
+): HTMLLabelElement {
     const field = document.createElement('label');
-    field.className = 'auth-dialog__field';
 
     const label = document.createElement('span');
-    label.className = 'auth-dialog__label';
     label.textContent = labelText;
 
     const inputWrapper = document.createElement('span');
-    inputWrapper.className = 'auth-dialog__input-wrapper';
     inputWrapper.append(createElement(icon));
 
     const input = document.createElement('input');
@@ -36,8 +25,11 @@ function createAuthField(
     input.required = true;
     inputWrapper.append(input);
 
-    if(inputType === 'password'){
-        const visibilityButton = createIconButton('Show password', Eye, 'auth-dialog__visibility');
+    if (inputType === 'password') {
+        const visibilityButton = createIconButton('Show password', Eye, {
+            size: 'sm',
+            shape: 'square',
+        });
         visibilityButton.addEventListener('click', () => {
             input.type = input.type === 'password' ? 'text' : 'password';
             visibilityButton.setAttribute(
@@ -55,71 +47,73 @@ function createAuthField(
 export function createAuthDialog(): {
     dialog: HTMLDialogElement;
     setMode: (mode: AuthMode) => void;
-}{
+} {
     const dialog = document.createElement('dialog');
     dialog.className = 'auth-dialog';
     dialog.setAttribute('aria-labelledby', 'auth-dialog-title');
 
-    const close = createIconButton('Close dialog', X, 'auth-dialog__close');
+    const close = createIconButton('Close dialog', X, {
+        size: 'sm',
+        shape: 'square',
+    });
     const tabs = document.createElement('div');
-    tabs.className = 'auth-dialog__tabs';
     tabs.setAttribute('role', 'tablist');
     tabs.setAttribute('aria-label', 'Authentication mode');
-    const loginTab = document.createElement('button');
-    loginTab.type = 'button';
-    loginTab.className = 'auth-dialog__tab';
+    const loginTab = createButton({ label: 'Login', variant: 'outline', size: 'md' });
+    loginTab.classList.add('auth-tab');
     loginTab.setAttribute('role', 'tab');
     loginTab.setAttribute('aria-controls', 'auth-dialog-form');
-    loginTab.textContent = 'Login';
-    const registerTab = document.createElement('button');
-    registerTab.type = 'button';
-    registerTab.className = 'auth-dialog__tab';
+    const registerTab = createButton({ label: 'Register', variant: 'outline', size: 'md' });
+    registerTab.classList.add('auth-tab');
     registerTab.setAttribute('role', 'tab');
     registerTab.setAttribute('aria-controls', 'auth-dialog-form');
-    registerTab.textContent = 'Register';
     tabs.append(loginTab, registerTab);
 
     const title = document.createElement('h2');
     title.id = 'auth-dialog-title';
     const message = document.createElement('p');
-    message.className = 'auth-dialog__message';
 
     const form = document.createElement('form');
-    form.className = 'auth-dialog__form';
     form.id = 'auth-dialog-form';
     form.addEventListener('submit', (event) => event.preventDefault());
 
     const fields = document.createElement('div');
-    fields.className = 'auth-dialog__fields';
 
-    const forgotPassword = document.createElement('button');
-    forgotPassword.type = 'button';
-    forgotPassword.className = 'auth-dialog__forgot';
-    forgotPassword.textContent = 'Forgot Password?';
+    const forgotPassword = createButton({
+        label: 'Forgot Password?',
+        variant: 'outline',
+        size: 'sm',
+    });
+    forgotPassword.classList.add('auth-text-button');
 
-    const submit = document.createElement('button');
-    submit.type = 'submit';
-    submit.className = 'auth-dialog__submit';
+    const submit = createButton({
+        variant: 'primary',
+        size: 'lg',
+        fullWidth: true,
+        type: 'submit',
+    });
 
     const divider = document.createElement('div');
-    divider.className = 'auth-dialog__divider';
     divider.append(document.createElement('span'));
     const dividerLabel = document.createElement('span');
     dividerLabel.textContent = 'OR';
     divider.append(dividerLabel, document.createElement('span'));
 
-    const google = document.createElement('button');
+    const googleLabel = document.createElement('span');
+    googleLabel.textContent = 'G';
+    const google = createButton({
+        variant: 'outline',
+        size: 'lg',
+        fullWidth: true,
+        iconLeft: googleLabel,
+    });
     google.type = 'button';
-    google.className = 'auth-dialog__google';
-    google.textContent = 'G  Continue with Google';
+    google.append(document.createTextNode('Continue with Google'));
 
     const footer = document.createElement('p');
-    footer.className = 'auth-dialog__footer';
 
     const setMode = (mode: AuthMode): void => {
         const isLogin = mode === 'login';
-        loginTab.classList.toggle('is-active', isLogin);
-        registerTab.classList.toggle('is-active', !isLogin);
         loginTab.setAttribute('aria-selected', String(isLogin));
         registerTab.setAttribute('aria-selected', String(!isLogin));
         loginTab.tabIndex = isLogin ? 0 : -1;
@@ -149,10 +143,12 @@ export function createAuthDialog(): {
         forgotPassword.hidden = !isLogin;
         submit.textContent = isLogin ? 'Login' : 'Create Account';
         footer.textContent = isLogin ? "Don't have an account? " : 'Already have an account? ';
-        const footerAction = document.createElement('button');
-        footerAction.type = 'button';
-        footerAction.className = 'auth-dialog__footer-action';
-        footerAction.textContent = isLogin ? 'Register' : 'Login';
+        const footerAction = createButton({
+            label: isLogin ? 'Register' : 'Login',
+            variant: 'outline',
+            size: 'sm',
+        });
+        footerAction.classList.add('auth-text-button');
         footerAction.addEventListener('click', () => setMode(isLogin ? 'register' : 'login'));
         footer.append(footerAction);
     };
@@ -165,5 +161,5 @@ export function createAuthDialog(): {
     dialog.append(close, tabs, title, message, form);
     form.append(fields, forgotPassword, submit, divider, google, footer);
     setMode('login');
-    return{ dialog, setMode };
+    return { dialog, setMode };
 }

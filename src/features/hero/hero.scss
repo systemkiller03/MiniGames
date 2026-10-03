@@ -21,7 +21,7 @@
         opacity: 0.2;
     }
 
-    &__content {
+    > div {
         position: relative;
         z-index: 1;
         width: calc(100% - #{$size-4});
@@ -41,25 +41,24 @@
 
     h1 {
         max-width: 500px;
-        margin: 0;
+
         color: $color-on-primary;
         font-size: $font-size-headline-medium;
         line-height: 1.15;
     }
 
     p {
-        margin: 0;
         color: $color-on-bg;
         font-size: $font-size-body-small;
         line-height: 1.2;
     }
 }
 
-@media (min-width: 481px) and (max-width: 1199px) {
+@include desktop {
     .hero {
         min-height: 383px;
 
-        &__content {
+        > div {
             width: 480px;
             margin: 0 $size-5;
             min-height: 239px;
@@ -75,15 +74,15 @@
     }
 }
 
-@media (min-width: 1200px) {
+@include desktop {
     .hero {
         padding: $size-14 $size-15;
         min-height: 627px;
 
-        &__content {
+        > div {
             width: 640px;
             min-height: 403px;
-            margin: 0;
+
             padding: $size-6;
             border-width: 3px;
             border-radius: $corner-extra-large;
@@ -97,12 +96,6 @@
         p {
             font-size: $font-size-body-large;
             line-height: 1.5;
-        }
-
-        .btn {
-            padding: $button-large-padding;
-            border-radius: $corner-small;
-            font-size: $font-size-body-large;
         }
     }
 }

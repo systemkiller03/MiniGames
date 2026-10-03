@@ -1,6 +1,6 @@
-import'./pagination.scss';
-import{ ChevronLeft, ChevronRight } from'lucide';
-import{ createIconButton } from'../../shared/components/icon-button/icon-button';
+import './pagination.scss';
+import { createPaginationButton as makePaginationButton } from '@/shared/components';
+export { createPaginationButton } from '@/shared/components';
 
 interface PaginationOptions {
     totalPages?: number;
@@ -12,36 +12,36 @@ export function createPagination({
     totalPages = 4,
     currentPage = 1,
     onPageChange,
-}: PaginationOptions = {}): HTMLElement{
+}: PaginationOptions = {}): HTMLElement {
     const pagination = document.createElement('nav');
     pagination.className = 'pagination';
     pagination.setAttribute('aria-label', 'Pagination');
 
     const controls = document.createElement('div');
-    controls.className = 'pagination__controls';
-
-    const previousButton = createIconButton(
-        'Previous page',
-        ChevronLeft,
-        'pagination__button pagination__button--previous',
-    );
-    const nextButton = createIconButton(
-        'Next page',
-        ChevronRight,
-        'pagination__button pagination__button--next',
-    );
 
     const pageCount = Math.max(1, Math.floor(totalPages));
     let selectedPage = Math.min(pageCount, Math.max(1, Math.floor(currentPage)));
+    const previousButton = makePaginationButton({
+        kind: 'prev',
+        disabled: selectedPage === 1,
+    });
+    const nextButton = makePaginationButton({
+        kind: 'next',
+        disabled: selectedPage === pageCount,
+    });
     const pageButtons = Array.from({ length: pageCount }, (_, index) => {
         const page = index + 1;
-        const button = createPaginationButton(page);
+        const button = makePaginationButton({
+            kind: 'page',
+            children: String(page),
+            selected: page === selectedPage,
+        });
         button.addEventListener('click', () => selectPage(page));
         return button;
     });
 
-    function selectPage(page: number): void{
-        if(page === selectedPage){
+    function selectPage(page: number): void {
+        if (page === selectedPage) {
             return;
         }
         selectedPage = page;
@@ -49,14 +49,13 @@ export function createPagination({
         onPageChange?.(selectedPage);
     }
 
-    function updateControls(): void{
+    function updateControls(): void {
         previousButton.disabled = selectedPage === 1;
         nextButton.disabled = selectedPage === pageCount;
-        for(const[index, button] of pageButtons.entries()){
+        for (const [index, button] of pageButtons.entries()) {
             const isSelected = index + 1 === selectedPage;
-            button.classList.toggle('is-active', isSelected);
             button.toggleAttribute('aria-current', isSelected);
-            if(isSelected){
+            if (isSelected) {
                 button.setAttribute('aria-current', 'page');
             }
         }
@@ -69,13 +68,4 @@ export function createPagination({
     updateControls();
 
     return pagination;
-}
-
-export function createPaginationButton(number: number): HTMLButtonElement{
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'pagination__button';
-    button.textContent = String(number);
-    button.setAttribute('aria-label', `Page ${number}`);
-    return button;
 }

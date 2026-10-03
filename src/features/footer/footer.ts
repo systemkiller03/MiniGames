@@ -34,39 +34,37 @@ const GITHUB_USER = 'systemkiller03';
 
 function create<K extends keyof HTMLElementTagNameMap>(
     tag: K,
-    className?: string,
     text?: string,
 ): HTMLElementTagNameMap[K] {
     const element = document.createElement(tag);
-    if (className) element.className = className;
-    if (text) element.textContent = text;
+    if (text !== undefined) element.textContent = text;
     return element;
 }
 
 function createBrand(): HTMLAnchorElement {
-    const brand = create('a', 'footer__brand');
+    const brand = create('a');
     brand.href = import.meta.env.BASE_URL;
     brand.setAttribute('aria-label', 'MiniGames home');
 
-    const logo = create('img', 'footer__logo');
+    const logo = create('img');
     logo.src = logoSource;
     logo.alt = '';
 
-    brand.append(logo, create('span', undefined, 'MiniGames'));
+    brand.append(logo, create('span', 'MiniGames'));
     return brand;
 }
 
 function createLinkColumn(title: string, id: string, links: FooterLink[]): HTMLElement {
-    const column = create('nav', 'footer__column');
+    const column = create('nav');
     column.setAttribute('aria-labelledby', id);
 
-    const heading = create('h2', 'footer__heading', title);
+    const heading = create('h2', title);
     heading.id = id;
 
-    const list = create('ul', 'footer__list');
+    const list = create('ul');
     for (const { label, href } of links) {
         const item = document.createElement('li');
-        const link = create('a', 'footer__link', label);
+        const link = create('a', label);
         link.href = getNavigationUrl(href);
         item.append(link);
         list.append(item);
@@ -77,13 +75,13 @@ function createLinkColumn(title: string, id: string, links: FooterLink[]): HTMLE
 }
 
 function createSocialColumn(): HTMLElement {
-    const column = create('div', 'footer__column footer__column--social');
-    const heading = create('h2', 'footer__heading', 'Community');
-    const list = create('ul', 'footer__social');
+    const column = create('section');
+    const heading = create('h2', 'Community');
+    const list = create('ul');
 
     for (const { label, href, icon, type } of SOCIAL_LINKS) {
         const item = document.createElement('li');
-        const link = create('a', 'footer__social-link');
+        const link = create('a');
         link.href = href;
         link.setAttribute('aria-label', label);
         link.title = label;
@@ -107,38 +105,37 @@ function createSocialColumn(): HTMLElement {
 }
 
 function createChip(href: string, icon: HTMLElement, label: string): HTMLAnchorElement {
-    const chip = create('a', 'footer__chip');
+    const chip = create('a');
     chip.href = href;
     chip.target = '_blank';
     chip.rel = 'noreferrer noopener';
-    chip.append(icon, create('span', 'footer__chip-label', label));
+    chip.append(icon, create('span', label));
     return chip;
 }
 
 function createBottom(): HTMLElement {
-    const bottom = create('div', 'footer__bottom');
+    const bottom = create('div');
 
-    const copyright = create(
-        'p',
-        'footer__copyright',
-        `© ${new Date().getFullYear()} MiniGames. All rights reserved.`,
-    );
+    const copyright = create('p', `© ${new Date().getFullYear()} MiniGames. All rights reserved.`);
 
-    const rsIcon = create('span', 'footer__chip-icon footer__chip-icon--rs', 'RS');
+    const rsIcon = create('span', 'RS');
+    rsIcon.dataset.icon = 'rs';
     rsIcon.setAttribute('aria-hidden', 'true');
 
-    const codeIcon = create('span', 'footer__chip-icon footer__chip-icon--code');
+    const codeIcon = create('span');
+    codeIcon.dataset.icon = 'code';
     codeIcon.setAttribute('aria-hidden', 'true');
     codeIcon.append(createElement(Code2));
 
-    const rssFeedIcon = create('span', 'footer__chip-icon footer__chip-icon--rss');
+    const rssFeedIcon = create('span');
+    rssFeedIcon.dataset.icon = 'rss';
     rssFeedIcon.setAttribute('aria-hidden', 'true');
     const rssImage = document.createElement('img');
     rssImage.src = rssLogo;
     rssImage.alt = '';
     rssFeedIcon.append(rssImage);
 
-    const tagline = create('p', 'footer__tagline', 'Designed with love');
+    const tagline = create('p', 'Designed with love');
 
     bottom.append(
         copyright,
@@ -150,14 +147,15 @@ function createBottom(): HTMLElement {
 }
 
 export function createFooter(): HTMLElement {
-    const footer = create('footer', 'footer');
-    const inner = create('div', 'footer__inner');
-    const top = create('div', 'footer__top');
+    const footer = create('footer');
+    footer.className = 'footer';
+    const inner = create('div');
+    const top = create('header');
 
-    const about = create('div', 'footer__about');
-    about.append(createBrand(), create('p', 'footer__description', DESCRIPTION));
+    const about = create('section');
+    about.append(createBrand(), create('p', DESCRIPTION));
 
-    const columns = create('div', 'footer__columns');
+    const columns = create('div');
     columns.append(
         createLinkColumn('Explore', 'footer-explore', EXPLORE_LINKS),
         createLinkColumn('Company', 'footer-company', COMPANY_LINKS),

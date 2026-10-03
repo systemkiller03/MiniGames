@@ -7,22 +7,20 @@
     @include desktop {
         padding: $size-3 $size-5;
     }
-    h2 {
+    > h2 {
         font-size: $font-size-display-large;
         font-family: $font-family-inter;
         font-weight: $font-weight-bold;
         color: $color-on-primary;
-        margin: 0;
         @include tablet {
             font-size: $font-size-display-medium;
         }
     }
-    p {
+    > p {
         font-size: $font-size-body-large;
         font-family: $font-family-inter;
         font-weight: $font-weight-bold;
         color: $color-on-bg;
-        margin: 0;
         @include tablet {
             font-size: $font-size-body-medium;
         }

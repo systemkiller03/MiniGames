@@ -1,8 +1,8 @@
 import logoIconSrc from '@/assets/Logo.svg';
-import { createButton } from '@/shared/components/button/button';
+import { createButton, createIconButton } from '@/shared/components';
 import { getNavigationUrl } from '@/shared/navigation';
 import './header.scss';
-import { createElement, Menu } from 'lucide';
+import { Menu } from 'lucide';
 import { createMobileBurger } from './mobile-burger';
 
 export type NAV_ELEM = { name: string; link: string };
@@ -27,6 +27,7 @@ const NAV_ELEMS: NAV_ELEM[] = [
 
 export function createHeader() {
     const header = document.createElement('header');
+    header.className = 'site-header';
 
     const logo = document.createElement('div');
 
@@ -54,19 +55,22 @@ export function createHeader() {
     nav.append(ul);
 
     const div = document.createElement('div');
-    const login = createButton({ label: 'Log In', variant: 'outline' });
-    login.classList.add('login');
+    const login = createButton({ label: 'Log In', variant: 'outline', size: 'md' });
+    login.dataset.authAction = 'login';
     div.append(login);
 
-    const signup = createButton({ label: 'Sign Up', variant: 'primary' });
-    signup.classList.add('signup');
+    const signup = createButton({ label: 'Sign Up', variant: 'primary', size: 'md' });
+    signup.dataset.authAction = 'signup';
     div.append(signup);
 
-    const mobileBurgerButton = createButton({ icon: createElement(Menu), variant: 'outline' });
-    mobileBurgerButton.classList.add('mobileBurgerButton');
+    const mobileBurgerButton = createIconButton('Open menu', Menu, {
+        size: 'sm',
+        shape: 'square',
+    });
+    mobileBurgerButton.dataset.mobileMenuToggle = '';
 
     mobileBurgerButton.addEventListener('click', () => {
-        aside.classList.remove('closed');
+        aside.hidden = false;
     });
 
     div.append(mobileBurgerButton);
