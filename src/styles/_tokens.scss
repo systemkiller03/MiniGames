@@ -119,6 +119,16 @@ $focus-ring-color: $color-tertiary;
 
 $transition-fast: 150ms ease;
 
+// Sort dropdown
+$dropdown-trigger-height-desktop: 44px;
+$dropdown-trigger-height-compact: 40px; // tablet + mobile
+$dropdown-trigger-padding-x-desktop: 20px;
+$dropdown-trigger-width-desktop: 190px;
+$dropdown-trigger-width-tablet: 182px;
+$dropdown-menu-min-width: 200px;
+$dropdown-item-height: 49px;
+$dropdown-divider-height: 1px;
+
 // Shadows
 $shadow-level-1: 4px 4px 0 $color-primary;
 $shadow-level-2: 6px 6px 0 $color-primary;

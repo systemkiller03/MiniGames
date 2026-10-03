@@ -1,0 +1,144 @@
+@use '/src/styles/tokens' as *;
+
+.sort-dropdown {
+    position: relative;
+    z-index: 20;
+    width: 100%;
+
+    &__trigger {
+        display: flex;
+        width: 100%;
+        height: $dropdown-trigger-height-compact;
+        align-items: center;
+        justify-content: space-between;
+        padding-inline: $size-2;
+        border: $button-border-width solid $color-black;
+        border-radius: $corner-medium;
+        color: $color-on-primary;
+        background: $color-white;
+        font-family: $font-family-inter;
+        font-size: $font-size-label-medium;
+        font-weight: $font-weight-medium;
+        text-align: left;
+        cursor: pointer;
+        transition:
+            background-color $transition-fast,
+            border-color $transition-fast,
+            transform $transition-fast;
+
+        &:hover {
+            background: $color-surface;
+        }
+
+        &:focus-visible {
+            outline: $focus-ring-width solid $focus-ring-color;
+            outline-offset: $focus-ring-offset;
+        }
+
+        &[aria-expanded='true'] {
+            border-color: $color-primary;
+            background: $color-white;
+
+            svg {
+                transform: rotate(180deg);
+            }
+        }
+
+        svg {
+            width: $icon-size-medium;
+            height: $icon-size-medium;
+            flex: 0 0 auto;
+            transition: transform $transition-fast;
+        }
+
+        @media (width >= $breakpoint-tablet) {
+            font-size: $font-size-label-large;
+        }
+
+        @media (width >= $breakpoint-desktop) {
+            height: $dropdown-trigger-height-desktop;
+            padding-inline: $dropdown-trigger-padding-x-desktop;
+        }
+    }
+
+    &__menu {
+        position: absolute;
+        z-index: 20;
+        top: calc(100% + #{$size-05});
+        right: 0;
+        width: $dropdown-menu-min-width;
+        min-width: $dropdown-menu-min-width;
+        padding: 0 0 $dropdown-divider-height;
+        overflow: hidden;
+        border: $button-border-width-thin solid $color-outline-variant;
+        border-radius: $corner-medium;
+        background: $color-white;
+        box-shadow: $shadow-hard;
+
+        @media (width < $breakpoint-desktop) {
+            right: auto;
+            width: max(100%, $dropdown-menu-min-width);
+            min-width: 100%;
+        }
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    &__item {
+        display: flex;
+        width: 100%;
+        height: $dropdown-item-height;
+        align-items: center;
+        padding-inline: $size-2;
+        border: 0;
+        border-bottom: $dropdown-divider-height solid $color-outline;
+        color: $color-on-primary;
+        background: $color-white;
+        font-family: $font-family-inter;
+        font-size: $font-size-label-medium;
+        font-weight: $font-weight-medium;
+        text-align: left;
+        cursor: pointer;
+        transition:
+            background-color $transition-fast,
+            border-color $transition-fast,
+            transform $transition-fast;
+
+        &:last-child {
+            border-bottom: 0;
+        }
+
+        &:hover,
+        &[aria-selected='true'] {
+            background: $color-surface;
+        }
+
+        &[aria-selected='true'] {
+            font-weight: $font-weight-bold;
+        }
+
+        &:focus-visible {
+            position: relative;
+            outline: $focus-ring-width solid $focus-ring-color;
+            outline-offset: -$focus-ring-width;
+        }
+
+        @media (width >= $breakpoint-tablet) {
+            font-size: $font-size-label-large;
+        }
+    }
+
+    @media (width >= $breakpoint-tablet) {
+        width: $dropdown-trigger-width-tablet;
+    }
+
+    @media (width < $breakpoint-tablet) {
+        width: calc(100vw - $size-4);
+    }
+
+    @media (width >= $breakpoint-desktop) {
+        width: $dropdown-trigger-width-desktop;
+    }
+}
