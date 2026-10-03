@@ -1,7 +1,7 @@
 import logoIconSrc from '@/assets/Logo.svg';
-import { createButton } from '@/shared/components/button/button';
+import { createButton, createIconButton } from '@/shared/components';
 import { getNavigationUrl } from '@/shared/navigation';
-import { createElement, X } from 'lucide';
+import { X } from 'lucide';
 import './mobile-burger.scss';
 export type NAV_ELEM = { name: string; link: string };
 const NAV_ELEMS: NAV_ELEM[] = [
@@ -24,7 +24,8 @@ const NAV_ELEMS: NAV_ELEM[] = [
 ];
 export function createMobileBurger() {
     const aside = document.createElement('aside');
-    aside.classList.add('closed');
+    aside.className = 'mobile-menu';
+    aside.hidden = true;
 
     const firstLine = document.createElement('div');
     const logo = document.createElement('div');
@@ -39,11 +40,14 @@ export function createMobileBurger() {
     logo.append(icon);
     logo.append(h1);
     firstLine.append(logo);
-    const closeButton = createButton({ icon: createElement(X), variant: 'outline' });
-    closeButton.classList.add('closeButton');
+    const closeButton = createIconButton('Close menu', X, {
+        size: 'sm',
+        shape: 'square',
+        tone: 'dark',
+    });
 
     closeButton.addEventListener('click', () => {
-        aside.classList.add('closed');
+        aside.hidden = true;
     });
     firstLine.append(closeButton);
 
@@ -62,12 +66,21 @@ export function createMobileBurger() {
     nav.append(ul);
 
     const div = document.createElement('div');
-    const login = createButton({ label: 'Log In', variant: 'outline' });
-    login.classList.add('login');
+    const login = createButton({
+        label: 'Log In',
+        variant: 'outline-inverse',
+        size: 'md',
+        fullWidth: true,
+    });
+    login.dataset.authAction = 'login';
     div.append(login);
 
-    const signup = createButton({ label: 'Sign Up', variant: 'primary' });
-    signup.classList.add('signup');
+    const signup = createButton({
+        label: 'Sign Up',
+        variant: 'primary',
+        size: 'md',
+        fullWidth: true,
+    });
     div.append(signup);
 
     nav.append(div);

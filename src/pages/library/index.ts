@@ -1,15 +1,15 @@
-import{ createCard } from'@/features/card/card';
-import{ createCategories } from'@/features/categories/categories';
-import{ createDescription } from'@/features/description/description';
-import{ createGameDialog } from'@/features/game-dialog/game-dialog';
-import{ createPagination } from'@/features/pagination/pagination';
+import { createCard } from '@/features/card/card';
+import { createCategories } from '@/features/categories/categories';
+import { createDescription } from '@/features/description/description';
+import { createGameDialog } from '@/features/game-dialog/game-dialog';
+import { createPagination } from '@/features/pagination/pagination';
 
-import i1 from'@/assets/vacation-cafe-simulator-card.jpg';
-import i2 from'@/assets/winter-burrow-card.jpg';
-import i3 from'@/assets/shelve-the-potions-card.jpg';
-import i4 from'@/assets/heartopia-card.jpg';
-import i5 from'@/assets/palia-card.jpg';
-import i6 from'@/assets/cat-mail-co-card.jpg';
+import i1 from '@/assets/vacation-cafe-simulator-card.jpg';
+import i2 from '@/assets/winter-burrow-card.jpg';
+import i3 from '@/assets/shelve-the-potions-card.jpg';
+import i4 from '@/assets/heartopia-card.jpg';
+import i5 from '@/assets/palia-card.jpg';
+import i6 from '@/assets/cat-mail-co-card.jpg';
 
 const CATEGORY_LABELS = ['All Games', 'Puzzle', 'Card', 'Match', 'Farm', 'Strategy', 'Arcade'];
 
@@ -90,7 +90,7 @@ const GAME_CARD_DATA: {
         likes: 38_200,
     },
 ];
-export function createLibraryPage(){
+export function createLibraryPage() {
     const main = document.createElement('main');
 
     const description = createDescription(
@@ -104,8 +104,8 @@ export function createLibraryPage(){
 
     const previewDialog = createGameDialog();
     const gameCards = document.createElement('section');
-    gameCards.classList.add('gameCardsSection');
-    for(const gameCardData of GAME_CARD_DATA){
+    gameCards.classList.add('game-cards');
+    for (const gameCardData of GAME_CARD_DATA) {
         const gameCard = createCard(gameCardData, () => {
             previewDialog.setGame({
                 image: gameCardData.imgSrc,

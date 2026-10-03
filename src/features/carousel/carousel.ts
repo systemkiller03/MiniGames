@@ -1,26 +1,26 @@
-import'./carousel.scss';
-import{ ArrowLeft, ArrowRight } from'lucide';
-import vacationCafeCard from'../../assets/vacation-cafe-simulator-card.jpg';
-import vacationCafeHero from'../../assets/vacation-cafe-simulator-hero.jpg';
-import winterBurrowCard from'../../assets/winter-burrow-card.jpg';
-import winterBurrowHero from'../../assets/winter-burrow-hero.jpg';
-import shelvePotionsCard from'../../assets/shelve-the-potions-card.jpg';
-import shelvePotionsHero from'../../assets/shelve-the-potions-hero.jpg';
-import heartopiaCard from'../../assets/heartopia-card.jpg';
-import heartopiaHero from'../../assets/heartopia-hero.jpg';
-import paliaCard from'../../assets/palia-card.jpg';
-import paliaHero from'../../assets/palia-hero.jpg';
-import catMailCard from'../../assets/cat-mail-co-card.jpg';
-import catMailHero from'../../assets/cat-mail-co-hero.jpg';
-import tinyGladeCard from'../../assets/tiny-glade-card.jpg';
-import tinyGladeHero from'../../assets/tiny-glade-hero.jpg';
-import tailsideCard from'../../assets/tailside-cozy-cafe-sim-card.jpg';
-import tailsideHero from'../../assets/tailside-cozy-cafe-sim-hero.jpg';
-import islandersCard from'../../assets/islanders-new-shores-card.jpg';
-import islandersHero from'../../assets/islanders-new-shores-hero.jpg';
-import{ createGameDialog } from'../game-dialog/game-dialog';
-import type { GameDialogData } from'../game-dialog/game-dialog';
-import{ createIconButton } from'../../shared/components/icon-button/icon-button';
+import './carousel.scss';
+import { ArrowLeft, ArrowRight } from 'lucide';
+import vacationCafeCard from '../../assets/vacation-cafe-simulator-card.jpg';
+import vacationCafeHero from '../../assets/vacation-cafe-simulator-hero.jpg';
+import winterBurrowCard from '../../assets/winter-burrow-card.jpg';
+import winterBurrowHero from '../../assets/winter-burrow-hero.jpg';
+import shelvePotionsCard from '../../assets/shelve-the-potions-card.jpg';
+import shelvePotionsHero from '../../assets/shelve-the-potions-hero.jpg';
+import heartopiaCard from '../../assets/heartopia-card.jpg';
+import heartopiaHero from '../../assets/heartopia-hero.jpg';
+import paliaCard from '../../assets/palia-card.jpg';
+import paliaHero from '../../assets/palia-hero.jpg';
+import catMailCard from '../../assets/cat-mail-co-card.jpg';
+import catMailHero from '../../assets/cat-mail-co-hero.jpg';
+import tinyGladeCard from '../../assets/tiny-glade-card.jpg';
+import tinyGladeHero from '../../assets/tiny-glade-hero.jpg';
+import tailsideCard from '../../assets/tailside-cozy-cafe-sim-card.jpg';
+import tailsideHero from '../../assets/tailside-cozy-cafe-sim-hero.jpg';
+import islandersCard from '../../assets/islanders-new-shores-card.jpg';
+import islandersHero from '../../assets/islanders-new-shores-hero.jpg';
+import { createGameDialog } from '../game-dialog/game-dialog';
+import type { GameDialogData } from '../game-dialog/game-dialog';
+import { createButton, createIconButton } from '@/shared/components';
 
 type SliderGame = GameDialogData & { slug: string; cardImage: string };
 type CardSlot = 'peek' | 'side' | 'featured';
@@ -176,24 +176,23 @@ const GAMES: SliderGame[] = [
     },
 ];
 
-function formatCount(value: number): string{
-    if(value >= 1_000_000){
-        return`${(value / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+function formatCount(value: number): string {
+    if (value >= 1_000_000) {
+        return `${(value / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
     }
     return value >= 1000 ? `${(value / 1000).toFixed(1).replace(/\.0$/, '')}K` : String(value);
 }
 
-function createMetadata(game: SliderGame): HTMLElement{
+function createMetadata(game: SliderGame): HTMLElement {
     const metadata = document.createElement('div');
-    metadata.className = 'carousel__card-meta';
 
     const rating = document.createElement('span');
-    rating.className = 'carousel__rating';
+    rating.dataset.stat = 'rating';
     rating.setAttribute('aria-label', `${game.rating.toFixed(1)} out of 5 stars`);
     rating.textContent = `★ ${game.rating.toFixed(1)}`;
 
     const likes = document.createElement('span');
-    likes.className = 'carousel__likes';
+    likes.dataset.stat = 'likes';
     likes.setAttribute('aria-label', `${formatCount(game.likes)} likes`);
     likes.textContent = `♥ ${formatCount(game.likes)}`;
 
@@ -201,69 +200,71 @@ function createMetadata(game: SliderGame): HTMLElement{
     return metadata;
 }
 
-function updateCard(card: HTMLElement, game: SliderGame, slot: CardSlot): void{
-    card.className = `carousel__card carousel__card--${slot}`;
+function updateCard(card: HTMLElement, game: SliderGame, slot: CardSlot): void {
+    card.dataset.slot = slot;
     card.dataset.gameSlug = game.slug;
     card.setAttribute('aria-label', `Open details for ${game.title}`);
 
     const image = card.querySelector('img');
     const title = card.querySelector('h3');
-    const metadata = card.querySelector('.carousel__card-meta');
-    if(image instanceof HTMLImageElement){
+    const metadata = card.querySelector(':scope > div > div');
+    if (image instanceof HTMLImageElement) {
         image.src = game.cardImage;
         image.alt = game.title;
     }
-    if(title instanceof HTMLHeadingElement){
+    if (title instanceof HTMLHeadingElement) {
         title.textContent = game.title;
         title.title = game.title;
     }
-    if(metadata instanceof HTMLElement){
+    if (metadata instanceof HTMLElement) {
         metadata.replaceChildren(...createMetadata(game).childNodes);
     }
 }
 
-export function createCarousel(): HTMLElement{
+export function createCarousel(): HTMLElement {
     const section = document.createElement('section');
     section.className = 'carousel';
     section.setAttribute('aria-labelledby', 'carousel-title');
     section.dataset.currentIndex = '0';
 
-    const heading = document.createElement('div');
-    heading.className = 'carousel__heading';
+    const headingElement = document.createElement('header');
     const title = document.createElement('h2');
     title.id = 'carousel-title';
     title.textContent = 'New Games';
 
+    const previousButton = createIconButton('Previous games', ArrowLeft, {
+        size: 'sm',
+        shape: 'circle',
+        variant: 'surface',
+    });
+    previousButton.dataset.direction = 'previous';
+    const nextButton = createIconButton('Next games', ArrowRight, {
+        size: 'sm',
+        shape: 'circle',
+        variant: 'surface',
+    });
+    nextButton.dataset.direction = 'next';
     const controls = document.createElement('div');
-    controls.className = 'carousel__controls';
-    const previousButton = createIconButton('Previous games', ArrowLeft, 'carousel__arrow');
-    const nextButton = createIconButton(
-        'Next games',
-        ArrowRight,
-        'carousel__arrow carousel__arrow--next',
-    );
     controls.append(previousButton, nextButton);
-    heading.append(title, controls);
+    headingElement.append(title, controls);
 
     const viewport = document.createElement('div');
-    viewport.className = 'carousel__viewport';
+    viewport.dataset.carouselViewport = '';
     viewport.setAttribute('aria-label', 'Featured games slider');
     const track = document.createElement('div');
-    track.className = 'carousel__track';
+    track.dataset.track = '';
     viewport.append(track);
 
     const dialog = createGameDialog(GAMES[0]);
     const cards = new Map<string, HTMLElement>();
-    for(const game of GAMES){
+    for (const game of GAMES) {
         const card = document.createElement('article');
-        card.className = 'carousel__card';
         card.tabIndex = 0;
         card.setAttribute('role', 'button');
 
         const image = document.createElement('img');
         image.alt = game.title;
         const info = document.createElement('div');
-        info.className = 'carousel__card-info';
         const gameTitle = document.createElement('h3');
         const metadata = createMetadata(game);
         info.append(gameTitle, metadata);
@@ -271,14 +272,14 @@ export function createCarousel(): HTMLElement{
         updateCard(card, game, 'peek');
 
         const openGame = (): void => {
-            if(Date.now() < suppressCardClickUntil) return;
+            if (Date.now() < suppressCardClickUntil) return;
             pauseAutoplay();
             dialog.setGame(game);
             dialog.open();
         };
         card.addEventListener('click', openGame);
         card.addEventListener('keydown', (event: KeyboardEvent) => {
-            if(event.key !== 'Enter' && event.key !== ' ') return;
+            if (event.key !== 'Enter' && event.key !== ' ') return;
             event.preventDefault();
             openGame();
         });
@@ -287,13 +288,12 @@ export function createCarousel(): HTMLElement{
         track.append(card);
     }
 
-    const indicators = document.createElement('div');
-    indicators.className = 'carousel__indicators';
-    for(const[gameIndex, game] of GAMES.entries()){
-        const indicator = document.createElement('button');
-        indicator.type = 'button';
+    const indicators = document.createElement('nav');
+    indicators.setAttribute('aria-label', 'Choose featured game');
+    for (const [gameIndex, game] of GAMES.entries()) {
+        const indicator = createButton({ variant: 'primary', size: 'sm' });
+        indicator.classList.add('carousel-indicator');
         indicator.setAttribute('aria-label', `Show ${game.title} in center`);
-        indicator.className = 'carousel__indicator';
         indicator.dataset.gameIndex = String(gameIndex);
         indicators.append(indicator);
     }
@@ -309,9 +309,9 @@ export function createCarousel(): HTMLElement{
     let activePointerId: number | undefined;
     let suppressCardClickUntil = 0;
 
-    function scheduleAutoplay(): void{
-        if(isAutoplayPaused) return;
-        if(autoplayTimer !== undefined) globalThis.clearTimeout(autoplayTimer);
+    function scheduleAutoplay(): void {
+        if (isAutoplayPaused) return;
+        if (autoplayTimer !== undefined) globalThis.clearTimeout(autoplayTimer);
         autoplayDeadline = performance.now() + remainingDuration;
         autoplayTimer = globalThis.setTimeout(() => {
             autoplayTimer = undefined;
@@ -319,27 +319,27 @@ export function createCarousel(): HTMLElement{
         }, remainingDuration);
     }
 
-    function pauseAutoplay(): void{
-        if(isAutoplayPaused) return;
+    function pauseAutoplay(): void {
+        if (isAutoplayPaused) return;
         isAutoplayPaused = true;
-        if(autoplayTimer === undefined) return;
+        if (autoplayTimer === undefined) return;
         globalThis.clearTimeout(autoplayTimer);
         autoplayTimer = undefined;
         remainingDuration = Math.max(0, autoplayDeadline - performance.now());
     }
 
-    function resumeAutoplay(shouldResetTimer = false): void{
-        if(shouldResetTimer) remainingDuration = AUTOPLAY_INTERVAL;
-        if(!isAutoplayPaused) return;
+    function resumeAutoplay(shouldResetTimer = false): void {
+        if (shouldResetTimer) remainingDuration = AUTOPLAY_INTERVAL;
+        if (!isAutoplayPaused) return;
         isAutoplayPaused = false;
         scheduleAutoplay();
     }
 
-    function renderCards(shouldAnimate = false): void{
+    function renderCards(shouldAnimate = false): void {
         const previousRects = new Map<HTMLElement, DOMRect>();
-        if(shouldAnimate){
-            for(const card of track.children){
-                if(card instanceof HTMLElement && !card.hidden){
+        if (shouldAnimate) {
+            for (const card of track.children) {
+                if (card instanceof HTMLElement && !card.hidden) {
                     previousRects.set(card, card.getBoundingClientRect());
                 }
             }
@@ -347,13 +347,13 @@ export function createCarousel(): HTMLElement{
 
         const activeGames = VISIBLE_OFFSETS.map((offset, position) => {
             const gameIndex = (currentIndex + offset + GAMES.length) % GAMES.length;
-            return{ game: GAMES[gameIndex], slot: CARD_SLOTS[position] };
+            return { game: GAMES[gameIndex], slot: CARD_SLOTS[position] };
         });
         const activeSlugs = new Set(activeGames.map(({ game }) => game.slug));
         const activeCards: HTMLElement[] = [];
-        for(const{ game, slot } of activeGames){
+        for (const { game, slot } of activeGames) {
             const card = cards.get(game.slug);
-            if(!card) continue;
+            if (!card) continue;
             updateCard(card, game, slot);
             card.hidden = false;
             card.removeAttribute('aria-hidden');
@@ -363,7 +363,7 @@ export function createCarousel(): HTMLElement{
         const hiddenCards = GAMES.filter((game) => !activeSlugs.has(game.slug))
             .map((game) => cards.get(game.slug))
             .filter((card): card is HTMLElement => card !== undefined);
-        for(const card of hiddenCards){
+        for (const card of hiddenCards) {
             card.hidden = true;
             card.setAttribute('aria-hidden', 'true');
         }
@@ -371,11 +371,11 @@ export function createCarousel(): HTMLElement{
         section.dataset.currentIndex = String(currentIndex);
         section.dataset.currentGame = GAMES[currentIndex].slug;
 
-        for(const card of activeCards){
-            if(!shouldAnimate || globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches)
+        for (const card of activeCards) {
+            if (!shouldAnimate || globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches)
                 continue;
             const previousRect = previousRects.get(card);
-            if(!previousRect){
+            if (!previousRect) {
                 card.animate([{ opacity: 0 }, { opacity: 1 }], {
                     duration: 220,
                     easing: 'ease-out',
@@ -384,27 +384,26 @@ export function createCarousel(): HTMLElement{
             }
             const nextRect = card.getBoundingClientRect();
             const offsetX = previousRect.left - nextRect.left;
-            if(Math.abs(offsetX) < 1) continue;
+            if (Math.abs(offsetX) < 1) continue;
             card.animate(
                 [{ transform: `translateX(${offsetX}px)` }, { transform: 'translateX(0)' }],
                 { duration: 350, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' },
             );
         }
 
-        for(const[gameIndex, indicator] of[...indicators.children].entries()){
-            indicator.classList.toggle('is-active', gameIndex === currentIndex);
+        for (const [gameIndex, indicator] of [...indicators.children].entries()) {
             indicator.setAttribute('aria-current', gameIndex === currentIndex ? 'true' : 'false');
         }
     }
 
-    function advance(direction: 1 | -1): void{
+    function advance(direction: 1 | -1): void {
         currentIndex = (currentIndex + direction + GAMES.length) % GAMES.length;
         remainingDuration = AUTOPLAY_INTERVAL;
         renderCards(true);
         scheduleAutoplay();
     }
 
-    function showGame(gameIndex: number): void{
+    function showGame(gameIndex: number): void {
         currentIndex = gameIndex;
         remainingDuration = AUTOPLAY_INTERVAL;
         renderCards(true);
@@ -412,7 +411,7 @@ export function createCarousel(): HTMLElement{
     }
 
     const finishPointer = (event: PointerEvent): void => {
-        if(!isPointerDown || pointerStartX === undefined || event.pointerId !== activePointerId)
+        if (!isPointerDown || pointerStartX === undefined || event.pointerId !== activePointerId)
             return;
         const deltaX = event.clientX - pointerStartX;
         const deltaY = event.clientY - pointerStartY;
@@ -420,9 +419,9 @@ export function createCarousel(): HTMLElement{
         isPointerDown = false;
         activePointerId = undefined;
         pointerStartX = undefined;
-        viewport.classList.remove('is-pressed');
+        delete viewport.dataset.pressed;
 
-        if(wasSwipe){
+        if (wasSwipe) {
             suppressCardClickUntil = Date.now() + 500;
             advance(deltaX < 0 ? 1 : -1);
             resumeAutoplay();
@@ -432,12 +431,12 @@ export function createCarousel(): HTMLElement{
     };
 
     viewport.addEventListener('pointerdown', (event: PointerEvent) => {
-        if(!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+        if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
         pointerStartX = event.clientX;
         pointerStartY = event.clientY;
         isPointerDown = true;
         activePointerId = event.pointerId;
-        viewport.classList.add('is-pressed');
+        viewport.dataset.pressed = 'true';
         pauseAutoplay();
     });
     globalThis.addEventListener('pointerup', finishPointer);
@@ -445,13 +444,13 @@ export function createCarousel(): HTMLElement{
 
     previousButton.addEventListener('click', () => advance(-1));
     nextButton.addEventListener('click', () => advance(1));
-    for(const[gameIndex, indicator] of[...indicators.children].entries()){
+    for (const [gameIndex, indicator] of [...indicators.children].entries()) {
         indicator.addEventListener('click', () => showGame(gameIndex));
     }
     dialog.dialog.addEventListener('close', () => resumeAutoplay());
 
     renderCards();
-    section.append(heading, viewport, indicators, dialog.dialog);
+    section.append(headingElement, viewport, indicators, dialog.dialog);
     scheduleAutoplay();
     return section;
 }

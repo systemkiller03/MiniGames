@@ -1,10 +1,7 @@
 @use '/src/styles/tokens' as *;
 @use '/src/styles/mixins' as *;
 
-* {
-    margin: 0;
-}
-header {
+.site-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -13,8 +10,10 @@ header {
     background-color: $color-bg;
     color: $color-on-primary;
     font-family: $font-family-inter;
-    border: 1px $color-on-primary solid;
+    border: 1px solid $color-on-primary;
     font-weight: $font-weight-bold;
+    * {
+    }
     @include desktop {
         padding: $size-2 $size-5;
     }
@@ -30,7 +29,7 @@ header {
         }
         h1 {
             font-size: $font-size-headline-medium;
-            margin: 0;
+
             @include tablet {
                 font-size: $font-size-headline-small;
             }
@@ -54,7 +53,7 @@ header {
                 font-size: $font-size-body-medium;
                 font-weight: $font-weight-bold;
                 text-decoration: none;
-                transition: color 0.2s ease;
+                transition: color 150ms ease;
 
                 &:hover {
                     color: $color-primary;
@@ -64,24 +63,21 @@ header {
                 }
             }
         }
-        div {
+        > div {
             display: flex;
             align-items: center;
             gap: $size-4;
-            .login {
-                @include tablet {
+            [data-auth-action='login'],
+            [data-auth-action='signup'] {
+                @media (width < $breakpoint-tablet) {
                     display: none;
                 }
             }
-            .signup {
-                @include mobile {
+            [data-mobile-menu-toggle] {
+                display: inline-flex;
+
+                @media (width >= $breakpoint-desktop) {
                     display: none;
-                }
-            }
-            .mobileBurgerButton {
-                display: none;
-                @include tablet {
-                    display: block;
                 }
             }
         }

@@ -1,9 +1,7 @@
-import'./game-dialog.scss';
-import heroImage from'@/assets/grimshire-hero.jpg';
-import{ createButton } from'@/shared/components/button/button';
-import{ createElement, Heart, Send, Star, Trophy, X } from'lucide';
-
-type IconNode = Parameters<typeof createElement>[0];
+import './game-dialog.scss';
+import heroImage from '@/assets/grimshire-hero.jpg';
+import { createButton, createIconButton, createToggleButton } from '@/shared/components';
+import { createElement, Heart, Send, Star, Trophy, X } from 'lucide';
 
 export type GameDialogData = {
     image: string;
@@ -76,56 +74,40 @@ const INITIAL_COMMENTS: GameComment[] = [
     },
 ];
 
-function createIconButton(label: string, icon: IconNode, className: string): HTMLButtonElement{
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = className;
-    button.setAttribute('aria-label', label);
-    button.append(createElement(icon));
-    return button;
-}
-
-function createScore(label: string, value: string, icon: IconNode): HTMLDivElement{
+function createScore(label: string, value: string, icon: IconNode): HTMLDivElement {
     const item = document.createElement('div');
-    item.className = 'game-dialog__score';
+    item.dataset.score = label.toLowerCase();
     item.setAttribute('aria-label', `${label} ${value}`);
 
     const iconWrap = document.createElement('span');
-    iconWrap.className = 'game-dialog__score-icon';
     iconWrap.append(createElement(icon));
 
     const text = document.createElement('span');
-    text.className = 'game-dialog__score-text';
     text.textContent = value;
 
     item.append(iconWrap, text);
     return item;
 }
 
-function createStat(label: string, value: string): HTMLDivElement{
+function createStat(label: string, value: string): HTMLDivElement {
     const stat = document.createElement('div');
-    stat.className = 'game-dialog__stat';
 
-    const name = document.createElement('span');
-    name.className = 'game-dialog__stat-label';
+    const name = document.createElement('dt');
     name.textContent = label;
 
-    const detail = document.createElement('strong');
-    detail.className = 'game-dialog__stat-value';
+    const detail = document.createElement('dd');
     detail.textContent = value;
 
     stat.append(name, detail);
     return stat;
 }
 
-function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement{
+function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement {
     const row = document.createElement('div');
-    row.className = 'game-dialog__record';
+    row.setAttribute('role', 'listitem');
 
     const player = document.createElement('div');
-    player.className = 'game-dialog__record-player';
     const medal = document.createElement('span');
-    medal.className = 'game-dialog__medal';
     medal.setAttribute('aria-hidden', 'true');
     medal.textContent = record.medal;
     const name = document.createElement('strong');
@@ -133,7 +115,6 @@ function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement{
     player.append(medal, name);
 
     const result = document.createElement('div');
-    result.className = 'game-dialog__record-result';
     const score = document.createElement('strong');
     score.textContent = record.score;
     const time = document.createElement('span');
@@ -144,16 +125,13 @@ function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement{
     return row;
 }
 
-function createComment(comment: GameComment): HTMLElement{
+function createComment(comment: GameComment): HTMLElement {
     const card = document.createElement('article');
-    card.className = 'game-dialog__comment';
 
     const heading = document.createElement('div');
-    heading.className = 'game-dialog__comment-heading';
     const author = document.createElement('div');
-    author.className = 'game-dialog__comment-author';
     const avatar = document.createElement('span');
-    avatar.className = `game-dialog__avatar game-dialog__avatar--${comment.tone}`;
+    avatar.dataset.tone = comment.tone;
     avatar.setAttribute('aria-hidden', 'true');
     avatar.textContent = comment.avatar;
     const name = document.createElement('strong');
@@ -164,15 +142,16 @@ function createComment(comment: GameComment): HTMLElement{
     heading.append(author, time);
 
     const text = document.createElement('p');
-    text.className = 'game-dialog__comment-text';
     text.textContent = comment.text;
 
-    const likes = document.createElement('span');
-    likes.className = 'game-dialog__comment-likes';
-    likes.append(createElement(Heart));
-    const likeCount = document.createElement('span');
-    likeCount.textContent = String(comment.likes);
-    likes.append(likeCount);
+    const likes = createToggleButton({
+        iconOnly: true,
+        compact: true,
+        labelOff: 'Like comment',
+        labelOn: 'Unlike comment',
+        count: comment.likes,
+    });
+    likes.dataset.role = 'likes';
 
     card.append(heading, text, likes);
     return card;
@@ -183,84 +162,77 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     setGame: (game: GameDialogData) => void;
     open: () => void;
     close: () => void;
-}{
+} {
     const dialog = document.createElement('dialog');
     dialog.className = 'game-dialog';
     dialog.setAttribute('aria-labelledby', 'game-dialog-title');
     dialog.setAttribute('aria-describedby', 'game-dialog-description');
 
     const panel = document.createElement('div');
-    panel.className = 'game-dialog__panel';
 
-    const close = createIconButton('Close dialog', X, 'game-dialog__close');
+    const close = createIconButton('Close dialog', X, {
+        size: 'md',
+        shape: 'square',
+        tone: 'dark',
+    });
     close.addEventListener('click', () => dialog.close());
 
-    const media = document.createElement('div');
-    media.className = 'game-dialog__media';
+    const media = document.createElement('figure');
     const image = document.createElement('img');
-    image.className = 'game-dialog__image';
     image.alt = 'Game cover';
     media.append(image);
 
-    const content = document.createElement('div');
-    content.className = 'game-dialog__content';
+    const content = document.createElement('main');
 
     const title = document.createElement('h2');
     title.id = 'game-dialog-title';
-    title.className = 'game-dialog__title';
     const meta = document.createElement('div');
-    meta.className = 'game-dialog__meta';
-    const titleRow = document.createElement('div');
-    titleRow.className = 'game-dialog__title-row';
+    const titleRow = document.createElement('header');
     titleRow.append(title, meta);
 
     const description = document.createElement('p');
     description.id = 'game-dialog-description';
-    description.className = 'game-dialog__description';
-    const stats = document.createElement('div');
-    stats.className = 'game-dialog__stats';
+    const stats = document.createElement('dl');
 
     const actions = document.createElement('div');
-    actions.className = 'game-dialog__actions';
-    const playButton = createButton({ label: 'Play Now', variant: 'primary' });
-    playButton.classList.add('game-dialog__primary-action');
-    const saveButton = createButton({ icon: createElement(Heart), variant: 'outline' });
-    saveButton.append(document.createTextNode('Add to Favorites'));
-    saveButton.classList.add('game-dialog__secondary-action');
+    const playButton = createButton({
+        label: 'Play Now',
+        variant: 'primary',
+        size: 'lg',
+        shadow: true,
+    });
+    const saveButton = createToggleButton();
+    saveButton.classList.add('game-dialog-favorite');
     actions.append(playButton, saveButton);
 
     const recordsSection = document.createElement('section');
-    recordsSection.className = 'game-dialog__section';
     const recordsTitle = document.createElement('h3');
-    recordsTitle.className = 'game-dialog__section-title';
     recordsTitle.append(createElement(Trophy), document.createTextNode('Top Records'));
     const records = document.createElement('div');
-    records.className = 'game-dialog__records';
+    records.setAttribute('role', 'list');
     records.replaceChildren(...TOP_RECORDS.map((record) => createRecord(record)));
     recordsSection.append(recordsTitle, records);
 
     const commentsSection = document.createElement('section');
-    commentsSection.className = 'game-dialog__section game-dialog__comments-section';
     const commentsTitle = document.createElement('h3');
-    commentsTitle.className = 'game-dialog__comments-title';
     const composer = document.createElement('form');
-    composer.className = 'game-dialog__composer';
     const userAvatar = document.createElement('span');
-    userAvatar.className = 'game-dialog__composer-avatar';
     userAvatar.setAttribute('aria-hidden', 'true');
     userAvatar.textContent = 'U';
     const commentInput = document.createElement('textarea');
-    commentInput.className = 'game-dialog__comment-input';
     commentInput.name = 'comment';
     commentInput.placeholder = 'Write a comment...';
     commentInput.setAttribute('aria-label', 'Write a comment');
     commentInput.maxLength = 300;
-    const sendButton = createIconButton('Post comment', Send, 'game-dialog__send');
+    const sendButton = createIconButton('Post comment', Send, {
+        size: 'md',
+        shape: 'square',
+        variant: 'primary',
+    });
     sendButton.type = 'submit';
     composer.append(userAvatar, commentInput, sendButton);
 
     const comments = document.createElement('div');
-    comments.className = 'game-dialog__comments';
     const commentData = INITIAL_COMMENTS.map((comment) => ({ ...comment }));
     const renderComments = (): void => {
         commentsTitle.textContent = `Comments (${commentData.length})`;
@@ -269,7 +241,7 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     composer.addEventListener('submit', (event) => {
         event.preventDefault();
         const text = commentInput.value.trim();
-        if(!text) return;
+        if (!text) return;
         commentData.unshift({
             name: 'You',
             avatar: 'U',
@@ -306,18 +278,18 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     };
 
     dialog.addEventListener('click', (event) => {
-        if(event.target === dialog){
+        if (event.target === dialog) {
             dialog.close();
         }
     });
 
     setGame(initialGame);
 
-    return{
+    return {
         dialog,
         setGame,
         open: () => {
-            if(typeof dialog.showModal === 'function'){
+            if (typeof dialog.showModal === 'function') {
                 dialog.showModal();
                 return;
             }
@@ -327,9 +299,9 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     };
 }
 
-function formatCount(value: number): string{
-    if(value >= 1_000_000){
-        return`${(value / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+function formatCount(value: number): string {
+    if (value >= 1_000_000) {
+        return `${(value / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
     }
     return value >= 1000 ? `${(value / 1000).toFixed(1).replace(/\.0$/, '')}K` : value.toString();
 }
