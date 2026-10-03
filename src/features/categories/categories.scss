@@ -1,25 +1,42 @@
-@use '/src/styles/mixins' as *;
 @use '/src/styles/tokens' as *;
 
 ul.categories {
     list-style: none;
     display: flex;
     flex-direction: row;
-    gap: $size-2;
-    padding: $size-4 $size-15;
-    width: 100%;
-    @include desktop {
-        overflow-x: scroll;
-        scrollbar-width: none;
-        padding: $size-2 $size-5;
-    }
+    gap: $size-1;
+    min-width: 0;
 
-    @media (width < $breakpoint-tablet) {
+    li {
+        width: max-content;
+    }
+}
+
+.library-filter-sort-bar {
+    display: grid;
+    gap: $size-2;
+    padding: $size-2 $size-2;
+
+    .categories {
+        width: 100%;
         overflow-x: auto;
         scrollbar-width: none;
     }
 
-    li {
-        width: max-content;
+    @media (width >= $breakpoint-tablet) {
+        padding-inline: $size-5;
+    }
+
+    @media (width >= $breakpoint-desktop) {
+        height: calc($dropdown-trigger-height-desktop + $size-4);
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: $size-2;
+        padding: 0 $size-15;
+
+        .categories {
+            gap: $size-2;
+            overflow: visible;
+        }
     }
 }
