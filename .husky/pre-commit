@@ -1,4 +1,2 @@
-pnpm format
 pnpm format:check
-pnpm lint --fix
 pnpm lint
