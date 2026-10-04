@@ -31,12 +31,28 @@ export type ApiGameComment = {
     createdAt: string;
 };
 
+export type GameCommentsQuery = {
+    limit?: number;
+    sort?: 'newest' | 'oldest' | string;
+};
+
+export type ApiGameCommentsResult = {
+    comments: ApiGameComment[];
+    totalCount: number;
+};
+
 type GameDetailsResponse = {
     data?: ApiGameDetails;
 };
 
 type GameCommentsResponse = {
     data?: ApiGameComment[];
+    comments?: ApiGameComment[];
+    totalCount?: number;
+    count?: number;
+    meta?: {
+        totalCount?: number;
+    };
 };
 
 export async function getGameDetails(slug: string): Promise<ApiGameDetails> {
@@ -49,7 +65,41 @@ export async function getGameDetails(slug: string): Promise<ApiGameDetails> {
     return response.data;
 }
 
-export async function getGameComments(slug: string): Promise<ApiGameComment[]> {
-    const response = await apiClient<GameCommentsResponse>(`/games/${slug}/comments`);
-    return response.data ?? [];
+export async function getGameComments(
+    slug: string,
+    query: GameCommentsQuery = {},
+): Promise<ApiGameComment[]> {
+    const result = await getGameCommentsWithMeta(slug, query);
+    return result.comments;
+}
+
+export async function getGameCommentsWithMeta(
+    slug: string,
+    query: GameCommentsQuery = {},
+): Promise<ApiGameCommentsResult> {
+    const parameters = new URLSearchParams();
+
+    if (query.limit !== undefined) {
+        parameters.set('limit', String(query.limit));
+    }
+
+    if (query.sort) {
+        parameters.set('sort', query.sort);
+    }
+
+    const path =
+        parameters.size > 0
+            ? `/games/${slug}/comments?${parameters.toString()}`
+            : `/games/${slug}/comments`;
+    const response = await apiClient<GameCommentsResponse>(path);
+    const comments = response.data ?? response.comments ?? [];
+    let totalCount = response.meta?.totalCount ?? comments.length;
+    if (typeof response.count === 'number') {
+        totalCount = response.count;
+    }
+    if (typeof response.totalCount === 'number') {
+        totalCount = response.totalCount;
+    }
+
+    return { comments, totalCount };
 }

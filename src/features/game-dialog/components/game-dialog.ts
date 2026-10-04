@@ -20,6 +20,7 @@ export type GameDialogData = {
     mode?: string;
     records?: GameRecord[];
     comments?: GameComment[];
+    totalComments?: number;
 };
 
 export type GameRecord = {
@@ -83,6 +84,7 @@ export const DEFAULT_GAME: GameDialogData = {
             likes: 8,
         },
     ],
+    totalComments: 3,
 };
 
 function createScore(label: string, value: string, icon: IconNode): HTMLDivElement {
@@ -221,8 +223,9 @@ export function createGameDialogComponent(
 
     const comments = document.createElement('div');
     let commentData: GameComment[] = initialGame.comments ?? DEFAULT_GAME.comments ?? [];
+    let totalCommentCount = initialGame.totalComments ?? commentData.length;
     const renderComments = (): void => {
-        commentsTitle.textContent = `Comments (${commentData.length})`;
+        commentsTitle.textContent = `Comments (${totalCommentCount})`;
         comments.replaceChildren(...commentData.map((comment) => createComment(comment)));
     };
     composer.addEventListener('submit', (event) => {
@@ -257,6 +260,7 @@ export function createGameDialogComponent(
             game.comments && game.comments.length > 0
                 ? game.comments
                 : (DEFAULT_GAME.comments ?? []);
+        totalCommentCount = game.totalComments ?? safeComments.length;
 
         layout.image.src = game.image;
         layout.image.alt = game.title;
