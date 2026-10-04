@@ -1,11 +1,7 @@
 import { createCard } from '@/features/card/card';
-import type { GameDialogData } from '@/features/game-dialog/game-dialog';
+import type { GameDialogData } from '@/features/game-dialog';
+import { getCardImage as getLocalCardImage } from '@/shared/utils/game-images';
 import type { ApiLibraryGame } from '../api/library.api';
-
-const CARD_IMAGES = import.meta.glob<string>('/src/assets/*-card.jpg', {
-    eager: true,
-    import: 'default',
-});
 
 function toTitleCase(value: string): string {
     return value
@@ -24,13 +20,13 @@ function getAbsoluteImageUrl(value: string): string {
 }
 
 function getCardImage(game: ApiLibraryGame): string {
-    const filename = game.cardImage.split('/').at(-1);
-    const localImage = filename ? CARD_IMAGES[`/src/assets/${filename}`] : undefined;
+    const localImage = getLocalCardImage(game.cardImage);
     return localImage ?? getAbsoluteImageUrl(game.cardImage);
 }
 
 function toDialogData(game: ApiLibraryGame, image: string): GameDialogData {
     return {
+        slug: game.slug,
         image,
         title: game.name,
         category: toTitleCase(game.category),
