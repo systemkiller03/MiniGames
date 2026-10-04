@@ -1,0 +1,248 @@
+@use '/src/styles/mixins' as *;
+@use '/src/styles/tokens' as *;
+
+.game-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $size-3;
+    padding: $size-5 $size-15;
+    width: 100%;
+    @include desktop {
+        grid-template-columns: 1fr;
+        padding: 0 $size-5;
+    }
+}
+.game-card {
+    display: flex;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $color-on-primary;
+    border-radius: $corner-medium;
+    box-shadow: 4px 4px 0 $color-on-primary;
+    @include tablet {
+        height: 152px;
+    }
+    > img {
+        height: 100%;
+        width: 320px;
+        object-fit: cover;
+        border-top-left-radius: $corner-medium;
+        border-bottom-left-radius: $corner-medium;
+        @include tablet {
+            width: 270px;
+        }
+    }
+    > div {
+        padding: $size-2;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        letter-spacing: 0.5px;
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            div {
+                display: flex;
+                align-items: center;
+                gap: $size-2;
+
+                h3 {
+                    font-size: $font-size-display-small;
+                    font-family: $font-family-inter;
+                    font-weight: $font-weight-bold;
+                    color: $color-on-primary;
+                    @include tablet {
+                        font-size: $font-size-headline-small;
+                    }
+                }
+                p[data-role='category'] {
+                    color: $color-on-primary;
+                    font-size: $font-size-label-medium;
+                    font-weight: $font-weight-bold;
+                    border: 1px solid $color-on-primary;
+                    border-radius: $corner-extra-large;
+                    padding: $size-05 $size-1;
+                    cursor: pointer;
+                }
+            }
+            p {
+                font-size: $font-size-headline-medium;
+                font-family: $font-family-inter;
+                font-weight: $font-weight-bold;
+                color: $color-on-primary;
+                @include tablet {
+                    font-size: $font-size-headline-small;
+                }
+                &[data-price='free'] {
+                    color: $color-price-free;
+                }
+            }
+        }
+        > p {
+            display: -webkit-box;
+            overflow: hidden;
+            font-size: $font-size-body-medium;
+            font-family: $font-family-inter;
+            font-weight: $font-weight-medium;
+            color: $color-on-bg;
+            flex-shrink: 0;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            line-height: 1.4;
+            @include desktop {
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+            }
+
+            @include tablet {
+                font-size: $font-size-body-small;
+            }
+        }
+    }
+    footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        > div {
+            display: flex;
+            align-items: center;
+            gap: $size-2;
+
+            > div {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                img {
+                    width: 20px;
+                    height: 20px;
+                    object-fit: contain;
+                    margin-right: 5px;
+                }
+                p {
+                    font-size: $font-size-label-large;
+                    font-family: $font-family-inter;
+                    font-weight: $font-weight-bold;
+                    color: $color-on-primary;
+                    @include tablet {
+                        font-size: $font-size-label-medium;
+                    }
+                }
+            }
+        }
+    }
+}
+@include mobile {
+    .game-cards {
+        grid-template-columns: 1fr;
+        gap: $size-2;
+        padding: 0 $size-2;
+    }
+
+    .game-card {
+        height: auto;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        overflow: hidden;
+        background-color: $color-white;
+        border-width: 2.5px;
+        border-radius: $corner-large;
+
+        > img {
+            flex: none;
+            width: 100%;
+            height: 160px;
+            border-radius: 0;
+        }
+
+        > div {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-areas:
+                'title title'
+                'description description'
+                'stats price'
+                'details details';
+            gap: $size-2;
+            width: 100%;
+            height: auto;
+            padding: $size-2;
+
+            header {
+                display: contents;
+
+                > [data-role='title'] {
+                    grid-area: title;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: $size-1;
+
+                    h3 {
+                        font-size: $font-size-headline-small;
+                        line-height: normal;
+                    }
+
+                    p[data-role='category'] {
+                        background-color: $color-secondary;
+                        border: 0;
+                        box-shadow: inset 0 0 0 1.5px $color-on-primary;
+                        padding: 2px $size-1;
+                        font-size: $font-size-label-medium;
+                        line-height: normal;
+                    }
+                }
+
+                > p {
+                    grid-area: price;
+                    align-self: center;
+                    justify-self: end;
+                    font-size: $font-size-headline-small;
+                    line-height: normal;
+                }
+            }
+
+            > p {
+                grid-area: description;
+                font-size: $font-size-body-small;
+                line-height: 20px;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+            }
+
+            footer {
+                display: contents;
+
+                > [data-role='stats'] {
+                    grid-area: stats;
+                    gap: $size-2;
+
+                    > div {
+                        gap: $size-05;
+
+                        img {
+                            width: $icon-size-medium;
+                            height: $icon-size-medium;
+                            margin-right: 0;
+                        }
+
+                        p {
+                            font-size: $font-size-label-medium;
+                            line-height: normal;
+                        }
+                    }
+                }
+
+                > [data-role='details'] {
+                    grid-area: details;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

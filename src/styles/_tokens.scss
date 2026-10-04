@@ -13,6 +13,7 @@ $color-on-bg-footer: #b9b5c9;
 
 $color-surface: #fff9e5;
 $color-surface-low: #fffcf5;
+$color-surface-disabled: #f5f5f5; // NEW: disabled button / chip background
 
 $color-primary: #ffd02b;
 $color-primary-low: #fde047;
@@ -47,7 +48,6 @@ $size-13: 104px;
 $size-14: 112px;
 $size-15: 120px;
 
-// Corner radius
 $corner-extra-small: 4px;
 $corner-small: 8px;
 $corner-medium: 12px;
@@ -55,7 +55,6 @@ $corner-large: 16px;
 $corner-extra-large: 24px;
 $corner-full: 9999px;
 
-// Typography
 $font-family-inter: 'Inter', sans-serif;
 $font-family-roboto: 'Roboto', sans-serif;
 
@@ -82,17 +81,62 @@ $font-weight-bold: 700;
 $font-weight-extra-bold: 800;
 
 // Buttons
-$button-large-padding: 24px 16px;
+$button-large-padding: 16px 24px;
 $button-medium-padding: 10px 20px;
-$button-small-padding: 16px 8px;
+$button-small-padding: 8px 16px;
 $button-icon-padding: 8px;
+
+$button-height-small: 33px;
+$button-height-medium: 37px;
+$button-height-large: 48px;
+
+$button-border-width: 2px;
+$button-border-width-thin: 1px;
+$button-border-width-hover: 1.5px;
+
+$button-line-height: 1.2;
+$button-gap: $size-1;
+
+$button-icon-padding-large: 12px;
+
+$icon-size-small: 20px;
+$icon-size-medium: 24px;
+
+$icon-button-size-small: $size-4;
+$icon-button-size-medium: $size-5;
+
+$pagination-size: $size-5;
+$pagination-gap: $size-2;
+
+$chip-height: 33px;
+$chip-height-mobile: 31px;
+
+$touch-target-min: 44px;
+
+$focus-ring-width: 2px;
+$focus-ring-offset: 2px;
+$focus-ring-color: $color-tertiary;
+
+$transition-fast: 150ms ease;
+
+// Sort dropdown
+$dropdown-trigger-height-desktop: 44px;
+$dropdown-trigger-height-compact: 40px; // tablet + mobile
+$dropdown-trigger-padding-x-desktop: 20px;
+$dropdown-trigger-width-desktop: 190px;
+$dropdown-trigger-width-tablet: 182px;
+$dropdown-menu-min-width: 200px;
+$dropdown-item-height: 49px;
+$dropdown-divider-height: 1px;
 
 // Shadows
 $shadow-level-1: 4px 4px 0 $color-primary;
 $shadow-level-2: 6px 6px 0 $color-primary;
 $shadow-level-3: 8px 8px 0 $color-primary;
 
+$shadow-hard: 4px 4px 0 $color-black;
+
 // Breakpoints
-$breakpoint-mobile: 375px;
+$breakpoint-mobile: 480px;
 $breakpoint-tablet: 768px;
-$breakpoint-desktop: 1920px;
+$breakpoint-desktop: 1200px;

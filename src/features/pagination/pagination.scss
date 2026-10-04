@@ -1,0 +1,21 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: $size-5 $size-15;
+
+    > div {
+        display: flex;
+        align-items: center;
+        gap: $pagination-gap;
+    }
+}
+
+@include desktop {
+    .pagination {
+        padding-inline: $size-2;
+    }
+}

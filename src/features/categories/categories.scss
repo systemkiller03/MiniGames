@@ -1,0 +1,42 @@
+@use '/src/styles/tokens' as *;
+
+ul.categories {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: $size-1;
+    min-width: 0;
+
+    li {
+        width: max-content;
+    }
+}
+
+.library-filter-sort-bar {
+    display: grid;
+    gap: $size-2;
+    padding: $size-2 $size-2;
+
+    .categories {
+        width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    @media (width >= $breakpoint-tablet) {
+        padding-inline: $size-5;
+    }
+
+    @media (width >= $breakpoint-desktop) {
+        height: calc($dropdown-trigger-height-desktop + $size-4);
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: $size-2;
+        padding: 0 $size-15;
+
+        .categories {
+            gap: $size-2;
+            overflow: visible;
+        }
+    }
+}

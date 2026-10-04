@@ -1,0 +1,23 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+body:has(.home-page) > .site-header {
+    border: 0;
+    border-bottom: 2px solid $color-on-primary;
+}
+
+body:has(.home-page) > .site-header > nav ul li:first-child a {
+    color: $color-on-primary;
+    font-weight: $font-weight-bold;
+}
+
+body:has(.home-page) > .site-header > nav ul li:not(:first-child) a {
+    color: $color-on-bg;
+    font-weight: $font-weight-medium;
+}
+
+@include desktop {
+    body:has(.home-page) > .site-header {
+        padding: $size-3 $size-10;
+    }
+}

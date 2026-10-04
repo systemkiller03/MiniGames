@@ -1,0 +1,28 @@
+@use '/src/styles/mixins' as *;
+@use '/src/styles/tokens' as *;
+
+.description {
+    width: 100%;
+    padding: $size-5 $size-15;
+    @include desktop {
+        padding: $size-3 $size-5;
+    }
+    > h2 {
+        font-size: $font-size-display-large;
+        font-family: $font-family-inter;
+        font-weight: $font-weight-bold;
+        color: $color-on-primary;
+        @include tablet {
+            font-size: $font-size-display-medium;
+        }
+    }
+    > p {
+        font-size: $font-size-body-large;
+        font-family: $font-family-inter;
+        font-weight: $font-weight-bold;
+        color: $color-on-bg;
+        @include tablet {
+            font-size: $font-size-body-medium;
+        }
+    }
+}
