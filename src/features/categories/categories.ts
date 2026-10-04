@@ -1,22 +1,25 @@
 import './categories.scss';
+import type { ApiLibraryCategory } from '@/features/library/api/library.api';
 import { createFilterChip } from '@/shared/components';
 
-export function createCategories(labels: string[]) {
-    const categories = document.createElement('ul');
-    categories.classList.add('categories');
-    for (const label of labels) {
-        const category = document.createElement('li');
+export function createCategories(
+    categories: ApiLibraryCategory[],
+    selectedCategory: string,
+    onSelect: (categorySlug: string) => void,
+) {
+    const list = document.createElement('ul');
+    list.classList.add('categories');
+
+    for (const category of categories) {
+        const categoryItem = document.createElement('li');
         const chip = createFilterChip({
-            children: label,
-            selected: label === 'All Games',
-            onClick: () => {
-                for (const otherChip of categories.querySelectorAll('button')) {
-                    otherChip.setAttribute('aria-pressed', String(otherChip === chip));
-                }
-            },
+            children: category.label,
+            selected: category.slug === selectedCategory,
+            onClick: () => onSelect(category.slug),
         });
-        category.append(chip);
-        categories.append(category);
+        categoryItem.append(chip);
+        list.append(categoryItem);
     }
-    return categories;
+
+    return list;
 }
