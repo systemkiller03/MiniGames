@@ -1,5 +1,5 @@
 import './home.scss';
-import { createCarousel } from '../../features/carousel/carousel';
+import { createCarousel } from '../../features/carousel';
 import { createDeveloperSection } from '../../features/developer/developer';
 import { createHero } from '../../features/hero/hero';
 import { createLeaderboard } from '../../features/leaderboard/leaderboard';
