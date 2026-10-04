@@ -44,7 +44,7 @@ function createAuthField(
     return field;
 }
 
-export function createAuthDialog(): {
+export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
     dialog: HTMLDialogElement;
     setMode: (mode: AuthMode) => void;
 } {
@@ -112,7 +112,10 @@ export function createAuthDialog(): {
 
     const footer = document.createElement('p');
 
+    let currentMode: AuthMode = 'login';
+
     const setMode = (mode: AuthMode): void => {
+        currentMode = mode;
         const isLogin = mode === 'login';
         loginTab.setAttribute('aria-selected', String(isLogin));
         registerTab.setAttribute('aria-selected', String(!isLogin));
@@ -149,13 +152,22 @@ export function createAuthDialog(): {
             size: 'sm',
         });
         footerAction.classList.add('auth-text-button');
-        footerAction.addEventListener('click', () => setMode(isLogin ? 'register' : 'login'));
+        footerAction.addEventListener('click', () => selectMode(isLogin ? 'register' : 'login'));
         footer.append(footerAction);
     };
 
+    const selectMode = (mode: AuthMode): void => {
+        if (mode === currentMode) {
+            return;
+        }
+
+        setMode(mode);
+        onModeChange?.(mode);
+    };
+
     close.addEventListener('click', () => dialog.close());
-    loginTab.addEventListener('click', () => setMode('login'));
-    registerTab.addEventListener('click', () => setMode('register'));
+    loginTab.addEventListener('click', () => selectMode('login'));
+    registerTab.addEventListener('click', () => selectMode('register'));
     loginTab.setAttribute('aria-label', 'Show login form');
     registerTab.setAttribute('aria-label', 'Show registration form');
     dialog.append(close, tabs, title, message, form);

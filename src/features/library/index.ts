@@ -13,6 +13,7 @@ import { renderGameList } from './components/game-list';
 import { createLibraryLayout } from './components/layout';
 import { createLoadingState } from './components/loading';
 import type { LibrarySortKey } from '@/features/sort-dropdown/sort-dropdown';
+import { readRouteState, updateRouteState } from '@/shared/utils/navigation';
 
 type LibraryState = {
     categories: ApiLibraryCategory[];
@@ -25,14 +26,15 @@ type LibraryState = {
 };
 
 export function createLibrary(): DocumentFragment {
+    const initialRoute = readRouteState();
     const state: LibraryState = {
         categories: [],
-        category: 'all',
+        category: initialRoute.category ?? 'all',
         games: [],
-        page: 1,
+        page: initialRoute.pageNumber ?? 1,
         totalPages: 1,
         status: 'loading',
-        sortKey: 'rating-desc',
+        sortKey: (initialRoute.sort as LibrarySortKey) ?? 'rating-desc',
     };
 
     let gamesRequestId = 0;
@@ -47,6 +49,13 @@ export function createLibrary(): DocumentFragment {
             resetPageAndLoad();
         },
         (page) => {
+            state.page = page;
+            updateRouteState({
+                page: '/library',
+                category: state.category,
+                sort: state.sortKey,
+                pageNumber: state.page,
+            });
             void loadGames(page);
         },
     );
@@ -63,8 +72,18 @@ export function createLibrary(): DocumentFragment {
         }, 3200);
     }
 
+    function syncRoute(): void {
+        updateRouteState({
+            page: '/library',
+            category: state.category,
+            sort: state.sortKey,
+            pageNumber: state.page,
+        });
+    }
+
     function resetPageAndLoad(): void {
         state.page = 1;
+        syncRoute();
         layout.pagination.update(state.totalPages, state.page);
         void loadGames(1);
     }
@@ -89,16 +108,42 @@ export function createLibrary(): DocumentFragment {
     function renderGames(): void {
         renderGameList(layout.gameCards, state.games, (game) => {
             layout.previewDialog.setGame(game);
-            layout.previewDialog.open();
+            void layout.previewDialog.open();
         });
         layout.gameCards.dataset.state = 'ready';
+
+        const routeState = readRouteState();
+        if (!routeState.game) {
+            return;
+        }
+
+        layout.previewDialog.setGame({
+            slug: routeState.game,
+            image: '',
+            title: routeState.game,
+            category: '',
+            price: '',
+            rating: 0,
+            likes: 0,
+            description: '',
+            tags: [],
+            players: '',
+            duration: '',
+            mode: 'Desktop',
+        });
+        void layout.previewDialog.open();
     }
 
     async function loadCategories(): Promise<void> {
         try {
             const categories = await getLibraryCategories();
             state.categories = categories;
-            state.category = categories.find((category) => category.isDefault)?.slug ?? 'all';
+            const selectedCategory = categories.find(
+                (category) => category.slug === state.category,
+            );
+            state.category = selectedCategory
+                ? selectedCategory.slug
+                : (categories.find((category) => category.isDefault)?.slug ?? 'all');
             renderCategories();
         } catch {
             showSnackbar('Unable to load categories. Please try again.');
