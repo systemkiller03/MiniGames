@@ -2,7 +2,7 @@ import './home.scss';
 import { createCarousel } from '../../features/carousel';
 import { createDeveloperSection } from '../../features/developer/developer';
 import { createHero } from '../../features/hero/hero';
-import { createLeaderboard } from '../../features/leaderboard/leaderboard';
+import { createLeaderboard } from '../../features/leaderboard';
 
 export function createHomePage(): HTMLElement {
     const page = document.createElement('main');
