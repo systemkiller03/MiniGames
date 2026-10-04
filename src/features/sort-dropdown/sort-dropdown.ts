@@ -1,13 +1,13 @@
 import './sort-dropdown.scss';
 import { ChevronDown, createElement } from 'lucide';
 
-export type LibrarySortKey = 'rating-desc' | 'rating-asc' | 'most-liked' | 'name-asc';
+export type LibrarySortKey = 'rating-desc' | 'rating-asc' | 'name-asc' | 'name-desc';
 
 const SORT_OPTIONS: { key: LibrarySortKey; label: string }[] = [
     { key: 'rating-desc', label: 'Rating ↓' },
     { key: 'rating-asc', label: 'Rating ↑' },
-    { key: 'most-liked', label: 'Most liked' },
     { key: 'name-asc', label: 'Name A–Z' },
+    { key: 'name-desc', label: 'Name Z–A' },
 ];
 
 export function createSortDropdown(onSort: (sortKey: LibrarySortKey) => void): HTMLElement {
