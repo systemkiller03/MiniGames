@@ -1,6 +1,6 @@
 import logoIconSrc from '@/assets/Logo.svg';
 import { createButton, createIconButton } from '@/shared/components';
-import { getNavigationUrl } from '@/shared/navigation';
+import { getNavigationUrl } from '@/shared/utils/navigation';
 import { X } from 'lucide';
 import './mobile-burger.scss';
 export type NAV_ELEM = { name: string; link: string };
