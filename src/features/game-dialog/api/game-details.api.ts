@@ -93,13 +93,8 @@ export async function getGameCommentsWithMeta(
             : `/games/${slug}/comments`;
     const response = await apiClient<GameCommentsResponse>(path);
     const comments = response.data ?? response.comments ?? [];
-    let totalCount = response.meta?.totalCount ?? comments.length;
-    if (typeof response.count === 'number') {
-        totalCount = response.count;
-    }
-    if (typeof response.totalCount === 'number') {
-        totalCount = response.totalCount;
-    }
+    const totalCount =
+        response.totalCount ?? response.count ?? response.meta?.totalCount ?? comments.length;
 
     return { comments, totalCount };
 }
