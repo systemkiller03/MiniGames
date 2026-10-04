@@ -1,0 +1,117 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+.game-cards {
+    .library-state {
+        display: grid;
+        grid-column: 1 / -1;
+        place-items: center;
+        width: min(100%, 620px);
+        min-height: 220px;
+        margin: 0 auto;
+        padding: $size-3;
+        border: 1px solid $color-outline-variant;
+        border-radius: $corner-large;
+        background: $color-white;
+        text-align: center;
+        box-shadow: $shadow-level-1;
+
+        h3 {
+            margin: 0 0 $size-1;
+            color: $color-on-primary;
+        }
+
+        p {
+            margin: 0;
+            color: $color-on-bg;
+        }
+    }
+
+    .library-loading {
+        display: grid;
+        grid-column: 1 / -1;
+        gap: $size-2;
+        width: 100%;
+        padding: $size-2;
+        text-align: center;
+
+        h3 {
+            margin: 0;
+            color: $color-on-primary;
+        }
+    }
+
+    .library-loading-cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: $size-3;
+    }
+
+    .library-loading-card {
+        height: 200px;
+        border: 1px solid $color-on-primary;
+        border-radius: $corner-medium;
+        background: linear-gradient(90deg, #efeff2 25%, #fafafa 50%, #efeff2 75%);
+        background-size: 200% 100%;
+        box-shadow: 4px 4px 0 $color-on-primary;
+        animation: library-shimmer 1.6s ease-in-out infinite;
+    }
+
+    .library-snackbar {
+        position: fixed;
+        right: $size-3;
+        bottom: $size-3;
+        z-index: 20;
+        max-width: min(420px, calc(100vw - 2rem));
+        padding: $size-2 $size-3;
+        border-radius: $corner-medium;
+        background: rgb(142 34 34 / 90%);
+        color: $color-white;
+        opacity: 0;
+        transform: translateY(12px);
+        transition:
+            opacity 180ms ease,
+            transform 180ms ease;
+        pointer-events: none;
+
+        &.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@include desktop {
+    .game-cards .library-loading-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@include mobile {
+    .game-cards {
+        .library-loading {
+            padding: 0;
+        }
+
+        .library-loading-cards {
+            grid-template-columns: 1fr;
+            gap: $size-2;
+        }
+
+        .library-loading-card {
+            height: 240px;
+            border-width: 2.5px;
+            border-radius: $corner-large;
+        }
+    }
+}
+
+@keyframes library-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
