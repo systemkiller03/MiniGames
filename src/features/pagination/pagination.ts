@@ -8,64 +8,78 @@ interface PaginationOptions {
     onPageChange?: (page: number) => void;
 }
 
+export type PaginationControl = {
+    element: HTMLElement;
+    update: (totalPages: number, currentPage: number) => void;
+};
+
 export function createPagination({
-    totalPages = 4,
+    totalPages = 1,
     currentPage = 1,
     onPageChange,
-}: PaginationOptions = {}): HTMLElement {
+}: PaginationOptions = {}): PaginationControl {
     const pagination = document.createElement('nav');
     pagination.className = 'pagination';
     pagination.setAttribute('aria-label', 'Pagination');
-
     const controls = document.createElement('div');
+    pagination.append(controls);
 
-    const pageCount = Math.max(1, Math.floor(totalPages));
+    let pageCount = Math.max(1, Math.floor(totalPages));
     let selectedPage = Math.min(pageCount, Math.max(1, Math.floor(currentPage)));
-    const previousButton = makePaginationButton({
-        kind: 'prev',
-        disabled: selectedPage === 1,
-    });
-    const nextButton = makePaginationButton({
-        kind: 'next',
-        disabled: selectedPage === pageCount,
-    });
-    const pageButtons = Array.from({ length: pageCount }, (_, index) => {
-        const page = index + 1;
-        const button = makePaginationButton({
-            kind: 'page',
-            children: String(page),
-            selected: page === selectedPage,
-        });
-        button.addEventListener('click', () => selectPage(page));
-        return button;
-    });
+    const mobileQuery = globalThis.matchMedia('(max-width: 480px)');
 
     function selectPage(page: number): void {
-        if (page === selectedPage) {
+        if (page === selectedPage || page < 1 || page > pageCount) {
             return;
         }
         selectedPage = page;
-        updateControls();
+        renderControls();
         onPageChange?.(selectedPage);
     }
 
-    function updateControls(): void {
-        previousButton.disabled = selectedPage === 1;
-        nextButton.disabled = selectedPage === pageCount;
-        for (const [index, button] of pageButtons.entries()) {
-            const isSelected = index + 1 === selectedPage;
-            button.toggleAttribute('aria-current', isSelected);
-            if (isSelected) {
-                button.setAttribute('aria-current', 'page');
-            }
-        }
+    function renderControls(): void {
+        const visiblePageLimit = mobileQuery.matches ? 3 : 4;
+        const visiblePageCount = Math.min(pageCount, visiblePageLimit);
+        const lastStart = Math.max(1, pageCount - visiblePageCount + 1);
+        const firstPage = Math.min(
+            lastStart,
+            Math.max(1, selectedPage - Math.floor(visiblePageCount / 2)),
+        );
+        const pages = Array.from({ length: visiblePageCount }, (_, index) => firstPage + index);
+        const previousButton = makePaginationButton({
+            kind: 'prev',
+            disabled: selectedPage === 1,
+        });
+        const nextButton = makePaginationButton({
+            kind: 'next',
+            disabled: selectedPage === pageCount,
+        });
+        const pageButtons = pages.map((page) => {
+            const button = makePaginationButton({
+                kind: 'page',
+                children: String(page),
+                selected: page === selectedPage,
+            });
+            button.addEventListener('click', () => selectPage(page));
+            return button;
+        });
+
+        previousButton.addEventListener('click', () => selectPage(selectedPage - 1));
+        nextButton.addEventListener('click', () => selectPage(selectedPage + 1));
+        controls.replaceChildren(previousButton, ...pageButtons, nextButton);
     }
 
-    previousButton.addEventListener('click', () => selectPage(selectedPage - 1));
-    nextButton.addEventListener('click', () => selectPage(selectedPage + 1));
-    controls.append(previousButton, ...pageButtons, nextButton);
-    pagination.append(controls);
-    updateControls();
+    function update(nextTotalPages: number, nextCurrentPage: number): void {
+        pageCount = Math.max(1, Math.floor(nextTotalPages));
+        selectedPage = Math.min(pageCount, Math.max(1, Math.floor(nextCurrentPage)));
+        renderControls();
+    }
 
-    return pagination;
+    mobileQuery.addEventListener('change', renderControls);
+    renderControls();
+
+    return {
+        element: pagination,
+        update,
+    };
 }

@@ -5,6 +5,7 @@ import {
     getLibraryGames,
     type ApiLibraryCategory,
     type ApiLibraryGame,
+    type ApiLibraryGamesPage,
 } from './api/library.api';
 import { createEmptyState } from './components/empty';
 import { createErrorState } from './components/error';
@@ -17,6 +18,8 @@ type LibraryState = {
     categories: ApiLibraryCategory[];
     category: string;
     games: ApiLibraryGame[];
+    page: number;
+    totalPages: number;
     status: 'loading' | 'ready' | 'empty' | 'error';
     sortKey: LibrarySortKey;
 };
@@ -26,19 +29,25 @@ export function createLibrary(): DocumentFragment {
         categories: [],
         category: 'all',
         games: [],
+        page: 1,
+        totalPages: 1,
         status: 'loading',
         sortKey: 'rating-desc',
     };
 
+    let gamesRequestId = 0;
     const layout = createLibraryLayout(
         (sortKey) => {
             state.sortKey = sortKey;
-            void loadGames();
+            resetPageAndLoad();
         },
         (category) => {
             state.category = category;
             renderCategories();
-            void loadGames();
+            resetPageAndLoad();
+        },
+        (page) => {
+            void loadGames(page);
         },
     );
 
@@ -54,6 +63,12 @@ export function createLibrary(): DocumentFragment {
         }, 3200);
     }
 
+    function resetPageAndLoad(): void {
+        state.page = 1;
+        layout.pagination.update(state.totalPages, state.page);
+        void loadGames(1);
+    }
+
     function renderCategories(): void {
         if (state.categories.length === 0) {
             return;
@@ -66,7 +81,7 @@ export function createLibrary(): DocumentFragment {
                 }
                 state.category = category;
                 renderCategories();
-                void loadGames();
+                resetPageAndLoad();
             }),
         );
     }
@@ -90,18 +105,28 @@ export function createLibrary(): DocumentFragment {
         }
     }
 
-    async function loadGames(): Promise<void> {
+    async function loadGames(page = state.page): Promise<void> {
+        const requestId = ++gamesRequestId;
         state.status = 'loading';
         layout.gameCards.dataset.state = 'loading';
         layout.gameCards.replaceChildren(createLoadingState());
 
         try {
-            state.games = await getLibraryGames({
+            const response: ApiLibraryGamesPage = await getLibraryGames({
                 category: state.category,
                 sort: state.sortKey,
-                page: 1,
+                page,
                 limit: 6,
             });
+
+            if (requestId !== gamesRequestId) {
+                return;
+            }
+
+            state.games = response.data;
+            state.page = response.page;
+            state.totalPages = response.totalPages;
+            layout.pagination.update(state.totalPages, state.page);
 
             if (state.games.length === 0) {
                 state.status = 'empty';
@@ -113,7 +138,12 @@ export function createLibrary(): DocumentFragment {
             state.status = 'ready';
             renderGames();
         } catch {
+            if (requestId !== gamesRequestId) {
+                return;
+            }
+
             state.status = 'error';
+            layout.pagination.update(state.totalPages, state.page);
             layout.gameCards.dataset.state = 'error';
             layout.gameCards.replaceChildren(createErrorState(() => void loadGames()));
             showSnackbar('Unable to load games. Please try again.');

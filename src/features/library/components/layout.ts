@@ -1,13 +1,13 @@
 import { createCategories } from '@/features/categories/categories';
 import { createGameDialog } from '@/features/game-dialog/game-dialog';
-import { createPagination } from '@/features/pagination/pagination';
+import { createPagination, type PaginationControl } from '@/features/pagination/pagination';
 import { createSortDropdown, type LibrarySortKey } from '@/features/sort-dropdown/sort-dropdown';
 
 export type LibraryLayout = {
     element: DocumentFragment;
     categories: HTMLElement;
     gameCards: HTMLElement;
-    pagination: HTMLElement;
+    pagination: PaginationControl;
     snackbar: HTMLElement;
     previewDialog: ReturnType<typeof createGameDialog>;
 };
@@ -15,6 +15,7 @@ export type LibraryLayout = {
 export function createLibraryLayout(
     onSort: (sortKey: LibrarySortKey) => void,
     onCategory: (categorySlug: string) => void,
+    onPageChange: (page: number) => void,
 ): LibraryLayout {
     const element = document.createDocumentFragment();
     const filterSortBar = document.createElement('div');
@@ -27,7 +28,7 @@ export function createLibraryLayout(
     const gameCards = document.createElement('section');
     gameCards.classList.add('game-cards');
 
-    const pagination = createPagination();
+    const pagination = createPagination({ onPageChange });
     const snackbar = document.createElement('div');
     snackbar.className = 'library-snackbar';
     snackbar.setAttribute('role', 'status');
@@ -35,6 +36,6 @@ export function createLibraryLayout(
 
     const previewDialog = createGameDialog();
 
-    element.append(filterSortBar, gameCards, pagination, snackbar, previewDialog.dialog);
+    element.append(filterSortBar, gameCards, pagination.element, snackbar, previewDialog.dialog);
     return { element, categories, gameCards, pagination, snackbar, previewDialog };
 }
