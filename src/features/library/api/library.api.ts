@@ -23,9 +23,19 @@ type LibraryCategoriesResponse = {
 
 type LibraryGamesResponse = {
     data?: ApiLibraryGame[];
+    meta?: {
+        page?: number;
+        totalPages?: number;
+    };
 };
 
 const PAGE_SIZE = 6;
+
+export type ApiLibraryGamesPage = {
+    data: ApiLibraryGame[];
+    page: number;
+    totalPages: number;
+};
 
 export async function getLibraryCategories(): Promise<ApiLibraryCategory[]> {
     const response = await apiClient<LibraryCategoriesResponse>('/categories');
@@ -37,7 +47,7 @@ export async function getLibraryGames(parameters?: {
     sort?: string;
     page?: number;
     limit?: number;
-}): Promise<ApiLibraryGame[]> {
+}): Promise<ApiLibraryGamesPage> {
     const searchParameters = new URLSearchParams({
         category: parameters?.category ?? 'all',
         sort: parameters?.sort ?? 'rating-desc',
@@ -46,5 +56,24 @@ export async function getLibraryGames(parameters?: {
     });
 
     const response = await apiClient<LibraryGamesResponse>(`/games?${searchParameters.toString()}`);
-    return response.data ?? [];
+    const { data } = response;
+    const { page, totalPages } = response.meta ?? {};
+    if (
+        typeof page !== 'number' ||
+        typeof totalPages !== 'number' ||
+        !Array.isArray(data) ||
+        !Number.isSafeInteger(page) ||
+        page < 1 ||
+        !Number.isSafeInteger(totalPages) ||
+        totalPages < 0 ||
+        page > Math.max(1, totalPages)
+    ) {
+        throw new Error('Invalid games response: expected data, page, and totalPages');
+    }
+
+    return {
+        data,
+        page,
+        totalPages,
+    };
 }
