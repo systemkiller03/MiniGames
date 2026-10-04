@@ -1,5 +1,5 @@
 import { createCategories } from '@/features/categories/categories';
-import { createGameDialog } from '@/features/game-dialog/game-dialog';
+import { createGameDialog } from '@/features/game-dialog';
 import { createPagination, type PaginationControl } from '@/features/pagination/pagination';
 import { createSortDropdown, type LibrarySortKey } from '@/features/sort-dropdown/sort-dropdown';
 

@@ -1,9 +1,12 @@
-import './game-dialog.scss';
 import heroImage from '@/assets/grimshire-hero.jpg';
 import { createButton, createIconButton, createToggleButton } from '@/shared/components';
-import { createElement, Heart, Send, Star, Trophy, X } from 'lucide';
+import { createElement, Heart, Send, Star, Trophy } from 'lucide';
+import type { GameDialogLayout } from './layout';
+
+type IconNode = Parameters<typeof createElement>[0];
 
 export type GameDialogData = {
+    slug?: string;
     image: string;
     title: string;
     category: string;
@@ -11,13 +14,32 @@ export type GameDialogData = {
     rating: number;
     likes: number;
     description: string;
-    tags: string[];
+    tags?: string[];
     players: string;
     duration: string;
-    mode: string;
+    mode?: string;
+    records?: GameRecord[];
+    comments?: GameComment[];
 };
 
-const DEFAULT_GAME: GameDialogData = {
+export type GameRecord = {
+    medal: string;
+    name: string;
+    score: string;
+    time: string;
+};
+
+export type GameComment = {
+    name: string;
+    avatar: string;
+    tone: 'blue' | 'yellow' | 'mist';
+    time: string;
+    text: string;
+    likes: number;
+};
+
+export const DEFAULT_GAME: GameDialogData = {
+    slug: 'tukoni-forest-keepers',
     image: heroImage,
     title: 'Tukoni: Forest Keepers',
     category: 'Puzzle',
@@ -30,49 +52,38 @@ const DEFAULT_GAME: GameDialogData = {
     players: 'Solo',
     duration: '40-90 min',
     mode: 'Desktop',
+    records: [
+        { medal: '🥇', name: 'ForestSpirit', score: '356,700 pts', time: '2 days ago' },
+        { medal: '🥈', name: 'TeaBrewer', score: '332,400 pts', time: '5 days ago' },
+        { medal: '🥉', name: 'HerbalistPath', score: '308,900 pts', time: '1 week ago' },
+    ],
+    comments: [
+        {
+            name: 'ForestDweller',
+            avatar: 'F',
+            tone: 'blue',
+            time: '3 hours ago',
+            text: "The hand-drawn art is absolutely magical 🍄 Every location feels like a page from a children's storybook. The mushroom village made me cry happy tears!",
+            likes: 12,
+        },
+        {
+            name: 'HerbalTeaLover',
+            avatar: 'H',
+            tone: 'yellow',
+            time: '1 day ago',
+            text: 'Perfect cozy evening game — brew a cup of chamomile, wrap in a blanket and help the little Tukoni prepare for winter. The puzzles are gentle but satisfying.',
+            likes: 5,
+        },
+        {
+            name: 'CottageCoreMia',
+            avatar: 'C',
+            tone: 'mist',
+            time: '3 days ago',
+            text: 'I want to live inside this game forever 🌿 The NPCs are so charming, the tea recipes are real, and the atmosphere is pure warmth and calm.',
+            likes: 8,
+        },
+    ],
 };
-
-const TOP_RECORDS = [
-    { medal: '🥇', name: 'ForestSpirit', score: '356,700 pts', time: '2 days ago' },
-    { medal: '🥈', name: 'TeaBrewer', score: '332,400 pts', time: '5 days ago' },
-    { medal: '🥉', name: 'HerbalistPath', score: '308,900 pts', time: '1 week ago' },
-];
-
-type GameComment = {
-    name: string;
-    avatar: string;
-    tone: 'blue' | 'yellow' | 'mist';
-    time: string;
-    text: string;
-    likes: number;
-};
-
-const INITIAL_COMMENTS: GameComment[] = [
-    {
-        name: 'ForestDweller',
-        avatar: 'F',
-        tone: 'blue',
-        time: '3 hours ago',
-        text: "The hand-drawn art is absolutely magical 🍄 Every location feels like a page from a children's storybook. The mushroom village made me cry happy tears!",
-        likes: 12,
-    },
-    {
-        name: 'HerbalTeaLover',
-        avatar: 'H',
-        tone: 'yellow',
-        time: '1 day ago',
-        text: 'Perfect cozy evening game — brew a cup of chamomile, wrap in a blanket and help the little Tukoni prepare for winter. The puzzles are gentle but satisfying.',
-        likes: 5,
-    },
-    {
-        name: 'CottageCoreMia',
-        avatar: 'C',
-        tone: 'mist',
-        time: '3 days ago',
-        text: 'I want to live inside this game forever 🌿 The NPCs are so charming, the tea recipes are real, and the atmosphere is pure warmth and calm.',
-        likes: 8,
-    },
-];
 
 function createScore(label: string, value: string, icon: IconNode): HTMLDivElement {
     const item = document.createElement('div');
@@ -102,7 +113,7 @@ function createStat(label: string, value: string): HTMLDivElement {
     return stat;
 }
 
-function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement {
+function createRecord(record: GameRecord): HTMLDivElement {
     const row = document.createElement('div');
     row.setAttribute('role', 'listitem');
 
@@ -128,7 +139,7 @@ function createRecord(record: (typeof TOP_RECORDS)[number]): HTMLDivElement {
 function createComment(comment: GameComment): HTMLElement {
     const card = document.createElement('article');
 
-    const heading = document.createElement('div');
+    const heading = document.createElement('header');
     const author = document.createElement('div');
     const avatar = document.createElement('span');
     avatar.dataset.tone = comment.tone;
@@ -157,33 +168,10 @@ function createComment(comment: GameComment): HTMLElement {
     return card;
 }
 
-export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
-    dialog: HTMLDialogElement;
-    setGame: (game: GameDialogData) => void;
-    open: () => void;
-    close: () => void;
-} {
-    const dialog = document.createElement('dialog');
-    dialog.className = 'game-dialog';
-    dialog.setAttribute('aria-labelledby', 'game-dialog-title');
-    dialog.setAttribute('aria-describedby', 'game-dialog-description');
-
-    const panel = document.createElement('div');
-
-    const close = createIconButton('Close dialog', X, {
-        size: 'md',
-        shape: 'square',
-        tone: 'dark',
-    });
-    close.addEventListener('click', () => dialog.close());
-
-    const media = document.createElement('figure');
-    const image = document.createElement('img');
-    image.alt = 'Game cover';
-    media.append(image);
-
-    const content = document.createElement('main');
-
+export function createGameDialogComponent(
+    layout: GameDialogLayout,
+    initialGame: GameDialogData = DEFAULT_GAME,
+): { setGame: (game: GameDialogData) => void } {
     const title = document.createElement('h2');
     title.id = 'game-dialog-title';
     const meta = document.createElement('div');
@@ -210,7 +198,6 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     recordsTitle.append(createElement(Trophy), document.createTextNode('Top Records'));
     const records = document.createElement('div');
     records.setAttribute('role', 'list');
-    records.replaceChildren(...TOP_RECORDS.map((record) => createRecord(record)));
     recordsSection.append(recordsTitle, records);
 
     const commentsSection = document.createElement('section');
@@ -233,7 +220,7 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     composer.append(userAvatar, commentInput, sendButton);
 
     const comments = document.createElement('div');
-    const commentData = INITIAL_COMMENTS.map((comment) => ({ ...comment }));
+    let commentData: GameComment[] = initialGame.comments ?? DEFAULT_GAME.comments ?? [];
     const renderComments = (): void => {
         commentsTitle.textContent = `Comments (${commentData.length})`;
         comments.replaceChildren(...commentData.map((comment) => createComment(comment)));
@@ -242,27 +229,37 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
         event.preventDefault();
         const text = commentInput.value.trim();
         if (!text) return;
-        commentData.unshift({
-            name: 'You',
-            avatar: 'U',
-            tone: 'yellow',
-            time: 'just now',
-            text,
-            likes: 0,
-        });
+        commentData = [
+            {
+                name: 'You',
+                avatar: 'U',
+                tone: 'yellow',
+                time: 'just now',
+                text,
+                likes: 0,
+            },
+            ...commentData,
+        ];
         renderComments();
         composer.reset();
     });
     renderComments();
     commentsSection.append(commentsTitle, composer, comments);
 
-    content.append(titleRow, description, stats, actions, recordsSection, commentsSection);
-    panel.append(close, media, content);
-    dialog.append(panel);
+    const restoreContent = (): void => {
+        layout.setContent(titleRow, description, stats, actions, recordsSection, commentsSection);
+    };
 
     const setGame = (game: GameDialogData): void => {
-        image.src = game.image;
-        image.alt = game.title;
+        const safeRecords =
+            game.records && game.records.length > 0 ? game.records : (DEFAULT_GAME.records ?? []);
+        const safeComments =
+            game.comments && game.comments.length > 0
+                ? game.comments
+                : (DEFAULT_GAME.comments ?? []);
+
+        layout.image.src = game.image;
+        layout.image.alt = game.title;
         title.textContent = game.title;
         meta.replaceChildren(
             createScore('Rating', game.rating.toFixed(1), Star),
@@ -275,33 +272,20 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
             createStat('Duration', game.duration),
             createStat('Price', game.price),
         );
+        records.replaceChildren(...safeRecords.map((record) => createRecord(record)));
+        commentData = [...safeComments];
+        renderComments();
+        restoreContent();
     };
-
-    dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) {
-            dialog.close();
-        }
-    });
 
     setGame(initialGame);
-
-    return {
-        dialog,
-        setGame,
-        open: () => {
-            if (typeof dialog.showModal === 'function') {
-                dialog.showModal();
-                return;
-            }
-            dialog.setAttribute('open', 'open');
-        },
-        close: () => dialog.close(),
-    };
+    return { setGame };
 }
 
 function formatCount(value: number): string {
     if (value >= 1_000_000) {
         return `${(value / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
     }
+
     return value >= 1000 ? `${(value / 1000).toFixed(1).replace(/\.0$/, '')}K` : value.toString();
 }

@@ -1,16 +1,8 @@
-import { createGameDialog, type GameDialogData } from '../../game-dialog/game-dialog';
+import { createGameDialog, type GameDialogData } from '../../game-dialog';
 import type { ApiFeaturedGame } from '../api/carousel.api';
 import type { CarouselLayout } from './layout';
 import { createButton } from '@/shared/components';
-
-const CARD_IMAGES = import.meta.glob<string>('/src/assets/*-card.jpg', {
-    eager: true,
-    import: 'default',
-});
-const HERO_IMAGES = import.meta.glob<string>('/src/assets/*-hero.jpg', {
-    eager: true,
-    import: 'default',
-});
+import { getCardImage, getHeroImage } from '@/shared/utils/game-images';
 
 type SliderGame = GameDialogData & { slug: string; cardImage: string };
 type CardSlot = 'peek' | 'side' | 'featured';
@@ -65,8 +57,7 @@ export function renderCarouselGames(
     layout: CarouselLayout,
 ): void {
     const games: SliderGame[] = featuredGames.map((game) => {
-        const cardFilename = game.cardImage.split('/').at(-1);
-        const cardImage = cardFilename ? CARD_IMAGES[`/src/assets/${cardFilename}`] : undefined;
+        const cardImage = getCardImage(game.cardImage);
         if (!cardImage) {
             throw new Error(`Local card image not found for ${game.slug}`);
         }
@@ -74,7 +65,7 @@ export function renderCarouselGames(
         return {
             slug: game.slug,
             cardImage,
-            image: HERO_IMAGES[`/src/assets/${game.slug}-hero.jpg`] ?? cardImage,
+            image: getHeroImage(game.slug, cardImage),
             title: game.name,
             category: game.category.charAt(0).toUpperCase() + game.category.slice(1),
             price: game.price,
