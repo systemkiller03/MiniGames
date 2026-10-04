@@ -8,7 +8,7 @@ export type GameDialogLayout = {
     setContent: (...children: HTMLElement[]) => void;
 };
 
-export function createGameDialogLayout(): GameDialogLayout {
+export function createGameDialogLayout(onClose?: () => void): GameDialogLayout {
     const dialog = document.createElement('dialog');
     dialog.className = 'game-dialog';
     dialog.setAttribute('aria-labelledby', 'game-dialog-title');
@@ -20,7 +20,10 @@ export function createGameDialogLayout(): GameDialogLayout {
         shape: 'square',
         tone: 'dark',
     });
-    closeButton.addEventListener('click', () => dialog.close());
+    closeButton.addEventListener('click', () => {
+        dialog.close();
+        onClose?.();
+    });
 
     const media = document.createElement('figure');
     const image = document.createElement('img');
@@ -35,9 +38,12 @@ export function createGameDialogLayout(): GameDialogLayout {
     panel.append(closeButton, media, content);
     dialog.append(panel);
     dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) {
-            dialog.close();
+        if (event.target !== dialog) {
+            return;
         }
+
+        dialog.close();
+        onClose?.();
     });
 
     return { dialog, image, content, setContent };

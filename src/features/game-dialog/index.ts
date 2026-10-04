@@ -17,6 +17,7 @@ import {
 import { createGameDialogLayout } from './components/layout';
 import { createLoadingState } from './components/loading';
 import { getHeroImage } from '@/shared/utils/game-images';
+import { readRouteState, updateRouteState } from '@/shared/utils/navigation';
 
 export type { GameDialogData } from './components/game-dialog';
 
@@ -99,13 +100,25 @@ function mapApiCommentToGameComment(comment: ApiGameComment): GameComment {
     };
 }
 
+function closeDialogAndRevertRoute(): void {
+    const routeState = readRouteState();
+    updateRouteState({
+        page: routeState.page,
+        category: routeState.category,
+        sort: routeState.sort,
+        pageNumber: routeState.pageNumber,
+        game: undefined,
+        auth: undefined,
+    });
+}
+
 export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     dialog: HTMLDialogElement;
     setGame: (game: GameDialogData) => void;
     open: () => Promise<void>;
     close: () => void;
 } {
-    const layout = createGameDialogLayout();
+    const layout = createGameDialogLayout(closeDialogAndRevertRoute);
     const component = createGameDialogComponent(layout, initialGame);
     let currentGame = initialGame;
 
@@ -165,13 +178,29 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
             }
         }
 
+        const routeState = readRouteState();
+        updateRouteState({
+            page: routeState.page,
+            category: routeState.category,
+            sort: routeState.sort,
+            pageNumber: routeState.pageNumber,
+            game: currentGame.slug ?? undefined,
+            auth: undefined,
+        });
+
         await loadGameDetails();
     };
+
+    layout.dialog.addEventListener('close', () => {
+        closeDialogAndRevertRoute();
+    });
 
     return {
         dialog: layout.dialog,
         setGame,
         open,
-        close: () => layout.dialog.close(),
+        close: () => {
+            layout.dialog.close();
+        },
     };
 }
