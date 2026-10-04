@@ -1,0 +1,374 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+.leaderboard {
+    width: 100%;
+    padding: $size-5 $size-2;
+    background: $color-bg;
+
+    h2 {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 1680px;
+        margin: 0 auto $size-5;
+        padding-left: $size-3;
+        color: $color-on-primary;
+        font-size: $font-size-headline-medium;
+        line-height: 1.2;
+
+        &::before {
+            position: absolute;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            border: 1.5px solid $color-on-primary;
+            border-radius: $corner-extra-small;
+            background: $color-primary;
+            content: '';
+        }
+    }
+
+    .leaderboard-table-wrap {
+        width: 100%;
+        max-width: 1680px;
+        margin: 0 auto;
+        overflow-x: auto;
+        border: 2.5px solid $color-on-primary;
+        border-radius: $corner-large;
+        box-shadow: 6px 6px 0 $color-on-primary;
+        background: $color-white;
+    }
+
+    .leaderboard-state {
+        display: flex;
+        flex-direction: column;
+        gap: $size-2;
+        min-height: 220px;
+        padding: $size-5;
+        color: $color-on-primary;
+        text-align: center;
+
+        h3 {
+            margin: 0;
+            font-size: $font-size-headline-small;
+        }
+
+        p {
+            margin: 0;
+            color: $color-on-primary;
+        }
+    }
+
+    .leaderboard-loading-rows {
+        display: grid;
+        gap: $size-2;
+        padding: $size-4;
+    }
+
+    .leaderboard-loading-row {
+        height: 54px;
+        border-radius: $corner-small;
+        background: linear-gradient(
+            90deg,
+            rgba($color-outline, 0.3) 0%,
+            rgba($color-outline, 0.75) 50%,
+            rgba($color-outline, 0.3) 100%
+        );
+        background-size: 200% 100%;
+        animation: leaderboard-shimmer 1.5s ease-in-out infinite;
+    }
+
+    .leaderboard-snackbar {
+        position: fixed;
+        right: $size-4;
+        bottom: $size-4;
+        z-index: 20;
+        display: none;
+        max-width: min(420px, calc(100vw - 32px));
+        padding: $size-2 $size-3;
+        border: 2px solid $color-on-primary;
+        border-radius: $corner-medium;
+        background: $color-error;
+        color: $color-white;
+        box-shadow: 4px 4px 0 $color-on-primary;
+        font-size: $font-size-body-medium;
+        font-weight: $font-weight-medium;
+
+        &.is-visible {
+            display: block;
+        }
+    }
+
+    table {
+        width: 100%;
+        min-width: 940px;
+        border-collapse: collapse;
+        color: $color-on-primary;
+        table-layout: fixed;
+    }
+
+    caption {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+    }
+
+    th,
+    td {
+        text-align: center;
+    }
+
+    th {
+        padding: $size-3;
+        border-bottom: 1.5px solid $color-on-primary;
+        color: $color-white;
+        background: $color-tertiary;
+        font-size: $font-size-body-medium;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+    }
+
+    td {
+        padding: $size-2 $size-3;
+        border-bottom: 1px solid $color-outline;
+        font-size: $font-size-body-medium;
+        font-weight: $font-weight-medium;
+    }
+
+    th:first-child,
+    td:first-child {
+        width: 80px;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 24%;
+    }
+
+    tbody td:first-child {
+        color: $color-on-primary;
+        font-weight: $font-weight-bold;
+    }
+
+    tbody td:nth-child(2) {
+        text-align: left;
+    }
+
+    tbody td:nth-child(2) > span:first-child {
+        display: inline-grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+        border: 1.5px solid $color-on-primary;
+        border-radius: 50%;
+        background: var(--avatar-color);
+        color: $color-on-primary;
+        font-size: $font-size-label-large;
+        font-weight: $font-weight-bold;
+        vertical-align: middle;
+    }
+
+    tbody td:nth-child(2) > span:last-child {
+        font-weight: $font-weight-bold;
+        vertical-align: middle;
+    }
+
+    tbody td:nth-child(5) {
+        white-space: nowrap;
+    }
+
+    tbody td:last-child span {
+        display: inline-block;
+        max-width: 100%;
+        overflow: hidden;
+        padding: 4px 12px;
+        border: 1.5px solid $color-on-primary;
+        border-radius: $corner-full;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    tbody tr:nth-child(odd) {
+        background: $color-bg;
+    }
+
+    tbody tr:first-child td:first-child {
+        color: $color-primary-high;
+    }
+}
+
+@keyframes leaderboard-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@include desktop {
+    .leaderboard {
+        padding-inline: $size-5;
+
+        .leaderboard-table-wrap {
+            overflow-x: hidden;
+        }
+
+        table {
+            min-width: 0;
+        }
+
+        th,
+        td {
+            padding-inline: $size-1;
+        }
+
+        th:first-child,
+        td:first-child {
+            width: 9%;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 30%;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3),
+        th:nth-child(4),
+        td:nth-child(4),
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 20%;
+        }
+
+        th:nth-child(6),
+        td:nth-child(6) {
+            display: none;
+        }
+    }
+}
+
+@include tablet {
+    .leaderboard {
+        padding: $size-4 $size-2;
+
+        h2 {
+            font-size: $font-size-headline-medium;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3),
+        th:nth-child(6),
+        td:nth-child(6) {
+            display: none;
+        }
+
+        th,
+        td {
+            padding-inline: $size-05;
+        }
+
+        th:first-child,
+        td:first-child {
+            width: 12%;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 40%;
+        }
+
+        th:nth-child(4),
+        td:nth-child(4),
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 24%;
+        }
+    }
+}
+
+@include mobile {
+    .leaderboard {
+        padding: $size-4 $size-1;
+
+        h2 {
+            margin-bottom: $size-4;
+            padding-left: $size-2;
+            font-size: $font-size-headline-small;
+        }
+
+        .leaderboard-table-wrap {
+            overflow-x: hidden;
+            border-width: 2px;
+            border-radius: $corner-large;
+            box-shadow: 4px 4px 0 $color-on-primary;
+        }
+
+        table {
+            min-width: 0;
+        }
+
+        th,
+        td {
+            padding: $size-05 $size-05;
+            font-size: $font-size-label-medium;
+        }
+
+        th:first-child,
+        td:first-child {
+            width: 12%;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 40%;
+        }
+
+        th:nth-child(4),
+        td:nth-child(4),
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 24%;
+        }
+
+        th:nth-child(4),
+        td:nth-child(4),
+        th:nth-child(5),
+        td:nth-child(5) {
+            white-space: nowrap;
+        }
+
+        tbody td:nth-child(2) > span:first-child {
+            width: 24px;
+            height: 24px;
+            margin-right: 4px;
+            font-size: $font-size-label-small;
+        }
+
+        tbody td:nth-child(2) > span:last-child {
+            display: inline-block;
+            max-width: calc(100% - 32px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+
+@include desktop-up {
+    .leaderboard {
+        padding: $size-5 $size-15;
+
+        h2 {
+            font-size: $font-size-headline-large;
+        }
+    }
+}
