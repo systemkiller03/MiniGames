@@ -1,4 +1,4 @@
-import { createAuthDialog } from '@/features/auth/auth';
+import { createAuthDialog } from '@/features/auth/components/auth';
 import { createFooter } from '@/features/footer/footer';
 import { createHeader } from '@/features/header/header';
 import { readRouteState, updateRouteState } from '@/shared/utils/navigation';
