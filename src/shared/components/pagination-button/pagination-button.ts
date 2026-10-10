@@ -12,8 +12,8 @@ export interface PaginationButtonOptions {
 
 export function createPaginationButton({
     kind,
-    selected = false,
-    disabled = false,
+    selected,
+    disabled,
     children,
 }: PaginationButtonOptions): HTMLButtonElement;
 export function createPaginationButton(number: number): HTMLButtonElement;
