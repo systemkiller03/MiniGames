@@ -1,0 +1,193 @@
+@use '/src/styles/tokens' as *;
+
+.game-comments {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+}
+
+.game-comments [hidden] {
+    display: none;
+}
+
+.game-comments > h3 {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    color: $color-on-primary;
+    font-size: $font-size-body-medium;
+    font-weight: $font-weight-bold;
+    line-height: 1.2;
+}
+
+.game-comments > form {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+}
+
+.game-comments > form > span:first-child {
+    display: grid;
+    width: $size-5;
+    height: $size-5;
+    flex: 0 0 auto;
+    color: $color-on-primary;
+    background: $color-primary;
+    border: 1.5px solid $color-on-primary;
+    border-radius: $corner-full;
+    font-size: $font-size-body-small;
+    font-weight: $font-weight-bold;
+    place-items: center;
+}
+
+.game-comments > form textarea {
+    width: 100%;
+    min-width: 0;
+    height: $size-6;
+    flex: 1 1 auto;
+    padding: $size-1 $size-2;
+    color: $color-on-primary;
+    background: $color-white;
+    border: 1px solid $color-on-primary;
+    border-radius: $corner-small;
+    font: inherit;
+    font-size: $font-size-body-small;
+    line-height: 20px;
+    resize: vertical;
+}
+
+.game-comments > form textarea::placeholder {
+    color: $color-on-bg-low;
+}
+
+.game-comments > form .icon-button {
+    display: grid;
+    flex: 0 0 auto;
+    border-radius: $corner-small;
+}
+
+.game-comments-content {
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+}
+
+.game-comments-content > article {
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+    padding: $size-2;
+    background: $color-white;
+    border-radius: $corner-medium;
+    box-shadow: 2px 2px 0 $color-outline;
+}
+
+.game-comments-content > article > header,
+.game-comments-content > article > header > div {
+    display: flex;
+    align-items: center;
+}
+
+.game-comments-content > article > header {
+    justify-content: space-between;
+    gap: $size-2;
+}
+
+.game-comments-content > article > header > div {
+    min-width: 0;
+    gap: $size-1;
+    font-size: $font-size-body-small;
+}
+
+.game-comments-content > article > header > div > span:first-child {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+    color: $color-on-primary;
+    border: 1px solid $color-on-primary;
+    border-radius: 50%;
+    font-size: $font-size-label-medium;
+    font-weight: $font-weight-bold;
+    place-items: center;
+}
+
+.game-comments [data-tone='blue'] {
+    background: #bce3ff;
+}
+
+.game-comments [data-tone='yellow'] {
+    background: $color-primary;
+}
+
+.game-comments [data-tone='mist'] {
+    background: #e8dff5;
+}
+
+.game-comments-content > article > header time {
+    flex: 0 0 auto;
+    color: $color-on-bg;
+    font-size: $font-size-label-medium;
+}
+
+.game-comments-content > article > p {
+    color: $color-on-primary;
+    font-size: $font-size-body-small;
+    line-height: 18px;
+    overflow-wrap: anywhere;
+}
+
+.game-comments-content > article > button[data-role='likes'] {
+    display: flex;
+    align-items: center;
+    gap: $size-05;
+    color: $color-on-primary;
+    font-size: $font-size-label-medium;
+    font-weight: $font-weight-bold;
+}
+
+.game-comments-content > article > button[data-role='likes'] > span {
+    color: $color-on-primary;
+}
+
+.comments-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $size-2;
+    padding: $size-2;
+    text-align: center;
+}
+
+.comments-state h4 {
+    margin: 0;
+    color: $color-on-primary;
+    font-size: $font-size-body-medium;
+}
+
+.comments-state p {
+    margin: 0;
+    color: $color-on-bg;
+    font-size: $font-size-body-small;
+    line-height: 1.5;
+}
+
+.comments-loading {
+    padding: $size-2;
+    color: $color-on-bg;
+    font-size: $font-size-body-small;
+    text-align: center;
+}
+
+@media (width < $breakpoint-tablet) {
+    .game-comments > form {
+        gap: $size-1;
+    }
+}
+
+@media (width < $breakpoint-mobile) {
+    .game-comments > form > span:first-child {
+        width: $size-4;
+        height: $size-4;
+    }
+}

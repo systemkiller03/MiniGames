@@ -1,17 +1,5 @@
 @use '/src/styles/tokens' as *;
 
-ul.categories {
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    gap: $size-1;
-    min-width: 0;
-
-    li {
-        width: max-content;
-    }
-}
-
 .library-filter-sort-bar {
     display: grid;
     gap: $size-2;

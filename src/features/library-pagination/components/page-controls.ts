@@ -1,4 +1,4 @@
-import './pagination.scss';
+import '../styles/pagination.scss';
 import { createPaginationButton as makePaginationButton } from '@/shared/components';
 export { createPaginationButton } from '@/shared/components';
 

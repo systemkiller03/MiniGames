@@ -1,4 +1,4 @@
-import './sort-dropdown.scss';
+import '../styles/sort-dropdown.scss';
 import { ChevronDown, createElement } from 'lucide';
 
 export type LibrarySortKey = 'rating-desc' | 'rating-asc' | 'name-asc' | 'name-desc';

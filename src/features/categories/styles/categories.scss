@@ -1,0 +1,26 @@
+@use '/src/styles/tokens' as *;
+
+ul.categories {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    gap: $size-1;
+    min-width: 0;
+
+    li {
+        width: max-content;
+    }
+}
+
+.categories-state {
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+    min-height: 40px;
+    padding: $size-1 $size-2;
+    border: 1px solid $color-outline-variant;
+    border-radius: $corner-medium;
+    background: $color-white;
+    color: $color-on-bg;
+    white-space: nowrap;
+}

@@ -247,134 +247,6 @@
     white-space: nowrap;
 }
 
-.game-dialog main > section:last-child {
-    gap: $size-2;
-}
-
-.game-dialog main > section:last-child > form {
-    display: flex;
-    align-items: center;
-    gap: $size-2;
-}
-
-.game-dialog main > section:last-child > form > span:first-child {
-    display: grid;
-    width: $size-5;
-    height: $size-5;
-    flex: 0 0 auto;
-    color: $color-on-primary;
-    background: $color-primary;
-    border: 1.5px solid $color-on-primary;
-    border-radius: $corner-full;
-    font-size: $font-size-body-small;
-    font-weight: $font-weight-bold;
-    place-items: center;
-}
-
-.game-dialog main > section:last-child > form textarea {
-    width: 100%;
-    min-width: 0;
-    height: $size-6;
-    flex: 1 1 auto;
-    padding: $size-1 $size-2;
-    color: $color-on-primary;
-    background: $color-white;
-    border: 1px solid $color-on-primary;
-    border-radius: $corner-small;
-    font: inherit;
-    font-size: $font-size-body-small;
-    line-height: 20px;
-    resize: vertical;
-}
-
-.game-dialog main > section:last-child > form textarea::placeholder {
-    color: $color-on-bg-low;
-}
-
-.game-dialog main > section:last-child > form .icon-button {
-    display: grid;
-    flex: 0 0 auto;
-    border-radius: $corner-small;
-}
-
-.game-dialog main > section:last-child > div > article {
-    display: flex;
-    flex-direction: column;
-    gap: $size-1;
-    padding: $size-2;
-    background: $color-white;
-    border-radius: $corner-medium;
-    box-shadow: 2px 2px 0 $color-outline;
-}
-
-.game-dialog main > section:last-child > div > article > header,
-.game-dialog main > section:last-child > div > article > header > div {
-    display: flex;
-    align-items: center;
-}
-
-.game-dialog main > section:last-child > div > article > header {
-    justify-content: space-between;
-    gap: $size-2;
-}
-
-.game-dialog main > section:last-child > div > article > header > div {
-    min-width: 0;
-    gap: $size-1;
-    font-size: $font-size-body-small;
-}
-
-.game-dialog main > section:last-child > div > article > header > div > span:first-child {
-    display: grid;
-    width: 28px;
-    height: 28px;
-    flex: 0 0 auto;
-    color: $color-on-primary;
-    border: 1px solid $color-on-primary;
-    border-radius: 50%;
-    font-size: $font-size-label-medium;
-    font-weight: $font-weight-bold;
-    place-items: center;
-}
-
-.game-dialog [data-tone='blue'] {
-    background: #bce3ff;
-}
-
-.game-dialog [data-tone='yellow'] {
-    background: $color-primary;
-}
-
-.game-dialog [data-tone='mist'] {
-    background: #e8dff5;
-}
-
-.game-dialog main > section:last-child > div > article > header time {
-    flex: 0 0 auto;
-    color: $color-on-bg;
-    font-size: $font-size-label-medium;
-}
-
-.game-dialog main > section:last-child > div > article > p {
-    color: $color-on-primary;
-    font-size: $font-size-body-small;
-    line-height: 18px;
-    overflow-wrap: anywhere;
-}
-
-.game-dialog main > section:last-child > div > article > button[data-role='likes'] {
-    display: flex;
-    align-items: center;
-    gap: $size-05;
-    color: $color-on-primary;
-    font-size: $font-size-label-medium;
-    font-weight: $font-weight-bold;
-}
-
-.game-dialog main > section:last-child > div > article > button[data-role='likes'] > span {
-    color: $color-on-primary;
-}
-
 .game-dialog-state {
     display: flex;
     flex-direction: column;
@@ -496,10 +368,6 @@
         padding-left: 36px;
         text-align: left;
     }
-
-    .game-dialog main > section:last-child > form {
-        gap: $size-1;
-    }
 }
 
 @include mobile {
@@ -509,10 +377,5 @@
 
     .game-dialog main > div {
         flex-direction: column;
-    }
-
-    .game-dialog main > section:last-child > form > span:first-child {
-        width: $size-4;
-        height: $size-4;
     }
 }
