@@ -37,9 +37,9 @@ export function createApp() {
     body.addEventListener('click', (event: MouseEvent) => {
         const target =
             event.target instanceof Element
-                ? (event.target.closest('[data-auth-action]') ?? undefined)
+                ? event.target.closest('[data-auth-action]')
                 : undefined;
-        if (!target) {
+        if (!(target instanceof HTMLElement)) {
             return;
         }
 

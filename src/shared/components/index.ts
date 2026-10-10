@@ -15,5 +15,7 @@ export type {
     PaginationButtonKind,
     PaginationButtonOptions,
 } from './pagination-button/pagination-button';
+export { createSnackbar } from './snackbar/snackbar';
+export type { SnackbarControl, SnackbarVariant } from './snackbar/snackbar';
 export { createToggleButton } from './toggle-button/toggle-button';
 export type { ToggleButtonOptions } from './toggle-button/toggle-button';

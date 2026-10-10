@@ -1,7 +1,8 @@
 import heart from '@/assets/heart.svg';
 import star from '@/assets/start.svg';
-import './card.scss';
+import '../styles/card.scss';
 import { createButton } from '@/shared/components';
+import { formatCount } from '@/shared/utils/format-count';
 
 export function createCard(
     {
@@ -69,7 +70,7 @@ export function createCard(
     starsImage.src = star;
     starsImage.alt = '';
     const starsNumber = document.createElement('p');
-    starsNumber.textContent = formatLikes(stars);
+    starsNumber.textContent = formatCount(stars);
     starsElement.append(starsImage, starsNumber);
 
     cardElement.append(starsElement);
@@ -79,7 +80,7 @@ export function createCard(
     likesImage.src = heart;
     likesImage.alt = '';
     const likesNumber = document.createElement('p');
-    likesNumber.textContent = formatLikes(likes);
+    likesNumber.textContent = formatCount(likes);
     likesElement.append(likesImage, likesNumber);
 
     cardElement.append(likesElement);
@@ -100,11 +101,4 @@ export function createCard(
     div.append(footer);
     card.append(div);
     return card;
-}
-
-function formatLikes(likes: number): string {
-    if (likes >= 1_000_000) {
-        return (likes / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-    }
-    return likes >= 1000 ? (likes / 1000).toFixed(1).replace(/\.0$/, '') + 'K' : likes.toString();
 }

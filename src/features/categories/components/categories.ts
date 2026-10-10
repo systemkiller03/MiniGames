@@ -1,12 +1,12 @@
-import './categories.scss';
-import type { ApiLibraryCategory } from '@/features/library/api/library.api';
+import '../styles/categories.scss';
+import type { ApiLibraryCategory } from '../api/categories.api';
 import { createFilterChip } from '@/shared/components';
 
 export function createCategories(
     categories: ApiLibraryCategory[],
     selectedCategory: string,
     onSelect: (categorySlug: string) => void,
-) {
+): HTMLUListElement {
     const list = document.createElement('ul');
     list.classList.add('categories');
 

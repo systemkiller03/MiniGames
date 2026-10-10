@@ -1,11 +1,5 @@
 import { apiClient } from '@/shared/api/api-client';
 
-export type ApiLibraryCategory = {
-    slug: string;
-    label: string;
-    isDefault: boolean;
-};
-
 export type ApiLibraryGame = {
     slug: string;
     name: string;
@@ -15,10 +9,6 @@ export type ApiLibraryGame = {
     rating: number;
     likesCount: number;
     cardImage: string;
-};
-
-type LibraryCategoriesResponse = {
-    data?: ApiLibraryCategory[];
 };
 
 type LibraryGamesResponse = {
@@ -37,11 +27,6 @@ export type ApiLibraryGamesPage = {
     totalPages: number;
 };
 
-export async function getLibraryCategories(): Promise<ApiLibraryCategory[]> {
-    const response = await apiClient<LibraryCategoriesResponse>('/categories');
-    return response.data ?? [];
-}
-
 export async function getLibraryGames(parameters?: {
     category?: string;
     sort?: string;
@@ -58,6 +43,7 @@ export async function getLibraryGames(parameters?: {
     const response = await apiClient<LibraryGamesResponse>(`/games?${searchParameters.toString()}`);
     const { data } = response;
     const { page, totalPages } = response.meta ?? {};
+    const lastPage = typeof totalPages === 'number' ? Math.max(1, totalPages) : 1;
     if (
         typeof page !== 'number' ||
         typeof totalPages !== 'number' ||
@@ -66,14 +52,14 @@ export async function getLibraryGames(parameters?: {
         page < 1 ||
         !Number.isSafeInteger(totalPages) ||
         totalPages < 0 ||
-        page > Math.max(1, totalPages)
+        (page > lastPage && data.length > 0)
     ) {
         throw new Error('Invalid games response: expected data, page, and totalPages');
     }
 
     return {
         data,
-        page,
+        page: Math.min(page, lastPage),
         totalPages,
     };
 }
