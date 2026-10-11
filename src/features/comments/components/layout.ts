@@ -118,8 +118,9 @@ export function createCommentsLayout(): CommentsLayout {
     const composer = document.createElement('form');
     const avatar = document.createElement('span');
     avatar.setAttribute('aria-hidden', 'true');
-    avatar.dataset.tone = 'avatar-random-1';
-    avatar.textContent = 'U';
+    const session = getAppSession();
+    avatar.dataset.tone = session ? toTone(session.displayName) : 'avatar-random-1';
+    avatar.textContent = toInitial(session?.displayName ?? '');
 
     const input = document.createElement('textarea');
     input.name = 'comment';
