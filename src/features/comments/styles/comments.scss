@@ -43,7 +43,9 @@
 .game-comments > form textarea {
     width: 100%;
     min-width: 0;
+    min-height: $size-6;
     height: $size-6;
+    max-height: 120px;
     flex: 1 1 auto;
     padding: $size-1 $size-2;
     color: $color-on-primary;
@@ -53,7 +55,8 @@
     font: inherit;
     font-size: $font-size-body-small;
     line-height: 20px;
-    resize: vertical;
+    resize: none;
+    overflow-y: hidden;
 }
 
 .game-comments > form textarea::placeholder {

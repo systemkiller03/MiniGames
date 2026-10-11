@@ -1,9 +1,9 @@
 import '../styles/comments.scss';
-import { createIconButton } from '@/shared/components';
-import { createToggleButton } from '@/shared/components';
+import { getAppSession } from '@/features/auth/api/auth.api';
+import { createIconButton, createSnackbar, createToggleButton } from '@/shared/components';
 import { formatRelativeTime } from '@/shared/utils/format-relative-time';
 import { Send } from 'lucide';
-import { getGameCommentsWithMeta, type ApiGameComment } from '../api/comments.api';
+import { getGameCommentsWithMeta, postGameComment, type ApiGameComment } from '../api/comments.api';
 import { createCommentsErrorState } from './error';
 import { createCommentsLoadingState } from './loading';
 
@@ -20,7 +20,9 @@ export type CommentsLayout = {
     element: HTMLElement;
     title: HTMLHeadingElement;
     composer: HTMLFormElement;
+    avatar: HTMLSpanElement;
     input: HTMLTextAreaElement;
+    submitButton: HTMLButtonElement;
     content: HTMLDivElement;
 };
 
@@ -93,69 +95,132 @@ export function createCommentsLayout(): CommentsLayout {
     title.textContent = 'Comments';
 
     const composer = document.createElement('form');
-    const userAvatar = document.createElement('span');
-    userAvatar.setAttribute('aria-hidden', 'true');
-    userAvatar.textContent = 'U';
+    const avatar = document.createElement('span');
+    avatar.setAttribute('aria-hidden', 'true');
+    avatar.textContent = 'U';
 
     const input = document.createElement('textarea');
     input.name = 'comment';
     input.placeholder = 'Write a comment...';
     input.setAttribute('aria-label', 'Write a comment');
-    input.maxLength = 300;
+    input.maxLength = 500;
 
-    const sendButton = createIconButton('Post comment', Send, {
+    const submitButton = createIconButton('Post comment', Send, {
         size: 'md',
         shape: 'square',
         variant: 'primary',
     });
-    sendButton.type = 'submit';
-    composer.append(userAvatar, input, sendButton);
+    submitButton.type = 'submit';
+    composer.append(avatar, input, submitButton);
     composer.hidden = true;
 
     const content = document.createElement('div');
     content.className = 'game-comments-content';
 
     element.append(title, composer, content);
-    return { element, title, composer, input, content };
+    return { element, title, composer, avatar, input, submitButton, content };
 }
 
 export function createComments(canPerformProtectedAction?: () => boolean): CommentsFeature {
     const layout = createCommentsLayout();
+    const snackbar = createSnackbar();
+    document.body.append(snackbar.element);
     let requestId = 0;
     let commentData: GameComment[] = [];
     let totalCount = 0;
+    let isSubmitting = false;
+    let currentSlug = '';
+
+    const syncComposerState = (): void => {
+        const session = getAppSession();
+        const isGuest = !session;
+        const initial = session?.displayName.trim().charAt(0).toUpperCase() ?? 'U';
+
+        layout.avatar.textContent = initial;
+        layout.input.disabled = isGuest || isSubmitting;
+        layout.submitButton.disabled = isGuest || isSubmitting;
+        layout.input.placeholder = session ? 'Write a comment...' : 'Please sign in to comment';
+    };
+
+    const resizeTextarea = (): void => {
+        layout.input.style.height = 'auto';
+        const maxHeight = 120;
+        const nextHeight = Math.min(layout.input.scrollHeight, maxHeight);
+        layout.input.style.height = `${nextHeight}px`;
+        layout.input.style.overflowY = layout.input.scrollHeight > maxHeight ? 'auto' : 'hidden';
+    };
 
     const renderComments = (): void => {
         layout.title.textContent = `Comments (${totalCount})`;
         layout.composer.hidden = false;
         layout.content.replaceChildren(...commentData.map((comment) => createComment(comment)));
+        syncComposerState();
     };
 
-    layout.composer.addEventListener('submit', (event) => {
-        event.preventDefault();
-        if (canPerformProtectedAction && !canPerformProtectedAction()) {
-            return;
-        }
-        const text = layout.input.value.trim();
-        if (!text) {
+    layout.input.addEventListener('input', resizeTextarea);
+    layout.input.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.key !== 'Enter' || event.shiftKey) {
             return;
         }
 
-        commentData = [
-            {
-                name: 'You',
-                avatar: 'U',
-                tone: 'yellow',
-                time: 'just now',
-                text,
-                likes: 0,
-            },
-            ...commentData,
-        ];
-        totalCount += 1;
-        renderComments();
-        layout.composer.reset();
+        event.preventDefault();
+        layout.composer.requestSubmit();
     });
+
+    layout.composer.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (isSubmitting) {
+            return;
+        }
+
+        const session = getAppSession();
+        if (!session) {
+            canPerformProtectedAction?.();
+            return;
+        }
+
+        const trimmedText = layout.input.value.trim();
+        if (!trimmedText) {
+            snackbar.show('Comment text cannot be empty.', 'error');
+            return;
+        }
+
+        if (trimmedText.length > 500) {
+            snackbar.show('Comment text must be 1-500 characters long.', 'error');
+            return;
+        }
+
+        isSubmitting = true;
+        syncComposerState();
+        const savedText = layout.input.value;
+
+        try {
+            await postGameComment(currentSlug, {
+                userEmail: session.email,
+                authorName: session.displayName.trim(),
+                text: trimmedText,
+            });
+
+            layout.input.value = '';
+            resizeTextarea();
+            snackbar.show('Comment posted.', 'success');
+            await load(currentSlug);
+        } catch (error) {
+            layout.input.value = savedText;
+            resizeTextarea();
+            const message =
+                error instanceof Error &&
+                /fetch|network|timeout|failed to fetch/i.test(error.message)
+                    ? 'Comment submission status is unknown. Please check your connection and try again.'
+                    : 'Unable to post comment. Please try again.';
+            snackbar.show(message, 'error');
+        } finally {
+            isSubmitting = false;
+            syncComposerState();
+        }
+    });
+
     layout.element.addEventListener(
         'click',
         (event: MouseEvent) => {
@@ -173,15 +238,20 @@ export function createComments(canPerformProtectedAction?: () => boolean): Comme
     );
 
     const load = async (slug: string): Promise<void> => {
+        currentSlug = slug;
         const currentRequestId = ++requestId;
         layout.title.textContent = 'Comments';
         layout.composer.hidden = true;
         layout.content.replaceChildren(createCommentsLoadingState());
+        layout.input.value = '';
+        syncComposerState();
 
         try {
+            const session = getAppSession();
             const response = await getGameCommentsWithMeta(slug, {
                 limit: 3,
                 sort: 'newest',
+                ...(session && { userEmail: session.email }),
             });
             if (currentRequestId !== requestId) {
                 return;
@@ -201,6 +271,7 @@ export function createComments(canPerformProtectedAction?: () => boolean): Comme
                     void load(slug);
                 }),
             );
+            syncComposerState();
         }
     };
 
