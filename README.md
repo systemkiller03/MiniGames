@@ -17,5 +17,8 @@ The frontend initializes Firebase using those values in `src/features/auth/api/a
 
 ### App Session Key
 
-The authenticated app session is stored under `minigames:app-session` in `localStorage`.
-This key contains a JSON object with the authenticated profile data used by the client UI.
+The authenticated app session is stored under the project-specific
+`minigames:app-session` key in `localStorage`. Its JSON object contains only `displayName`,
+`email`, `authenticatedAt` (a millisecond timestamp), and optional `avatarUrl`. The session
+expires five minutes after authentication; use DevTools to edit `authenticatedAt` when verifying
+expiration. Firebase's persisted identity alone does not restore an authenticated app session.
