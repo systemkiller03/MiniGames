@@ -1,5 +1,6 @@
 import { readRouteState } from '@/shared/utils/navigation';
 import { createPageLoading } from '@/pages/loading';
+import { getAppSession } from '@/features/auth/api/auth.api';
 
 type PageFactory = () => HTMLElement;
 type PageLoader = () => Promise<PageFactory>;
@@ -19,6 +20,8 @@ export function createRouter(main: HTMLElement): void {
     let renderId = 0;
 
     const render = (): void => {
+        getAppSession();
+        globalThis.dispatchEvent(new Event('app-route-changed'));
         const route = readRouteState();
         const currentRenderId = ++renderId;
         const loadPage =
@@ -87,6 +90,7 @@ export function createRouter(main: HTMLElement): void {
         }
 
         event.preventDefault();
+        getAppSession();
         if (url.href !== globalThis.location.href) {
             globalThis.history.pushState(undefined, '', url.href);
         }
