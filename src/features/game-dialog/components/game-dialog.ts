@@ -106,7 +106,17 @@ export function createGameDialogComponent(
     commentsSection: HTMLElement,
     initialGame: GameDialogData = DEFAULT_GAME,
     canPerformProtectedAction?: () => boolean,
-): { setGame: (game: GameDialogData) => void; resetUserState: () => void } {
+    onFavoriteToggle?: (isFavorited: boolean) => void,
+): {
+    setGame: (game: GameDialogData) => void;
+    resetUserState: () => void;
+    setFavoriteButtonState: (state: {
+        pressed: boolean;
+        count: number;
+        disabled?: boolean;
+        loading?: boolean;
+    }) => void;
+} {
     const title = document.createElement('h2');
     title.id = 'game-dialog-title';
     const meta = document.createElement('div');
@@ -124,7 +134,7 @@ export function createGameDialogComponent(
         size: 'lg',
         shadow: true,
     });
-    let saveButton = createToggleButton();
+    let saveButton = createToggleButton({ count: initialGame.likes });
     saveButton.classList.add('game-dialog-favorite');
     actions.append(playButton, saveButton);
     actions.addEventListener(
@@ -134,11 +144,25 @@ export function createGameDialogComponent(
                 event.target instanceof Element
                     ? event.target.closest('.game-dialog-favorite')
                     : undefined;
-            if (!(target instanceof HTMLButtonElement) || canPerformProtectedAction?.() !== false) {
+            if (!(target instanceof HTMLButtonElement)) {
                 return;
             }
+
+            if (canPerformProtectedAction?.() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+
+            if (target.disabled || target.dataset.loading === 'true') {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+
             event.preventDefault();
             event.stopPropagation();
+            onFavoriteToggle?.(saveButton.dataset.pressed !== 'true');
         },
         { capture: true },
     );
@@ -152,6 +176,45 @@ export function createGameDialogComponent(
 
     const restoreContent = (): void => {
         layout.setContent(titleRow, description, stats, actions, recordsSection, commentsSection);
+    };
+
+    const setFavoriteButtonState = ({
+        pressed,
+        count,
+        disabled = false,
+        loading = false,
+    }: {
+        pressed: boolean;
+        count: number;
+        disabled?: boolean;
+        loading?: boolean;
+    }): void => {
+        saveButton.disabled = disabled || loading;
+        saveButton.dataset.loading = String(loading);
+        saveButton.dataset.pressed = String(pressed);
+        saveButton.setAttribute('aria-pressed', String(pressed));
+        if (loading) {
+            saveButton.setAttribute('aria-label', 'Saving favorite');
+        } else {
+            const labelText = pressed ? 'Remove from Favorites' : 'Add to Favorites';
+            saveButton.setAttribute('aria-label', `${labelText}, ${count} likes`);
+        }
+
+        const slotLabel = saveButton.querySelector('span');
+        if (slotLabel) {
+            if (loading) {
+                slotLabel.textContent = 'Saving…';
+            } else if (pressed) {
+                slotLabel.textContent = 'Remove from Favorites';
+            } else {
+                slotLabel.textContent = 'Add to Favorites';
+            }
+        }
+
+        const countToken = saveButton.querySelectorAll('span')[1];
+        if (countToken) {
+            countToken.textContent = String(count);
+        }
     };
 
     const setGame = (game: GameDialogData): void => {
@@ -176,11 +239,12 @@ export function createGameDialogComponent(
     };
 
     const resetUserState = (): void => {
-        saveButton = createToggleButton();
+        saveButton = createToggleButton({ count: initialGame.likes });
         saveButton.classList.add('game-dialog-favorite');
         actions.replaceChildren(playButton, saveButton);
+        setFavoriteButtonState({ pressed: false, count: initialGame.likes });
     };
 
     setGame(initialGame);
-    return { setGame, resetUserState };
+    return { setGame, resetUserState, setFavoriteButtonState };
 }
