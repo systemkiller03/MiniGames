@@ -1,9 +1,14 @@
 import '../styles/comments.scss';
 import { getAppSession } from '@/features/auth/api/auth.api';
-import { createIconButton, createSnackbar, createToggleButton } from '@/shared/components';
+import { createIconButton, createSnackbar } from '@/shared/components';
 import { formatRelativeTime } from '@/shared/utils/format-relative-time';
-import { Send } from 'lucide';
-import { getGameCommentsWithMeta, postGameComment, type ApiGameComment } from '../api/comments.api';
+import { createElement, Heart, Send } from 'lucide';
+import {
+    getGameCommentsWithMeta,
+    postGameComment,
+    toggleCommentLike,
+    type ApiGameComment,
+} from '../api/comments.api';
 import { createCommentsErrorState } from './error';
 import { createCommentsLoadingState } from './loading';
 
@@ -19,12 +24,15 @@ const avatarTokens = [
 type GameCommentTone = (typeof avatarTokens)[number];
 
 type GameComment = {
+    commentId: string;
     name: string;
     avatar: string;
     tone: GameCommentTone;
     time: string;
     text: string;
     likes: number;
+    isLikedByCurrentUser: boolean;
+    isLoading?: boolean;
 };
 
 export type CommentsLayout = {
@@ -66,16 +74,21 @@ function toTone(name: string): GameCommentTone {
 
 function mapApiComment(comment: ApiGameComment): GameComment {
     return {
+        commentId: comment.commentId,
         name: comment.authorName,
         avatar: toInitial(comment.authorName),
         tone: toTone(comment.authorName),
         time: formatRelativeTime(comment.createdAt),
         text: comment.text,
         likes: comment.likesCount,
+        isLikedByCurrentUser: comment.isLikedByCurrentUser,
     };
 }
 
-function createComment(comment: GameComment): HTMLElement {
+function createComment(
+    comment: GameComment,
+    onLikeToggle: (commentId: string) => void,
+): HTMLElement {
     const card = document.createElement('article');
 
     const heading = document.createElement('header');
@@ -95,14 +108,34 @@ function createComment(comment: GameComment): HTMLElement {
     const text = document.createElement('p');
     text.textContent = comment.text;
 
-    const likes = createToggleButton({
-        iconOnly: true,
-        compact: true,
-        labelOff: 'Like comment',
-        labelOn: 'Unlike comment',
-        count: comment.likes,
-    });
+    const likes = document.createElement('button');
+    likes.type = 'button';
+    likes.className = 'toggle-button';
     likes.dataset.role = 'likes';
+    likes.dataset.commentId = comment.commentId;
+    likes.dataset.iconOnly = 'true';
+    likes.dataset.compact = 'true';
+    likes.dataset.pressed = String(comment.isLikedByCurrentUser);
+    likes.dataset.loading = String(Boolean(comment.isLoading));
+    likes.disabled = Boolean(comment.isLoading);
+    likes.setAttribute('aria-pressed', String(comment.isLikedByCurrentUser));
+    likes.setAttribute('aria-busy', String(Boolean(comment.isLoading)));
+    likes.setAttribute(
+        'aria-label',
+        `${comment.isLikedByCurrentUser ? 'Unlike' : 'Like'} comment, ${comment.likes} likes`,
+    );
+
+    const icon = createElement(Heart);
+    icon.setAttribute('aria-hidden', 'true');
+    const count = document.createElement('span');
+    count.textContent = String(comment.likes);
+    likes.append(icon, count);
+    likes.addEventListener('click', () => {
+        if (comment.isLoading || likes.disabled) {
+            return;
+        }
+        onLikeToggle(comment.commentId);
+    });
 
     card.append(heading, text, likes);
     return card;
@@ -144,7 +177,9 @@ export function createCommentsLayout(): CommentsLayout {
     return { element, title, composer, avatar, input, submitButton, content };
 }
 
-export function createComments(canPerformProtectedAction?: () => boolean): CommentsFeature {
+export function createComments(
+    canPerformProtectedAction?: (reason?: 'favorite' | 'comment-like') => boolean,
+): CommentsFeature {
     const layout = createCommentsLayout();
     const snackbar = createSnackbar();
     document.body.append(snackbar.element);
@@ -153,6 +188,7 @@ export function createComments(canPerformProtectedAction?: () => boolean): Comme
     let totalCount = 0;
     let isSubmitting = false;
     let currentSlug = '';
+    let pendingLikeCommentId: string | undefined;
 
     const syncComposerState = (): void => {
         const session = getAppSession();
@@ -178,8 +214,59 @@ export function createComments(canPerformProtectedAction?: () => boolean): Comme
     const renderComments = (): void => {
         layout.title.textContent = `Comments (${totalCount})`;
         layout.composer.hidden = false;
-        layout.content.replaceChildren(...commentData.map((comment) => createComment(comment)));
+        layout.content.replaceChildren(
+            ...commentData.map((comment) =>
+                createComment(comment, (commentId) => {
+                    void handleLikeToggle(commentId);
+                }),
+            ),
+        );
         syncComposerState();
+    };
+
+    const handleLikeToggle = async (commentId: string): Promise<void> => {
+        if (pendingLikeCommentId !== undefined) {
+            return;
+        }
+
+        const session = getAppSession();
+        if (!session) {
+            canPerformProtectedAction?.('comment-like');
+            return;
+        }
+
+        if (commentData.every((comment) => comment.commentId !== commentId)) {
+            return;
+        }
+
+        pendingLikeCommentId = commentId;
+        commentData = commentData.map((comment) =>
+            comment.commentId === commentId ? { ...comment, isLoading: true } : comment,
+        );
+        renderComments();
+
+        try {
+            const result = await toggleCommentLike(commentId, session.email);
+            commentData = commentData.map((comment) =>
+                comment.commentId === commentId
+                    ? {
+                          ...comment,
+                          isLoading: false,
+                          isLikedByCurrentUser: result.isLikedByCurrentUser,
+                          likes: result.likesCount,
+                      }
+                    : comment,
+            );
+            renderComments();
+        } catch {
+            commentData = commentData.map((comment) =>
+                comment.commentId === commentId ? { ...comment, isLoading: false } : comment,
+            );
+            renderComments();
+            snackbar.show('Unable to update comment likes right now. Please try again.', 'error');
+        } finally {
+            pendingLikeCommentId = undefined;
+        }
     };
 
     layout.input.addEventListener('input', resizeTextarea);
@@ -201,7 +288,7 @@ export function createComments(canPerformProtectedAction?: () => boolean): Comme
 
         const session = getAppSession();
         if (!session) {
-            canPerformProtectedAction?.();
+            canPerformProtectedAction?.('comment-like');
             return;
         }
 
@@ -253,7 +340,10 @@ export function createComments(canPerformProtectedAction?: () => boolean): Comme
                 event.target instanceof Element
                     ? event.target.closest('[data-role="likes"]')
                     : undefined;
-            if (!(target instanceof HTMLButtonElement) || canPerformProtectedAction?.() !== false) {
+            if (
+                !(target instanceof HTMLButtonElement) ||
+                canPerformProtectedAction?.('comment-like') !== false
+            ) {
                 return;
             }
             event.preventDefault();

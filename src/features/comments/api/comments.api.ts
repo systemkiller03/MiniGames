@@ -9,6 +9,11 @@ export type ApiGameComment = {
     createdAt: string;
 };
 
+export type ApiCommentLikeUpdate = {
+    likesCount: number;
+    isLikedByCurrentUser: boolean;
+};
+
 export type GameCommentsQuery = {
     limit?: number;
     sort?: 'newest' | 'oldest' | string;
@@ -39,6 +44,10 @@ type GameCommentsResponse = {
 
 type GameCommentSubmitResponse = {
     data?: ApiGameComment;
+};
+
+type CommentLikeResponse = {
+    data?: ApiCommentLikeUpdate;
 };
 
 export async function getGameCommentsWithMeta(
@@ -93,4 +102,28 @@ export async function postGameComment(
     }
 
     return comment;
+}
+
+export async function toggleCommentLike(
+    commentId: string,
+    userEmail: string,
+): Promise<ApiCommentLikeUpdate> {
+    const response = await apiClient<CommentLikeResponse>(`/comments/${commentId}/like`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userEmail }),
+    });
+
+    const update = response.data;
+    if (
+        !update ||
+        typeof update.likesCount !== 'number' ||
+        typeof update.isLikedByCurrentUser !== 'boolean'
+    ) {
+        throw new TypeError(`Comment like state not updated for ${commentId}`);
+    }
+
+    return update;
 }
