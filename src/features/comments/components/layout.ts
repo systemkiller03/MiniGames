@@ -7,10 +7,21 @@ import { getGameCommentsWithMeta, postGameComment, type ApiGameComment } from '.
 import { createCommentsErrorState } from './error';
 import { createCommentsLoadingState } from './loading';
 
+const avatarTokens = [
+    'avatar-random-1',
+    'avatar-random-2',
+    'avatar-random-3',
+    'avatar-random-4',
+    'avatar-random-5',
+    'avatar-random-6',
+] as const;
+
+type GameCommentTone = (typeof avatarTokens)[number];
+
 type GameComment = {
     name: string;
     avatar: string;
-    tone: 'blue' | 'yellow' | 'mist';
+    tone: GameCommentTone;
     time: string;
     text: string;
     likes: number;
@@ -31,22 +42,32 @@ export type CommentsFeature = {
     load: (slug: string) => Promise<void>;
 };
 
-function toTone(name: string): GameComment['tone'] {
-    const toneMap: Record<string, GameComment['tone']> = {
-        b: 'blue',
-        c: 'mist',
-        f: 'blue',
-        h: 'yellow',
-        y: 'yellow',
-    };
+const avatarToneByName = new Map<string, GameCommentTone>();
 
-    return toneMap[name.charAt(0).toLowerCase()] ?? 'mist';
+function toInitial(name: string): string {
+    const trimmedName = name.trim();
+    return trimmedName ? trimmedName.charAt(0).toUpperCase() : 'U';
+}
+
+function toTone(name: string): GameCommentTone {
+    const trimmedName = name.trim();
+    const existingTone = trimmedName ? avatarToneByName.get(trimmedName) : undefined;
+    if (existingTone) {
+        return existingTone;
+    }
+
+    const nextTone = avatarTokens[Math.floor(Math.random() * avatarTokens.length)];
+    if (trimmedName) {
+        avatarToneByName.set(trimmedName, nextTone);
+    }
+
+    return nextTone;
 }
 
 function mapApiComment(comment: ApiGameComment): GameComment {
     return {
         name: comment.authorName,
-        avatar: comment.authorName.charAt(0).toUpperCase(),
+        avatar: toInitial(comment.authorName),
         tone: toTone(comment.authorName),
         time: formatRelativeTime(comment.createdAt),
         text: comment.text,
@@ -97,6 +118,7 @@ export function createCommentsLayout(): CommentsLayout {
     const composer = document.createElement('form');
     const avatar = document.createElement('span');
     avatar.setAttribute('aria-hidden', 'true');
+    avatar.dataset.tone = 'avatar-random-1';
     avatar.textContent = 'U';
 
     const input = document.createElement('textarea');
@@ -134,9 +156,11 @@ export function createComments(canPerformProtectedAction?: () => boolean): Comme
     const syncComposerState = (): void => {
         const session = getAppSession();
         const isGuest = !session;
-        const initial = session?.displayName.trim().charAt(0).toUpperCase() ?? 'U';
+        const displayName = session?.displayName ?? '';
+        const initial = toInitial(displayName);
 
         layout.avatar.textContent = initial;
+        layout.avatar.dataset.tone = isGuest ? 'avatar-random-1' : toTone(displayName);
         layout.input.disabled = isGuest || isSubmitting;
         layout.submitButton.disabled = isGuest || isSubmitting;
         layout.input.placeholder = session ? 'Write a comment...' : 'Please sign in to comment';
