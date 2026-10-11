@@ -32,7 +32,7 @@
     height: $size-5;
     flex: 0 0 auto;
     color: $color-on-primary;
-    background: $color-primary;
+    background: $avatar-random-1;
     border: 1.5px solid $color-on-primary;
     border-radius: $corner-full;
     font-size: $font-size-body-small;
@@ -115,16 +115,28 @@
     place-items: center;
 }
 
-.game-comments [data-tone='blue'] {
-    background: #bce3ff;
+.game-comments [data-tone='avatar-random-1'] {
+    background: $avatar-random-1;
 }
 
-.game-comments [data-tone='yellow'] {
-    background: $color-primary;
+.game-comments [data-tone='avatar-random-2'] {
+    background: $avatar-random-2;
 }
 
-.game-comments [data-tone='mist'] {
-    background: #e8dff5;
+.game-comments [data-tone='avatar-random-3'] {
+    background: $avatar-random-3;
+}
+
+.game-comments [data-tone='avatar-random-4'] {
+    background: $avatar-random-4;
+}
+
+.game-comments [data-tone='avatar-random-5'] {
+    background: $avatar-random-5;
+}
+
+.game-comments [data-tone='avatar-random-6'] {
+    background: $avatar-random-6;
 }
 
 .game-comments-content > article > header time {
