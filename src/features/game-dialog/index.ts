@@ -69,7 +69,9 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     let currentGame = initialGame;
     let detailsRequestId = 0;
 
-    const canPerformProtectedAction = (): boolean => {
+    const canPerformProtectedAction = (
+        reason: 'favorite' | 'comment-like' = 'favorite',
+    ): boolean => {
         if (getAppSession()) {
             return true;
         }
@@ -91,9 +93,7 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
                 game: currentGame.slug ?? routeState.game,
                 auth: 'login',
             });
-            globalThis.dispatchEvent(
-                new CustomEvent('app-auth-required', { detail: { reason: 'favorite' } }),
-            );
+            globalThis.dispatchEvent(new CustomEvent('app-auth-required', { detail: { reason } }));
         }
         return false;
     };

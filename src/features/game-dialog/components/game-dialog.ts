@@ -105,7 +105,7 @@ export function createGameDialogComponent(
     layout: GameDialogLayout,
     commentsSection: HTMLElement,
     initialGame: GameDialogData = DEFAULT_GAME,
-    canPerformProtectedAction?: () => boolean,
+    canPerformProtectedAction?: (reason?: 'favorite' | 'comment-like') => boolean,
     onFavoriteToggle?: (isFavorited: boolean) => void,
 ): {
     setGame: (game: GameDialogData) => void;
@@ -148,7 +148,7 @@ export function createGameDialogComponent(
                 return;
             }
 
-            if (canPerformProtectedAction?.() === false) {
+            if (canPerformProtectedAction?.('favorite') === false) {
                 event.preventDefault();
                 event.stopPropagation();
                 return;
