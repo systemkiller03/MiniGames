@@ -65,6 +65,11 @@
         background: $color-price-free;
     }
 
+    &[data-variant='loading'] {
+        background: $color-primary;
+        color: $color-on-bg;
+    }
+
     &[data-variant='error'] {
         background: $color-error;
     }

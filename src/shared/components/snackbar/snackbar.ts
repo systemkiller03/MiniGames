@@ -1,7 +1,7 @@
 import './snackbar.scss';
 import { X, createElement } from 'lucide';
 
-export type SnackbarVariant = 'success' | 'error';
+export type SnackbarVariant = 'success' | 'error' | 'loading';
 
 export interface SnackbarControl {
     element: HTMLDivElement;
