@@ -93,7 +93,11 @@ export function createApp() {
         }
     };
 
-    globalThis.addEventListener('app-auth-required', () => {
+    globalThis.addEventListener('app-auth-required', (event: Event) => {
+        const detail = (event as CustomEvent<{ reason?: string }>).detail;
+        if (detail?.reason === 'favorite') {
+            sessionSnackbar.show('Please sign in to save favorites.', 'error');
+        }
         isProtectedAuthPending = true;
         syncAuthDialog();
     });

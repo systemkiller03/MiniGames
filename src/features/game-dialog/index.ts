@@ -1,7 +1,8 @@
 import './styles/game-dialog.scss';
 import { createComments } from '@/features/comments/components/layout';
+import { createSnackbar } from '@/shared/components';
 import { formatRelativeTime } from '@/shared/utils/format-relative-time';
-import { getGameDetails, type ApiGameDetails } from './api/game-details.api';
+import { getGameDetails, toggleGameFavorite, type ApiGameDetails } from './api/game-details.api';
 import { createEmptyState } from './components/empty';
 import { createErrorState } from './components/error';
 import {
@@ -55,6 +56,11 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
 } {
     let shouldSkipRouteCleanupOnClose = false;
     let isWaitingForAuth = false;
+    let isFavoriteRequestInFlight = false;
+    let favoriteState = { pressed: false, count: initialGame.likes };
+    const favoriteSnackbar = createSnackbar();
+    document.body.append(favoriteSnackbar.element);
+
     const layout = createGameDialogLayout(() => {
         if (!shouldSkipRouteCleanupOnClose) {
             closeDialogAndRevertRoute();
@@ -85,7 +91,9 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
                 game: currentGame.slug ?? routeState.game,
                 auth: 'login',
             });
-            globalThis.dispatchEvent(new Event('app-auth-required'));
+            globalThis.dispatchEvent(
+                new CustomEvent('app-auth-required', { detail: { reason: 'favorite' } }),
+            );
         }
         return false;
     };
@@ -96,14 +104,80 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
         comments.element,
         initialGame,
         canPerformProtectedAction,
+        async () => {
+            if (isFavoriteRequestInFlight) {
+                return;
+            }
+
+            const session = getAppSession();
+            if (!session) {
+                canPerformProtectedAction();
+                return;
+            }
+
+            const slug = currentGame.slug ?? DEFAULT_GAME.slug;
+            if (!slug) {
+                return;
+            }
+
+            isFavoriteRequestInFlight = true;
+            component.setFavoriteButtonState({
+                pressed: favoriteState.pressed,
+                count: favoriteState.count,
+                loading: true,
+                disabled: true,
+            });
+
+            try {
+                const result = await toggleGameFavorite(slug, session.email);
+                favoriteState = {
+                    pressed: result.isFavorited,
+                    count: result.likesCount,
+                };
+                currentGame = {
+                    ...currentGame,
+                    likes: result.likesCount,
+                };
+                component.setFavoriteButtonState({
+                    pressed: result.isFavorited,
+                    count: result.likesCount,
+                    disabled: false,
+                    loading: false,
+                });
+                component.setGame({
+                    ...currentGame,
+                    likes: result.likesCount,
+                });
+            } catch {
+                favoriteSnackbar.show(
+                    'Unable to update favorites right now. Please try again.',
+                    'error',
+                );
+                component.setFavoriteButtonState({
+                    pressed: favoriteState.pressed,
+                    count: favoriteState.count,
+                    disabled: false,
+                    loading: false,
+                });
+            } finally {
+                isFavoriteRequestInFlight = false;
+            }
+        },
     );
     globalThis.addEventListener('app-session-updated', () => {
-        if (getAppSession() || !layout.dialog.open) {
+        if (!layout.dialog.open) {
             return;
         }
 
         component.resetUserState();
+        component.setFavoriteButtonState({
+            pressed: false,
+            count: currentGame.likes,
+            disabled: false,
+            loading: false,
+        });
         void comments.load(currentGame.slug ?? DEFAULT_GAME.slug ?? '');
+        void loadGameDetails();
     });
 
     const setGame = (game: GameDialogData): void => {
@@ -124,7 +198,7 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
         layout.setContent(createLoadingState());
         let detail: ApiGameDetails;
         try {
-            detail = await getGameDetails(slug);
+            detail = await getGameDetails(slug, getAppSession()?.email);
         } catch {
             if (requestId === detailsRequestId) {
                 layout.setContent(createErrorState(() => void loadGameDetails()));
@@ -141,6 +215,11 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
             return;
         }
 
+        const nextFavoriteState = {
+            pressed: detail.isLikedByCurrentUser,
+            count: detail.likesCount,
+        };
+        favoriteState = nextFavoriteState;
         setGame({
             slug,
             image: getHeroImage(slug, currentGame.image),
@@ -155,6 +234,12 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
             tags: [],
             mode: 'Desktop',
             records: mapGameDetailsToRecord(detail),
+        });
+        component.setFavoriteButtonState({
+            pressed: detail.isLikedByCurrentUser,
+            count: detail.likesCount,
+            disabled: false,
+            loading: false,
         });
         void comments.load(slug);
     };
