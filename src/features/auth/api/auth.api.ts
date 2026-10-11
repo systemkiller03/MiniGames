@@ -245,5 +245,10 @@ export function clearAppSession(): void {
 
 export async function signOutAppSession(): Promise<void> {
     clearAppSession();
-    await signOut(getFirebaseAuth());
+    try {
+        await signOut(getFirebaseAuth());
+    } catch (error) {
+        clearAppSession();
+        throw error;
+    }
 }
