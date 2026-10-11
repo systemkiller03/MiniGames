@@ -1,10 +1,54 @@
 import '../styles/auth.scss';
 import { LockKeyhole, Mail, UserRound, X } from 'lucide';
-import { createButton, createIconButton } from '@/shared/components';
+import { FirebaseError } from 'firebase/app';
+import { createButton, createIconButton, createSnackbar } from '@/shared/components';
+import {
+    createAppSession,
+    registerWithEmail,
+    saveAppSession,
+    signInWithEmail,
+    signInWithGoogle,
+} from '../api/auth.api';
 import { validateAuthField, type AuthFieldName } from '../utils/auth-validation';
 import { createAuthField } from './auth-field';
 
 export type AuthMode = 'login' | 'register';
+
+function getAuthErrorMessage(error: unknown, fallbackMessage: string): string {
+    if (!(error instanceof FirebaseError)) {
+        return error instanceof Error && error.message ? error.message : fallbackMessage;
+    }
+
+    switch (error.code) {
+        case 'auth/operation-not-allowed':
+        case 'auth/admin-restricted-operation': {
+            return 'Email/password authentication is disabled. Enable the Email/Password provider in Firebase Console under Authentication > Sign-in method.';
+        }
+        case 'auth/invalid-credential':
+        case 'auth/user-not-found':
+        case 'auth/wrong-password': {
+            return 'Email or password is incorrect.';
+        }
+        case 'auth/email-already-in-use': {
+            return 'An account with this email already exists. Try signing in instead.';
+        }
+        case 'auth/weak-password': {
+            return 'This password is too weak. Choose a stronger password and try again.';
+        }
+        case 'auth/invalid-email': {
+            return 'Enter a valid email address.';
+        }
+        case 'auth/network-request-failed': {
+            return 'Unable to connect to the authentication service. Check your connection and try again.';
+        }
+        case 'auth/too-many-requests': {
+            return 'Too many attempts. Please wait a while and try again.';
+        }
+        default: {
+            return fallbackMessage;
+        }
+    }
+}
 
 export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
     dialog: HTMLDialogElement;
@@ -58,6 +102,8 @@ export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
         disabled: true,
     });
 
+    const snackbar = createSnackbar();
+
     const divider = document.createElement('div');
     divider.className = 'auth-divider';
     divider.append(document.createElement('span'));
@@ -82,6 +128,48 @@ export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
     const fieldMap = new Map<AuthFieldName, HTMLInputElement>();
     const errorMap = new Map<AuthFieldName, HTMLElement>();
     let currentMode: AuthMode = 'login';
+    let isSubmitting = false;
+    let footerAction: HTMLButtonElement | undefined;
+
+    const setStatusMessage = (nextMessage: string): void => {
+        message.textContent = nextMessage;
+        message.classList.remove('auth-status-error');
+    };
+
+    const setStatusError = (nextMessage: string): void => {
+        message.textContent = nextMessage;
+        message.classList.add('auth-status-error');
+    };
+
+    const setIsSubmitting = (shouldSubmit: boolean): void => {
+        isSubmitting = shouldSubmit;
+        const activeFields = getCurrentFieldNames();
+        for (const fieldName of activeFields) {
+            const input = fieldMap.get(fieldName);
+            if (input) {
+                input.disabled = shouldSubmit;
+            }
+        }
+
+        close.disabled = shouldSubmit;
+        loginTab.disabled = shouldSubmit;
+        registerTab.disabled = shouldSubmit;
+        forgotPassword.disabled = shouldSubmit;
+        const hasInvalidField = activeFields.some((fieldName) => {
+            const input = fieldMap.get(fieldName);
+            return input ? validateField(fieldName, input.value) !== '' : true;
+        });
+        submit.disabled = shouldSubmit || hasInvalidField;
+        google.disabled = shouldSubmit;
+        footerAction?.setAttribute('aria-disabled', String(shouldSubmit));
+        if (footerAction) {
+            footerAction.disabled = shouldSubmit;
+        }
+
+        const submitLabel = currentMode === 'login' ? 'Login' : 'Create Account';
+        const pendingLabel = currentMode === 'login' ? 'Logging in...' : 'Creating account...';
+        submit.textContent = shouldSubmit ? pendingLabel : submitLabel;
+    };
 
     const updateFieldMessage = (fieldName: AuthFieldName, errorMessage: string): void => {
         const input = fieldMap.get(fieldName);
@@ -116,7 +204,7 @@ export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
             return input ? validateField(fieldName, input.value) !== '' : true;
         });
 
-        submit.disabled = hasInvalidField;
+        submit.disabled = hasInvalidField || isSubmitting;
     };
 
     const syncFieldValidation = (fieldName: AuthFieldName): void => {
@@ -147,9 +235,11 @@ export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
         loginTab.tabIndex = isLogin ? 0 : -1;
         registerTab.tabIndex = isLogin ? -1 : 0;
         title.textContent = isLogin ? 'Welcome Back!' : 'Create Account';
-        message.textContent = isLogin
-            ? 'Sign in to resume your games and progress.'
-            : 'Join MiniGames to track your score & streak.';
+        setStatusMessage(
+            isLogin
+                ? 'Sign in to resume your games and progress.'
+                : 'Join MiniGames to track your score & streak.',
+        );
         fieldMap.clear();
         errorMap.clear();
         fields.replaceChildren(
@@ -168,7 +258,7 @@ export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
                       createAuthField(
                           'Username',
                           'text',
-                          'e.g. CozyGamer_99',
+                          'e.g. CozyGamer99',
                           UserRound,
                           'username',
                       ),
@@ -221,13 +311,18 @@ export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
         footer.textContent = isLogin ? "Don't have an account? " : 'Already have an account? ';
         footer.replaceChildren();
 
-        const footerAction = createButton({
+        footerAction = createButton({
             label: isLogin ? 'Register' : 'Login',
             variant: 'outline',
             size: 'sm',
+            disabled: isSubmitting,
         });
         footerAction.classList.add('auth-text-button');
-        footerAction.addEventListener('click', () => selectMode(isLogin ? 'register' : 'login'));
+        footerAction.addEventListener('click', () => {
+            if (!isSubmitting) {
+                selectMode(isLogin ? 'register' : 'login');
+            }
+        });
         footer.append(footerAction);
         updateSubmitState();
     };
@@ -241,12 +336,123 @@ export function createAuthDialog(onModeChange?: (mode: AuthMode) => void): {
         onModeChange?.(mode);
     };
 
-    close.addEventListener('click', () => dialog.close());
+    const submitAuth = async (event: SubmitEvent): Promise<void> => {
+        event.preventDefault();
+
+        if (isSubmitting) {
+            return;
+        }
+
+        const activeFields = getCurrentFieldNames();
+        const invalidField = activeFields.find((fieldName) => {
+            const input = fieldMap.get(fieldName);
+            return input ? validateField(fieldName, input.value) !== '' : true;
+        });
+
+        if (invalidField) {
+            const input = fieldMap.get(invalidField);
+            if (input) {
+                syncFieldValidation(invalidField);
+                input.focus();
+            }
+            return;
+        }
+
+        const email = fieldMap.get('email')?.value.trim() ?? '';
+        const password = fieldMap.get('password')?.value ?? '';
+        const username = fieldMap.get('username')?.value.trim() ?? '';
+
+        try {
+            setIsSubmitting(true);
+            setStatusMessage(
+                currentMode === 'login' ? 'Signing you in...' : 'Creating your profile...',
+            );
+
+            const user =
+                currentMode === 'login'
+                    ? await signInWithEmail(email, password)
+                    : await registerWithEmail(username, email, password);
+
+            const session = createAppSession(user.user);
+            saveAppSession(session);
+            snackbar.show(
+                currentMode === 'login'
+                    ? `Welcome back, ${session.displayName}!`
+                    : `Account created for ${session.displayName}.`,
+                'success',
+            );
+            dialog.close();
+        } catch (error) {
+            const fallbackMessage =
+                currentMode === 'login'
+                    ? 'Unable to sign in. Please check your details and try again.'
+                    : 'Unable to create your account. Please try again.';
+
+            const errorMessage = getAuthErrorMessage(error, fallbackMessage);
+
+            setStatusError(errorMessage);
+            snackbar.show(errorMessage || fallbackMessage, 'error');
+        } finally {
+            setIsSubmitting(false);
+            updateSubmitState();
+        }
+    };
+
+    const submitGoogleAuth = async (): Promise<void> => {
+        if (isSubmitting) {
+            return;
+        }
+
+        try {
+            setIsSubmitting(true);
+            setStatusMessage('Connecting to Google...');
+
+            const user = await signInWithGoogle();
+            const session = createAppSession(user.user);
+            saveAppSession(session);
+            snackbar.show(`Welcome back, ${session.displayName}!`, 'success');
+            dialog.close();
+        } catch (error) {
+            const fallbackMessage = 'Google sign-in was canceled or failed. Please try again.';
+            const errorMessage = getAuthErrorMessage(error, fallbackMessage);
+
+            setStatusError(errorMessage || fallbackMessage);
+            snackbar.show(errorMessage || fallbackMessage, 'error');
+        } finally {
+            setIsSubmitting(false);
+            updateSubmitState();
+        }
+    };
+
+    close.addEventListener('click', () => {
+        if (!isSubmitting) {
+            dialog.close();
+        }
+    });
+    dialog.addEventListener('cancel', (event) => {
+        if (isSubmitting) {
+            event.preventDefault();
+        }
+    });
+    dialog.addEventListener('click', (event) => {
+        if (isSubmitting && event.target === dialog) {
+            event.preventDefault();
+        }
+    });
+    dialog.addEventListener('keydown', (event) => {
+        if (isSubmitting && event.key === 'Escape') {
+            event.preventDefault();
+        }
+    });
+    google.addEventListener('click', () => {
+        void submitGoogleAuth();
+    });
+    form.addEventListener('submit', submitAuth);
     loginTab.addEventListener('click', () => selectMode('login'));
     registerTab.addEventListener('click', () => selectMode('register'));
     loginTab.setAttribute('aria-label', 'Show login form');
     registerTab.setAttribute('aria-label', 'Show registration form');
-    dialog.append(close, tabs, title, message, form);
+    dialog.append(close, tabs, title, message, form, snackbar.element);
     form.append(fields, forgotPassword, submit, divider, google, footer);
     setMode('login');
     return { dialog, setMode };
