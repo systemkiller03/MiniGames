@@ -118,3 +118,13 @@ export function updateRouteState(state: Partial<RouteState>, isReplace = false):
     const method = isReplace ? 'replaceState' : 'pushState';
     globalThis.history[method](undefined, '', url.href);
 }
+
+export function clearAuthParameterFromUrl(): void {
+    const url = new URL(globalThis.location.href);
+    if (!url.searchParams.has('auth')) {
+        return;
+    }
+
+    url.searchParams.delete('auth');
+    globalThis.history.replaceState(globalThis.history.state, '', url.href);
+}
