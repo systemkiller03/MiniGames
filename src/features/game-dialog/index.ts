@@ -14,6 +14,7 @@ import { createGameDialogLayout } from './components/layout';
 import { createLoadingState } from './components/loading';
 import { getHeroImage } from '@/shared/utils/game-images';
 import { readRouteState, updateRouteState } from '@/shared/utils/navigation';
+import { getAppSession } from '@/features/auth/api/auth.api';
 
 export type { GameDialogData } from './components/game-dialog';
 
@@ -52,11 +53,58 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     open: () => Promise<void>;
     close: () => void;
 } {
-    const layout = createGameDialogLayout(closeDialogAndRevertRoute);
-    const comments = createComments();
-    const component = createGameDialogComponent(layout, comments.element, initialGame);
+    let shouldSkipRouteCleanupOnClose = false;
+    let isWaitingForAuth = false;
+    const layout = createGameDialogLayout(() => {
+        if (!shouldSkipRouteCleanupOnClose) {
+            closeDialogAndRevertRoute();
+        }
+    });
     let currentGame = initialGame;
     let detailsRequestId = 0;
+
+    const canPerformProtectedAction = (): boolean => {
+        if (getAppSession()) {
+            return true;
+        }
+
+        if (!isWaitingForAuth) {
+            isWaitingForAuth = true;
+            const routeState = readRouteState();
+            shouldSkipRouteCleanupOnClose = true;
+            if (layout.dialog.open) {
+                layout.dialog.close();
+            } else {
+                shouldSkipRouteCleanupOnClose = false;
+            }
+            updateRouteState({
+                page: routeState.page,
+                category: routeState.category,
+                sort: routeState.sort,
+                pageNumber: routeState.pageNumber,
+                game: currentGame.slug ?? routeState.game,
+                auth: 'login',
+            });
+            globalThis.dispatchEvent(new Event('app-auth-required'));
+        }
+        return false;
+    };
+
+    const comments = createComments(canPerformProtectedAction);
+    const component = createGameDialogComponent(
+        layout,
+        comments.element,
+        initialGame,
+        canPerformProtectedAction,
+    );
+    globalThis.addEventListener('app-session-updated', () => {
+        if (getAppSession() || !layout.dialog.open) {
+            return;
+        }
+
+        component.resetUserState();
+        void comments.load(currentGame.slug ?? DEFAULT_GAME.slug ?? '');
+    });
 
     const setGame = (game: GameDialogData): void => {
         currentGame = game;
@@ -112,6 +160,7 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
     };
 
     const open = async (): Promise<void> => {
+        getAppSession();
         if (!layout.dialog.open) {
             if (typeof layout.dialog.showModal === 'function') {
                 layout.dialog.showModal();
@@ -121,20 +170,35 @@ export function createGameDialog(initialGame: GameDialogData = DEFAULT_GAME): {
         }
 
         const routeState = readRouteState();
-        updateRouteState({
-            page: routeState.page,
-            category: routeState.category,
-            sort: routeState.sort,
-            pageNumber: routeState.pageNumber,
-            game: currentGame.slug ?? undefined,
-            auth: undefined,
-        });
+        if (routeState.game !== currentGame.slug || routeState.auth) {
+            updateRouteState({
+                page: routeState.page,
+                category: routeState.category,
+                sort: routeState.sort,
+                pageNumber: routeState.pageNumber,
+                game: currentGame.slug ?? undefined,
+                auth: undefined,
+            });
+        }
 
         await loadGameDetails();
     };
 
     layout.dialog.addEventListener('close', () => {
+        if (shouldSkipRouteCleanupOnClose) {
+            shouldSkipRouteCleanupOnClose = false;
+            return;
+        }
         closeDialogAndRevertRoute();
+    });
+    globalThis.addEventListener('app-auth-completed', () => {
+        if (!isWaitingForAuth) {
+            return;
+        }
+        isWaitingForAuth = false;
+        if (layout.dialog.isConnected) {
+            void open();
+        }
     });
 
     return {

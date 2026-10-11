@@ -105,7 +105,8 @@ export function createGameDialogComponent(
     layout: GameDialogLayout,
     commentsSection: HTMLElement,
     initialGame: GameDialogData = DEFAULT_GAME,
-): { setGame: (game: GameDialogData) => void } {
+    canPerformProtectedAction?: () => boolean,
+): { setGame: (game: GameDialogData) => void; resetUserState: () => void } {
     const title = document.createElement('h2');
     title.id = 'game-dialog-title';
     const meta = document.createElement('div');
@@ -123,9 +124,24 @@ export function createGameDialogComponent(
         size: 'lg',
         shadow: true,
     });
-    const saveButton = createToggleButton();
+    let saveButton = createToggleButton();
     saveButton.classList.add('game-dialog-favorite');
     actions.append(playButton, saveButton);
+    actions.addEventListener(
+        'click',
+        (event: MouseEvent) => {
+            const target =
+                event.target instanceof Element
+                    ? event.target.closest('.game-dialog-favorite')
+                    : undefined;
+            if (!(target instanceof HTMLButtonElement) || canPerformProtectedAction?.() !== false) {
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+        },
+        { capture: true },
+    );
 
     const recordsSection = document.createElement('section');
     const recordsTitle = document.createElement('h3');
@@ -159,6 +175,12 @@ export function createGameDialogComponent(
         restoreContent();
     };
 
+    const resetUserState = (): void => {
+        saveButton = createToggleButton();
+        saveButton.classList.add('game-dialog-favorite');
+        actions.replaceChildren(playButton, saveButton);
+    };
+
     setGame(initialGame);
-    return { setGame };
+    return { setGame, resetUserState };
 }

@@ -119,7 +119,7 @@ export function createCommentsLayout(): CommentsLayout {
     return { element, title, composer, input, content };
 }
 
-export function createComments(): CommentsFeature {
+export function createComments(canPerformProtectedAction?: () => boolean): CommentsFeature {
     const layout = createCommentsLayout();
     let requestId = 0;
     let commentData: GameComment[] = [];
@@ -133,6 +133,9 @@ export function createComments(): CommentsFeature {
 
     layout.composer.addEventListener('submit', (event) => {
         event.preventDefault();
+        if (canPerformProtectedAction && !canPerformProtectedAction()) {
+            return;
+        }
         const text = layout.input.value.trim();
         if (!text) {
             return;
@@ -153,6 +156,21 @@ export function createComments(): CommentsFeature {
         renderComments();
         layout.composer.reset();
     });
+    layout.element.addEventListener(
+        'click',
+        (event: MouseEvent) => {
+            const target =
+                event.target instanceof Element
+                    ? event.target.closest('[data-role="likes"]')
+                    : undefined;
+            if (!(target instanceof HTMLButtonElement) || canPerformProtectedAction?.() !== false) {
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+        },
+        { capture: true },
+    );
 
     const load = async (slug: string): Promise<void> => {
         const currentRequestId = ++requestId;
