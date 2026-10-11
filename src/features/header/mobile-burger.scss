@@ -9,44 +9,58 @@
         display: flex;
         justify-content: space-between;
         flex-direction: column;
-        width: 100vw;
-        height: 100vh;
+        box-sizing: border-box;
         position: fixed;
-        top: 0;
-        left: 0;
+        inset: 0 auto auto 0;
+        width: min(100vw, 320px);
+        height: min(100vh, 587px);
         background: $color-bg-footer;
         padding: $size-3;
         gap: $size-4;
     }
-    div {
-        display: flex;
-        justify-content: space-between;
-        div {
-            display: flex;
-            align-items: center;
-            gap: $size-1;
-            img {
-                width: $size-4;
-                height: $size-4;
-                object-fit: contain;
-            }
-            h1 {
-                font-size: $font-size-headline-medium;
-                color: $color-white;
 
-                @include tablet {
-                    font-size: $font-size-headline-small;
-                }
-            }
+    &[hidden] {
+        display: none;
+    }
+}
+
+.mobile-menu__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mobile-menu__brand {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+
+    img {
+        width: $size-4;
+        height: $size-4;
+        object-fit: contain;
+    }
+
+    h1 {
+        margin: 0;
+        color: $color-white;
+        font-size: $font-size-headline-medium;
+
+        @include tablet {
+            font-size: $font-size-headline-small;
         }
     }
+}
+
+.mobile-menu {
     nav {
-        height: 100%;
+        flex: 1;
         width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         gap: $size-4;
+
         ul {
             display: flex;
             align-items: flex-start;
@@ -54,9 +68,10 @@
             gap: $size-3;
             list-style: none;
             padding: 0;
+
             a {
                 color: $color-on-bg-footer;
-                font-size: $font-size-body-large;
+                font-size: $font-size-body-medium;
                 font-weight: $font-weight-bold;
                 text-decoration: none;
                 transition: color 150ms ease;
@@ -64,19 +79,28 @@
                 &:hover {
                     color: $color-primary;
                 }
+
                 &:active {
                     color: $color-on-primary;
                 }
+
+                &[aria-current='page'] {
+                    color: $color-primary;
+                }
             }
         }
-        div {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            gap: $size-2;
-        }
     }
-    &[hidden] {
-        display: none;
-    }
+}
+
+.mobile-menu__actions {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    gap: $size-2;
+    width: 100%;
+}
+
+.mobile-menu__actions [data-auth-action='logout'] {
+    border-width: $button-border-width-thin;
+    border-radius: $corner-small;
 }
