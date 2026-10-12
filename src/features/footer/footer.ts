@@ -2,7 +2,7 @@ import './footer.scss';
 import logoSource from '../../assets/Logo.svg';
 import rssLogo from '../../assets/rss-logo.svg';
 import { Code2, MessageCircle, Share2, createElement } from 'lucide';
-import { getNavigationUrl } from '@/shared/navigation';
+import { getNavigationUrl } from '@/shared/utils/navigation';
 
 type FooterLink = { label: string; href: string };
 

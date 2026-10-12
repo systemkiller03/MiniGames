@@ -1,0 +1,82 @@
+@use '/src/styles/tokens' as *;
+
+.snackbar {
+    position: fixed;
+    right: $size-3;
+    bottom: $size-3;
+    z-index: 20;
+    max-width: min(420px, calc(100vw - 2rem));
+    padding: $size-2 $size-3;
+    border-radius: $corner-medium;
+    color: $color-white;
+    font-size: $font-size-body-medium;
+    font-weight: $font-weight-medium;
+    opacity: 0;
+    transform: translateY(12px);
+    visibility: hidden;
+    transition:
+        opacity 180ms ease,
+        transform 180ms ease,
+        visibility 0s linear 180ms;
+    pointer-events: none;
+
+    display: flex;
+    align-items: center;
+    gap: $size-2;
+
+    &_message {
+        flex: 1;
+    }
+
+    &_close {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        width: $size-4;
+        height: $size-4;
+        padding: 0;
+        border: 0;
+        border-radius: $corner-full;
+        color: inherit;
+        background: transparent;
+        cursor: pointer;
+
+        &:hover:not(:disabled) {
+            background: rgb(255 255 255 / 16%);
+        }
+
+        &:focus-visible {
+            outline: $focus-ring-width solid $color-white;
+            outline-offset: $focus-ring-offset;
+        }
+
+        &:disabled {
+            cursor: default;
+        }
+
+        svg {
+            width: $icon-size-small;
+            height: $icon-size-small;
+        }
+    }
+
+    &[data-variant='success'] {
+        background: $color-price-free;
+    }
+
+    &[data-variant='error'] {
+        background: $color-error;
+    }
+
+    &.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+        transition:
+            opacity 180ms ease,
+            transform 180ms ease,
+            visibility 0s;
+        pointer-events: auto;
+    }
+}

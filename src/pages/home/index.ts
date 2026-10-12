@@ -1,11 +1,11 @@
 import './home.scss';
-import { createCarousel } from '../../features/carousel/carousel';
+import { createCarousel } from '../../features/carousel';
 import { createDeveloperSection } from '../../features/developer/developer';
 import { createHero } from '../../features/hero/hero';
-import { createLeaderboard } from '../../features/leaderboard/leaderboard';
+import { createLeaderboard } from '../../features/leaderboard';
 
 export function createHomePage(): HTMLElement {
-    const page = document.createElement('main');
+    const page = document.createElement('div');
     page.className = 'home-page';
     page.append(createHero(), createCarousel(), createLeaderboard(), createDeveloperSection());
     return page;

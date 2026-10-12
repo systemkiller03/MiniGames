@@ -1,0 +1,381 @@
+@use '/src/styles/tokens' as *;
+@use '/src/styles/mixins' as *;
+
+.game-dialog {
+    position: fixed;
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: min(620px, calc(100vw - #{$size-4}), calc((100vh - #{$size-4}) * 0.737));
+    height: min(1357px, calc((100vw - #{$size-4}) * 1.357), calc(100vh - #{$size-4}));
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    overflow: auto;
+    color: $color-on-primary;
+    background: $color-bg;
+    border: 1px solid $color-outline-variant;
+    border-radius: $corner-extra-large;
+    box-shadow: 0 16px 48px rgb(30 27 58 / 25%);
+    overscroll-behavior: contain;
+    transform: translate(-50%, -50%);
+    scrollbar-width: none;
+}
+
+.game-dialog::-webkit-scrollbar {
+    display: none;
+}
+
+.game-dialog::backdrop {
+    background: rgb(30 27 58 / 70%);
+}
+
+.game-dialog > div {
+    position: relative;
+}
+
+.game-dialog figure {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 220px;
+    padding: 0;
+    overflow: hidden;
+    background: $color-surface;
+}
+
+.game-dialog figure img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+}
+
+.game-dialog > div > .icon-button:first-child {
+    position: absolute;
+    z-index: 10;
+    top: $size-2;
+    right: $size-2;
+    color: $color-white;
+    background: rgb(255 255 255 / 75%);
+    border: 1.5px solid rgb(255 255 255 / 90%);
+    border-radius: 50%;
+}
+
+.game-dialog main {
+    display: flex;
+    flex-direction: column;
+    gap: $size-3;
+    padding: $size-3;
+}
+
+.game-dialog main > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $size-2;
+}
+
+.game-dialog main h2 {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: $color-on-primary;
+    font-size: $font-size-display-medium;
+    font-weight: $font-weight-bold;
+    line-height: 1.1;
+}
+
+.game-dialog main > header > div {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: $size-2;
+}
+
+.game-dialog main > header > div > div {
+    display: flex;
+    align-items: center;
+    gap: $size-05;
+    font-size: $font-size-label-large;
+    font-weight: $font-weight-bold;
+}
+
+.game-dialog main > header > div > div > span:first-child,
+.game-dialog main > header > div > div > span:first-child svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+}
+
+.game-dialog main > header > div > div:first-child > span:first-child {
+    color: $color-primary-high;
+}
+
+.game-dialog main > header > div > div:last-child > span:first-child {
+    color: $color-like;
+}
+
+.game-dialog main > p {
+    color: $color-on-bg;
+    font-size: $font-size-body-medium;
+    line-height: 20px;
+}
+
+.game-dialog main > dl {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: $size-2;
+}
+
+.game-dialog main > dl > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: $size-1;
+    padding: $size-1 $size-2;
+    background: $color-white;
+    border: 1px solid $color-outline-variant;
+    border-radius: $corner-small;
+    box-shadow: 2px 2px 0 $color-outline;
+}
+
+.game-dialog main > dl dt {
+    color: $color-on-bg;
+    font-size: $font-size-label-medium;
+}
+
+.game-dialog main > dl dd {
+    overflow-wrap: anywhere;
+    color: $color-on-primary;
+    font-size: $font-size-label-large;
+}
+
+.game-dialog main > div {
+    display: flex;
+    gap: $size-2;
+}
+
+.game-dialog main > div > .btn,
+.game-dialog main > div > .toggle-button {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (width < $breakpoint-tablet) {
+    .game-dialog main > div > .game-dialog-favorite {
+        width: $button-height-large;
+        flex: 0 0 $button-height-large;
+        padding: $button-icon-padding-large;
+
+        > span {
+            display: none;
+        }
+    }
+}
+
+.game-dialog main > section {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+}
+
+.game-dialog main > section > h3 {
+    display: flex;
+    align-items: center;
+    gap: $size-1;
+    color: $color-on-primary;
+    font-size: $font-size-body-medium;
+    font-weight: $font-weight-bold;
+    line-height: 1.2;
+}
+
+.game-dialog main > section:first-of-type > h3 svg {
+    width: 18px;
+    height: 18px;
+    color: $color-primary-high;
+}
+
+.game-dialog main > section > div {
+    display: flex;
+    flex-direction: column;
+    gap: $size-1;
+}
+
+.game-dialog main > section:first-of-type > div > div {
+    display: flex;
+    min-height: 52px;
+    align-items: center;
+    justify-content: space-between;
+    gap: $size-2;
+    padding: $size-2;
+    background: $color-white;
+    border-radius: $corner-small;
+}
+
+.game-dialog main > section:first-of-type > div > div > div {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: $size-2;
+}
+
+.game-dialog main > section:first-of-type > div > div > div:first-child {
+    color: $color-on-primary;
+    font-size: $font-size-label-large;
+}
+
+.game-dialog main > section:first-of-type > div > div > div:first-child > span {
+    flex: 0 0 auto;
+    font-size: $font-size-body-medium;
+}
+
+.game-dialog main > section:first-of-type > div > div > div:last-child {
+    justify-content: flex-end;
+    font-size: $font-size-label-large;
+    text-align: right;
+}
+
+.game-dialog main > section:first-of-type > div > div > div:last-child span {
+    color: $color-on-bg;
+    font-size: $font-size-label-medium;
+    white-space: nowrap;
+}
+
+.game-dialog-state {
+    display: flex;
+    flex-direction: column;
+    gap: $size-2;
+    padding: $size-4 $size-3 $size-3;
+    color: $color-on-primary;
+    text-align: center;
+}
+
+.game-dialog-state h3 {
+    margin: 0;
+    color: $color-on-primary;
+    font-size: $font-size-headline-small;
+}
+
+.game-dialog-state p {
+    margin: 0;
+    color: $color-on-bg;
+    font-size: $font-size-body-medium;
+    line-height: 1.5;
+}
+
+.game-dialog-state .btn,
+.game-dialog-state button {
+    align-self: center;
+}
+
+.game-dialog-loading {
+    display: grid;
+    gap: $size-1;
+    margin-top: $size-1;
+}
+
+.game-dialog-loading-line {
+    display: block;
+    height: 12px;
+    border-radius: $corner-small;
+    background: linear-gradient(
+        90deg,
+        rgb(181 172 206 / 40%) 0%,
+        rgb(255 255 255 / 85%) 50%,
+        rgb(181 172 206 / 40%) 100%
+    );
+    background-size: 200% 100%;
+    animation: game-dialog-shimmer 1.2s linear infinite;
+}
+
+.game-dialog-loading-line:nth-child(1) {
+    width: 100%;
+}
+.game-dialog-loading-line:nth-child(2) {
+    width: 92%;
+}
+.game-dialog-loading-line:nth-child(3) {
+    width: 100%;
+}
+.game-dialog-loading-line:nth-child(4) {
+    width: 80%;
+}
+.game-dialog-loading-line:nth-child(5) {
+    width: 68%;
+}
+
+@keyframes game-dialog-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.game-dialog :focus-visible {
+    outline: $focus-ring-width solid $focus-ring-color;
+    outline-offset: $focus-ring-offset;
+}
+
+@include tablet {
+    .game-dialog {
+        width: min(calc(100vw - #{$size-3}), calc((100vh - #{$size-3}) * 0.737));
+        height: min(calc((100vw - #{$size-3}) * 1.357), calc(100vh - #{$size-3}));
+        border-radius: $corner-large;
+    }
+
+    .game-dialog figure {
+        height: 180px;
+    }
+
+    .game-dialog main {
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .game-dialog main > header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $size-1;
+    }
+
+    .game-dialog main h2 {
+        font-size: $font-size-headline-medium;
+    }
+
+    .game-dialog main > dl {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .game-dialog main > section:first-of-type > div > div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $size-1;
+        padding: 12px;
+    }
+
+    .game-dialog main > section:first-of-type > div > div > div:last-child {
+        width: 100%;
+        justify-content: space-between;
+        padding-left: 36px;
+        text-align: left;
+    }
+}
+
+@include mobile {
+    .game-dialog main {
+        padding: $size-2;
+    }
+
+    .game-dialog main > div {
+        flex-direction: column;
+    }
+}

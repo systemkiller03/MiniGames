@@ -1,7 +1,7 @@
 import './hero.scss';
 import heroImage from '../../assets/hero-section.png';
 import { createButton } from '../../shared/components';
-import { getNavigationUrl } from '@/shared/navigation';
+import { getNavigationUrl } from '@/shared/utils/navigation';
 
 export function createHero(): HTMLElement {
     const hero = document.createElement('section');

@@ -1,6 +1,6 @@
 import logoIconSrc from '@/assets/Logo.svg';
 import { createButton, createIconButton } from '@/shared/components';
-import { getNavigationUrl } from '@/shared/navigation';
+import { getNavigationUrl } from '@/shared/utils/navigation';
 import './header.scss';
 import { Menu } from 'lucide';
 import { createMobileBurger } from './mobile-burger';
