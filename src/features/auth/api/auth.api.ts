@@ -10,7 +10,6 @@ import {
 } from 'firebase/auth';
 import { getApps, initializeApp } from 'firebase/app';
 
-export const APP_SESSION_STORAGE_KEY = 'minigames:app-session';
 export const APP_SESSION_LIFETIME_MS = 5 * 60 * 1000;
 
 export type AppSession = {
@@ -29,6 +28,8 @@ const firebaseConfig = {
     projectId: (import.meta.env.VITE_FIREBASE_PROJECT_ID ?? '').trim(),
     appId: (import.meta.env.VITE_FIREBASE_APP_ID ?? '').trim(),
 };
+
+export const APP_SESSION_STORAGE_KEY = `minigames:${firebaseConfig.projectId}:app-session`;
 
 function hasFirebaseConfig(config: typeof firebaseConfig): boolean {
     return Object.values(config).every((value) => value.length > 0);

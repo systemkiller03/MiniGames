@@ -1,6 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { getNavigationUrl, readRouteState } from './navigation';
+import {
+    clearAuthParameterFromUrl,
+    getNavigationUrl,
+    readRouteState,
+    updateRouteState,
+} from './navigation';
 
 describe('getNavigationUrl', () => {
     it('normalizes the home route to the app base URL', () => {
@@ -27,6 +32,37 @@ describe('readRouteState', () => {
             pageNumber: 3,
             game: 'rocket',
             auth: 'login',
+        });
+    });
+
+    describe('updateRouteState', () => {
+        it('preserves relevant library state and removes default or absent query values', () => {
+            globalThis.history.replaceState(
+                undefined,
+                '',
+                '/MiniGames/?route=%2Flibrary&category=puzzle&sort=name-asc&page=3&game=cozy-sudoku&auth=register',
+            );
+            updateRouteState({ pageNumber: 1, category: 'all', game: undefined, auth: undefined });
+
+            expect(readRouteState()).toEqual({ page: '/library', sort: 'name-asc' });
+            expect(globalThis.location.search).toBe('?route=%2Flibrary&sort=name-asc');
+        });
+
+        it('replaces history when requested and clears an auth query without losing other state', () => {
+            globalThis.history.replaceState(
+                undefined,
+                '',
+                '/MiniGames/?route=%2Flibrary&auth=login&page=2',
+            );
+            const replaceSpy = vi.spyOn(globalThis.history, 'replaceState');
+
+            updateRouteState({ page: '/library', pageNumber: 2 }, true);
+            expect(replaceSpy).toHaveBeenCalledOnce();
+            expect(readRouteState().pageNumber).toBe(2);
+            clearAuthParameterFromUrl();
+            expect(readRouteState().auth).toBeUndefined();
+            clearAuthParameterFromUrl();
+            expect(replaceSpy).toHaveBeenCalledTimes(2);
         });
     });
 
