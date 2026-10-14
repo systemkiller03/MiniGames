@@ -74,13 +74,13 @@
         margin-top: $size-3;
     }
 
-    form > div:first-child {
+    .auth-fields {
         display: flex;
         flex-direction: column;
         gap: $size-2;
     }
 
-    form > div:first-child > label {
+    .auth-field {
         display: flex;
         flex-direction: column;
         gap: $size-1;
@@ -88,7 +88,7 @@
         font-weight: $font-weight-bold;
     }
 
-    form > div:first-child > label > span:nth-child(2) {
+    .auth-field-control {
         display: flex;
         align-items: center;
         gap: $size-2;
@@ -111,6 +111,18 @@
         }
     }
 
+    .auth-field-error {
+        min-height: 1.25rem;
+        color: $color-error;
+        font-size: $font-size-label-medium;
+        font-weight: $font-weight-medium;
+        line-height: 1.4;
+
+        &:empty {
+            display: none;
+        }
+    }
+
     input {
         width: 100%;
         min-width: 0;
@@ -120,13 +132,17 @@
         color: $color-on-primary;
         font-size: $font-size-body-small;
 
+        &[aria-invalid='true'] {
+            color: $color-error;
+        }
+
         &::placeholder {
             color: $color-on-bg;
             opacity: 1;
         }
     }
 
-    form > div:first-child > label > span:nth-child(2) > .icon-button {
+    .auth-field-control > .icon-button {
         display: inline-flex;
         flex: 0 0 auto;
         background: transparent;
@@ -156,7 +172,7 @@
         }
     }
 
-    form > div:nth-child(2) {
+    .auth-divider {
         display: flex;
         align-items: center;
         gap: $size-2;
@@ -164,11 +180,15 @@
         font-size: $font-size-label-medium;
         font-weight: $font-weight-bold;
 
-        span:first-child,
-        span:last-child {
+        > span:not(.auth-divider-label) {
             flex: 1;
             height: 1px;
             background: $color-outline;
+        }
+
+        .auth-divider-label {
+            flex: 0 0 auto;
+            line-height: 1;
         }
     }
 

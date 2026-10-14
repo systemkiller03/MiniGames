@@ -1,7 +1,7 @@
 import './snackbar.scss';
 import { X, createElement } from 'lucide';
 
-export type SnackbarVariant = 'success' | 'error';
+export type SnackbarVariant = 'success' | 'error' | 'loading';
 
 export interface SnackbarControl {
     element: HTMLDivElement;
@@ -12,6 +12,7 @@ export interface SnackbarControl {
 export function createSnackbar(): SnackbarControl {
     const element = document.createElement('div');
     element.className = 'snackbar';
+    element.setAttribute('popover', 'manual');
     element.setAttribute('role', 'status');
     element.setAttribute('aria-live', 'polite');
     element.setAttribute('aria-atomic', 'true');
@@ -29,6 +30,8 @@ export function createSnackbar(): SnackbarControl {
     element.append(messageElement, closeButton);
 
     let timer: number | undefined;
+    let popoverTimer: number | undefined;
+    let isPopoverOpen = false;
 
     function hide(): void {
         if (timer !== undefined) {
@@ -37,11 +40,26 @@ export function createSnackbar(): SnackbarControl {
         }
         element.classList.remove('is-visible');
         closeButton.disabled = true;
+        if (!isPopoverOpen) {
+            return;
+        }
+        if (popoverTimer !== undefined) {
+            globalThis.clearTimeout(popoverTimer);
+        }
+        popoverTimer = globalThis.setTimeout(() => {
+            element.hidePopover();
+            isPopoverOpen = false;
+            popoverTimer = undefined;
+        }, 180);
     }
 
     function show(message: string, variant: SnackbarVariant): void {
         if (timer !== undefined) {
             globalThis.clearTimeout(timer);
+        }
+        if (popoverTimer !== undefined) {
+            globalThis.clearTimeout(popoverTimer);
+            popoverTimer = undefined;
         }
 
         messageElement.textContent = message;
@@ -49,6 +67,10 @@ export function createSnackbar(): SnackbarControl {
         element.setAttribute('role', variant === 'error' ? 'alert' : 'status');
         element.setAttribute('aria-live', variant === 'error' ? 'assertive' : 'polite');
         closeButton.disabled = false;
+        if (!isPopoverOpen && typeof element.showPopover === 'function') {
+            element.showPopover();
+            isPopoverOpen = true;
+        }
         element.classList.add('is-visible');
         timer = globalThis.setTimeout(hide, 3200);
     }

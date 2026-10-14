@@ -2,11 +2,14 @@
 
 .snackbar {
     position: fixed;
+    inset: auto;
     right: $size-3;
     bottom: $size-3;
-    z-index: 20;
+    z-index: 1000;
     max-width: min(420px, calc(100vw - 2rem));
+    margin: 0;
     padding: $size-2 $size-3;
+    border: 0;
     border-radius: $corner-medium;
     color: $color-white;
     font-size: $font-size-body-medium;
@@ -63,6 +66,11 @@
 
     &[data-variant='success'] {
         background: $color-price-free;
+    }
+
+    &[data-variant='loading'] {
+        background: $color-primary;
+        color: $color-on-bg;
     }
 
     &[data-variant='error'] {

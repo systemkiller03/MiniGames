@@ -1,8 +1,10 @@
-import logoIconSrc from '@/assets/Logo.svg';
+import { getAppSession } from '@/features/auth/api/auth.api';
 import { createButton, createIconButton } from '@/shared/components';
-import { getNavigationUrl } from '@/shared/utils/navigation';
+import { getNavigationUrl, readRouteState } from '@/shared/utils/navigation';
+import logoIconSrc from '@/assets/Logo.svg';
 import { X } from 'lucide';
 import './mobile-burger.scss';
+
 export type NAV_ELEM = { name: string; link: string };
 const NAV_ELEMS: NAV_ELEM[] = [
     {
@@ -22,13 +24,16 @@ const NAV_ELEMS: NAV_ELEM[] = [
         link: '/',
     },
 ];
+
 export function createMobileBurger() {
     const aside = document.createElement('aside');
     aside.className = 'mobile-menu';
     aside.hidden = true;
 
     const firstLine = document.createElement('div');
+    firstLine.className = 'mobile-menu__header';
     const logo = document.createElement('div');
+    logo.className = 'mobile-menu__brand';
 
     const icon: HTMLImageElement = document.createElement('img');
     icon.src = logoIconSrc;
@@ -55,35 +60,72 @@ export function createMobileBurger() {
 
     const nav = document.createElement('nav');
     const ul = document.createElement('ul');
+    const updateActiveLink = (): void => {
+        const currentPage = readRouteState().page;
+        for (const link of ul.querySelectorAll('a')) {
+            const isCurrentPage = link.dataset.route === currentPage;
+            if (isCurrentPage) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.toggleAttribute('aria-current', false);
+            }
+        }
+    };
     for (const element of NAV_ELEMS) {
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.textContent = element.name;
         a.href = getNavigationUrl(element.link);
+        a.dataset.route = element.link;
         li.append(a);
         ul.append(li);
     }
+    updateActiveLink();
+    globalThis.addEventListener('app-route-changed', updateActiveLink);
     nav.append(ul);
 
-    const div = document.createElement('div');
-    const login = createButton({
-        label: 'Log In',
-        variant: 'outline-inverse',
-        size: 'md',
-        fullWidth: true,
-    });
-    login.dataset.authAction = 'login';
-    div.append(login);
+    const actions = document.createElement('div');
+    actions.className = 'mobile-menu__actions';
 
-    const signup = createButton({
-        label: 'Sign Up',
-        variant: 'primary',
-        size: 'md',
-        fullWidth: true,
-    });
-    div.append(signup);
+    const renderAuthActions = (): void => {
+        actions.replaceChildren();
+        const session = getAppSession();
 
-    nav.append(div);
+        if (session) {
+            const logout = createButton({
+                label: 'Log Out',
+                variant: 'outline-inverse',
+                size: 'sm',
+                fullWidth: true,
+            });
+            logout.dataset.authAction = 'logout';
+            actions.append(logout);
+            return;
+        }
+
+        const login = createButton({
+            label: 'Log In',
+            variant: 'outline-inverse',
+            size: 'md',
+            fullWidth: true,
+        });
+        login.dataset.authAction = 'login';
+        actions.append(login);
+
+        const signup = createButton({
+            label: 'Sign Up',
+            variant: 'primary',
+            size: 'md',
+            fullWidth: true,
+        });
+        signup.dataset.authAction = 'signup';
+        actions.append(signup);
+    };
+
+    renderAuthActions();
+    globalThis.addEventListener('app-session-updated', renderAuthActions);
+
+    nav.append(actions);
     aside.append(nav);
     return aside;
 }
